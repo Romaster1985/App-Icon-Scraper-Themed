@@ -27,11 +27,15 @@ class ThemeCustomizationActivity : AppCompatActivity() {
     private lateinit var seekBarX: SeekBar
     private lateinit var seekBarY: SeekBar
     private lateinit var seekBarScale: SeekBar
+    private lateinit var seekBarAlpha: SeekBar
+    private lateinit var seekBarColorIntensity: SeekBar
     private lateinit var applyButton: Button
     private lateinit var exportButton: Button
     private lateinit var xValueText: TextView
     private lateinit var yValueText: TextView
     private lateinit var scaleValueText: TextView
+    private lateinit var alphaValueText: TextView
+    private lateinit var colorIntensityValueText: TextView
     private lateinit var progressText: TextView
 
     private var selectedMask: Bitmap? = null
@@ -39,6 +43,8 @@ class ThemeCustomizationActivity : AppCompatActivity() {
     private var offsetX: Int = 0
     private var offsetY: Int = 0
     private var scalePercentage: Int = 100
+    private var alphaPercentage: Int = 100
+    private var colorIntensity: Int = 100
     private lateinit var selectedApps: List<AppInfo>
     private var sampleIcon: Bitmap? = null
     private val themedIcons = mutableMapOf<String, Bitmap>()
@@ -66,11 +72,15 @@ class ThemeCustomizationActivity : AppCompatActivity() {
         seekBarX = findViewById(R.id.seekBarX)
         seekBarY = findViewById(R.id.seekBarY)
         seekBarScale = findViewById(R.id.seekBarScale)
+        seekBarAlpha = findViewById(R.id.seekBarAlpha)
+        seekBarColorIntensity = findViewById(R.id.seekBarColorIntensity)
         applyButton = findViewById(R.id.applyButton)
         exportButton = findViewById(R.id.exportButton)
         xValueText = findViewById(R.id.xValueText)
         yValueText = findViewById(R.id.yValueText)
         scaleValueText = findViewById(R.id.scaleValueText)
+        alphaValueText = findViewById(R.id.alphaValueText)
+        colorIntensityValueText = findViewById(R.id.colorIntensityValueText)
         progressText = findViewById(R.id.progressText)
 
         seekBarX.max = 200
@@ -79,6 +89,13 @@ class ThemeCustomizationActivity : AppCompatActivity() {
         seekBarY.progress = 100
         seekBarScale.max = 200
         seekBarScale.progress = 100
+        seekBarAlpha.max = 100
+        seekBarAlpha.progress = 100
+        seekBarColorIntensity.max = 100
+        seekBarColorIntensity.progress = 100
+        
+        // Configurar color inicial del botón
+        colorPickerButton.setBackgroundColor(selectedColor)
     }
 
     private fun setupListeners() {
@@ -114,6 +131,26 @@ class ThemeCustomizationActivity : AppCompatActivity() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 scalePercentage = progress
                 scaleValueText.text = "Escala: $scalePercentage%"
+                updatePreview()
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        seekBarAlpha.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                alphaPercentage = progress
+                alphaValueText.text = "Transparencia: $alphaPercentage%"
+                updatePreview()
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        seekBarColorIntensity.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                colorIntensity = progress
+                colorIntensityValueText.text = "Intensidad de Color: $colorIntensity%"
                 updatePreview()
             }
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -184,7 +221,9 @@ class ThemeCustomizationActivity : AppCompatActivity() {
                 selectedColor, 
                 offsetX, 
                 offsetY, 
-                scalePercentage
+                scalePercentage,
+                alphaPercentage,
+                colorIntensity
             )
             iconPreview.setImageBitmap(processedIcon)
         }
@@ -219,7 +258,9 @@ class ThemeCustomizationActivity : AppCompatActivity() {
                         selectedColor, 
                         offsetX, 
                         offsetY, 
-                        scalePercentage
+                        scalePercentage,
+                        alphaPercentage,
+                        colorIntensity
                     )
                     
                     themedIcons[app.packageName] = themedIcon

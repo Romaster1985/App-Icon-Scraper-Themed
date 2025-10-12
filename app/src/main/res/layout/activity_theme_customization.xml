@@ -145,6 +145,36 @@
             android:id="@+id/seekBarScale"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- NUEVO: Transparencia -->
+        <TextView
+            android:id="@+id/alphaValueText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Transparencia: 100%"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp" />
+
+        <SeekBar
+            android:id="@+id/seekBarAlpha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- NUEVO: Intensidad de Color -->
+        <TextView
+            android:id="@+id/colorIntensityValueText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Intensidad de Color: 100%"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp" />
+
+        <SeekBar
+            android:id="@+id/seekBarColorIntensity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="24dp" />
 
         <!-- Progreso -->

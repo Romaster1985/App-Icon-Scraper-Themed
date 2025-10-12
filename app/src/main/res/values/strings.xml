@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">App Icon Scraper</string>
+    <string name="app_name">App Icon Scraper &amp; Themer</string>
     <string name="about_title">Acerca de</string>
     <string name="menu_about">Acerca de</string>
     <string name="export_selected">Exportar Seleccionados</string>
@@ -15,6 +15,6 @@
     <string name="no_apps_selected">No hay aplicaciones seleccionadas</string>
     <string name="scraping_icons">Extrayendo iconos…</string>
     
-    <!-- About section -->
-    <string name="about_content"><b>Aplicación desarrollada por Romaster</b>\n\n<b>Contacto:</b> roman.ignacio.romero@gmail.com\n\n<b>GitHub:</b> https://github.com/Romaster1985\n\nApp Icon Scraper permite extraer y exportar los iconos de las aplicaciones instaladas en tu dispositivo Android.\n\n<b>Características:</b>\n• Filtrado por tipo de aplicación\n• Selección múltiple\n• Exportación en formato ZIP\n• Personalización de iconos\n\nEsta aplicación fue diseñada con la ayuda de DeepSeek.</string>
+    <!-- About section actualizada -->
+    <string name="about_content"><b>App Icon Scraper &amp; Themer</b>\n\n<b>Desarrollado por Romaster</b>\n\n<b>Contacto:</b> roman.ignacio.romero@gmail.com\n\n<b>GitHub:</b> https://github.com/Romaster1985\n\nUna aplicación completa para extraer, personalizar y exportar iconos de aplicaciones Android.\n\n<b>Características principales:</b>\n• Escaneo de todas las aplicaciones instaladas\n• Filtrado inteligente (Sistema, Usuario, Google Apps)\n• Selección múltiple de aplicaciones\n• Exportación de iconos originales en formato ZIP\n• Sistema avanzado de tematización de iconos\n• Ajuste de posición, escala y transparencia\n• Control de intensidad de color\n• Vista previa en tiempo real\n• Exportación de packs de iconos personalizados\n\n<b>Tecnologías:</b> Kotlin, Android SDK, Material Design\n\nEsta aplicación fue desarrollada con la asistencia de DeepSeek.</string>
 </resources>

@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         
         setFiltersEnabled(false)
         updateFilterSelection()
-        updateButtonStyles() // Actualizar estilos iniciales
+        updateButtonStyles()
     }
 
     private fun initViews() {
@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         deselectAllButton = findViewById(R.id.deselectAllButton)
         scrapeButton = findViewById(R.id.scrapeButton)
         
-        // Texto fijo para el botón de tematizar
+        // Texto inicial sin contador
         exportButton.text = "Tematizar"
     }
 
@@ -124,7 +124,7 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
                     Log.d("MainActivity", "UI actualizada - Filtradas: ${filteredApps.size}")
                     
-                    updateButtonStyles() // Actualizar estilos después del escaneo
+                    updateButtonStyles()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -141,11 +141,9 @@ class MainActivity : AppCompatActivity() {
         val isEnabled = exportButton.isEnabled
         
         if (isEnabled) {
-            // Botón habilitado - estilo normal
             exportButton.setBackgroundResource(R.drawable.button_primary)
             exportButton.setTextColor(ContextCompat.getColor(this, R.color.white))
         } else {
-            // Botón deshabilitado - estilo similar a los filtros no seleccionados
             exportButton.setBackgroundResource(R.drawable.bg_card)
             exportButton.setTextColor(ContextCompat.getColor(this, R.color.text_secondary))
         }
@@ -238,7 +236,13 @@ class MainActivity : AppCompatActivity() {
         appsCountText.text = "$totalCount aplicaciones"
         exportButton.isEnabled = selectedCount > 0
         
-        // Actualizar estilos del botón
+        // Actualizar texto con contador
+        exportButton.text = if (selectedCount > 0) {
+            "Tematizar ($selectedCount)"
+        } else {
+            "Tematizar"
+        }
+        
         updateButtonStyles()
     }
 

@@ -23,13 +23,8 @@ class AboutActivity : AppCompatActivity() {
         val emailButton = findViewById<Button>(R.id.emailButton)
         val logoImage = findViewById<ImageView>(R.id.logoImage)
         
-        // Configurar el texto con formato HTML para negritas
         aboutText.text = getString(R.string.about_content)
-        
-        // Configurar el logo (puedes reemplazar esto con tu imagen PNG)
-        // Por defecto usamos el icono de la app, pero puedes cambiarlo por tu logo
-// logoImage.setImageResource(R.mipmap.ic_launcher)
-logoImage.setImageResource(R.drawable.logo_romaster)
+        logoImage.setImageResource(R.drawable.logo_romaster)
 
         githubButton.setOnClickListener {
             openUrl("https://github.com/Romaster1985")
@@ -48,7 +43,7 @@ logoImage.setImageResource(R.drawable.logo_romaster)
     private fun sendEmail() {
         val intent = Intent(Intent.ACTION_SENDTO).apply {
             data = Uri.parse("mailto:roman.ignacio.romero@gmail.com")
-            putExtra(Intent.EXTRA_SUBJECT, "App Icon Scraper")
+            putExtra(Intent.EXTRA_SUBJECT, "App Icon Scraper & Themer")
         }
         startActivity(Intent.createChooser(intent, "Enviar email"))
     }
