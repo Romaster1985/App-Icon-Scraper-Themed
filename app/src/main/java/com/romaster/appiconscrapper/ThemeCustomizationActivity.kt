@@ -1,15 +1,20 @@
 package com.romaster.appiconscrapper
 
 import android.app.Activity
+import android.content.ContentValues
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.*
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.graphics.drawable.toBitmap
-import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileInputStream
 import java.io.IOException
 import java.io.InputStream
 
@@ -34,8 +39,9 @@ class ThemeCustomizationActivity : AppCompatActivity() {
     private var offsetX: Int = 0
     private var offsetY: Int = 0
     private var scalePercentage: Int = 100
-    private lateinit var selectedApps: ArrayList<AppInfo>
+    private lateinit var selectedApps: List<AppInfo>
     private var sampleIcon: Bitmap? = null
+    private val themedIcons = mutableMapOf<String, Bitmap>()
 
     companion object {
         private const val PICK_MASK_REQUEST = 1001
@@ -45,7 +51,7 @@ class ThemeCustomizationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_theme_customization)
 
-        selectedApps = intent.getSerializableExtra("selected_apps") as ArrayList<AppInfo>
+        selectedApps = intent.getParcelableArrayListExtra<AppInfo>("selected_apps") ?: emptyList()
 
         initViews()
         setupListeners()
@@ -125,8 +131,14 @@ class ThemeCustomizationActivity : AppCompatActivity() {
 
     private fun loadSampleIcon() {
         if (selectedApps.isNotEmpty()) {
-            val drawable = selectedApps[0].icon
-            sampleIcon = drawable.toBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+            try {
+                val appInfo = packageManager.getApplicationInfo(selectedApps[0].packageName, 0)
+                val drawable = appInfo.loadIcon(packageManager)
+                sampleIcon = IconThemer.drawableToBitmap(drawable)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                sampleIcon = BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher)
+            }
         } else {
             sampleIcon = BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher)
         }
@@ -152,11 +164,10 @@ class ThemeCustomizationActivity : AppCompatActivity() {
         val builder = android.app.AlertDialog.Builder(this)
         builder.setTitle("Seleccionar Color")
         
-        val colorAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1)
-        colorAdapter.addAll("Rojo", "Verde", "Azul", "Cian", "Magenta", "Amarillo", 
-                           "Blanco", "Negro", "Gris", "Naranja", "Púrpura", "Azul Claro", "Verde Claro")
+        val colorNames = arrayOf("Rojo", "Verde", "Azul", "Cian", "Magenta", "Amarillo", 
+                               "Blanco", "Negro", "Gris", "Naranja", "Púrpura", "Azul Claro", "Verde Claro")
         
-        builder.setAdapter(colorAdapter) { dialog, which ->
+        builder.setItems(colorNames) { _, which ->
             selectedColor = colors[which]
             colorPickerButton.setBackgroundColor(selectedColor)
             updatePreview()
@@ -194,13 +205,13 @@ class ThemeCustomizationActivity : AppCompatActivity() {
                 applyButton.isEnabled = false
             }
 
+            themedIcons.clear()
+
             selectedApps.forEach { app ->
                 try {
-                    val originalIcon = app.icon.toBitmap(
-                        app.icon.intrinsicWidth, 
-                        app.icon.intrinsicHeight, 
-                        Bitmap.Config.ARGB_8888
-                    )
+                    val appInfo = packageManager.getApplicationInfo(app.packageName, 0)
+                    val drawable = appInfo.loadIcon(packageManager)
+                    val originalIcon = IconThemer.drawableToBitmap(drawable)
                     
                     val themedIcon = IconThemer.applyTheme(
                         originalIcon, 
@@ -211,7 +222,7 @@ class ThemeCustomizationActivity : AppCompatActivity() {
                         scalePercentage
                     )
                     
-                    app.themedIcon = themedIcon
+                    themedIcons[app.packageName] = themedIcon
                     processedCount++
                     
                     runOnUiThread {
@@ -232,19 +243,25 @@ class ThemeCustomizationActivity : AppCompatActivity() {
     }
 
     private fun exportThemedIcons() {
-        val appsWithThemedIcons = selectedApps.filter { it.themedIcon != null }
-        if (appsWithThemedIcons.isEmpty()) {
+        if (themedIcons.isEmpty()) {
             Toast.makeText(this, "Primero procesa los iconos", Toast.LENGTH_SHORT).show()
             return
         }
 
         Thread {
             try {
-                val success = IconScraper.createThemedZipFile(appsWithThemedIcons, filesDir, "themed_icons")
+                val timestamp = System.currentTimeMillis()
+                val fileName = "themed_icons_$timestamp.zip"
+                
+                val success = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    saveZipToDownloads(fileName)
+                } else {
+                    saveZipToExternalStorage(fileName)
+                }
                 
                 runOnUiThread {
                     if (success) {
-                        Toast.makeText(this, "Iconos tematizados exportados exitosamente", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, "Iconos tematizados exportados exitosamente a la carpeta Downloads", Toast.LENGTH_LONG).show()
                     } else {
                         Toast.makeText(this, "Error al exportar iconos tematizados", Toast.LENGTH_LONG).show()
                     }
@@ -256,6 +273,55 @@ class ThemeCustomizationActivity : AppCompatActivity() {
                 }
             }
         }.start()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun saveZipToDownloads(fileName: String): Boolean {
+        return try {
+            val contentValues = ContentValues().apply {
+                put(MediaStore.Downloads.DISPLAY_NAME, fileName)
+                put(MediaStore.Downloads.MIME_TYPE, "application/zip")
+                put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
+            }
+            
+            val resolver = contentResolver
+            val uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
+            
+            uri?.let {
+                resolver.openOutputStream(it)?.use { outputStream ->
+                    val tempFile = File(cacheDir, "temp_$fileName")
+                    val success = IconScraper.createThemedZipFile(themedIcons, tempFile)
+                    
+                    if (success) {
+                        FileInputStream(tempFile).use { inputStream ->
+                            inputStream.copyTo(outputStream)
+                        }
+                        tempFile.delete()
+                        true
+                    } else {
+                        false
+                    }
+                }
+            } ?: false
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun saveZipToExternalStorage(fileName: String): Boolean {
+        return try {
+            val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            if (!downloadsDir.exists()) {
+                downloadsDir.mkdirs()
+            }
+            val outputFile = File(downloadsDir, fileName)
+            IconScraper.createThemedZipFile(themedIcons, outputFile)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

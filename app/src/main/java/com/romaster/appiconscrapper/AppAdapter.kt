@@ -1,5 +1,6 @@
 package com.romaster.appiconscrapper
 
+import android.content.pm.PackageManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class AppAdapter(
-    private var apps: MutableList<AppInfo>,
+    private var apps: List<AppInfo>,
     private val onItemChecked: (Int, Boolean) -> Unit
 ) : RecyclerView.Adapter<AppAdapter.ViewHolder>() {
 
@@ -31,7 +32,14 @@ class AppAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val app = apps[position]
         
-        holder.appIcon.setImageDrawable(app.icon)
+        try {
+            val appInfo = holder.itemView.context.packageManager.getApplicationInfo(app.packageName, 0)
+            val drawable = appInfo.loadIcon(holder.itemView.context.packageManager)
+            holder.appIcon.setImageDrawable(drawable)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        
         holder.appName.text = app.name
         holder.appPackage.text = app.packageName
         
@@ -42,7 +50,6 @@ class AppAdapter(
         holder.googleBadge.visibility = if (app.isGoogleApp) View.VISIBLE else View.GONE
 
         holder.checkBox.setOnCheckedChangeListener { _, isChecked ->
-            apps[position].isSelected = isChecked
             onItemChecked(position, isChecked)
         }
 
@@ -54,18 +61,15 @@ class AppAdapter(
     override fun getItemCount() = apps.size
 
     fun updateList(newList: List<AppInfo>) {
-        apps.clear()
-        apps.addAll(newList)
+        apps = newList
         notifyDataSetChanged()
     }
 
     fun selectAll() {
-        apps.forEach { it.isSelected = true }
         notifyDataSetChanged()
     }
 
     fun deselectAll() {
-        apps.forEach { it.isSelected = false }
         notifyDataSetChanged()
     }
 
