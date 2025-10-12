@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Botón para iniciar escrapeo -->
+    <Button
+        android:id="@+id/scrapeButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Escrapear Apps"
+        android:textSize="18sp"
+        android:background="@drawable/button_primary"
+        android:textColor="@color/white" />
+
+    <!-- Filtros -->
+    <include layout="@layout/tab_layout" />
+
+    <!-- Contador y acciones -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/selectAllButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="4dp"
+            android:text="Seleccionar Todo"
+            android:textSize="14sp"
+            style="@style/Widget.AppCompat.Button.Borderless" />
+
+        <Button
+            android:id="@+id/deselectAllButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="4dp"
+            android:text="Limpiar Selección"
+            android:textSize="14sp"
+            style="@style/Widget.AppCompat.Button.Borderless" />
+
+    </LinearLayout>
+
+    <!-- Contador de aplicaciones -->
+    <TextView
+        android:id="@+id/appsCountText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="0 aplicaciones"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:padding="4dp" />
+
+    <!-- Lista de aplicaciones - MÁS ESPACIO -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/appsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="8dp"
+        android:scrollbars="vertical" />
+
+    <!-- Botón de exportar -->
+    <Button
+        android:id="@+id/exportButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/button_primary"
+        android:text="Exportar Seleccionados"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:enabled="false" />
+
+</LinearLayout>

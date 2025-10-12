@@ -1,0 +1,55 @@
+package com.romaster.appiconscrapper
+
+import android.content.Intent
+import android.net.Uri
+import android.os.Bundle
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+
+class AboutActivity : AppCompatActivity() {
+    
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_about)
+        
+        setupViews()
+    }
+    
+    private fun setupViews() {
+        val aboutText = findViewById<TextView>(R.id.aboutText)
+        val githubButton = findViewById<Button>(R.id.githubButton)
+        val emailButton = findViewById<Button>(R.id.emailButton)
+        val logoImage = findViewById<ImageView>(R.id.logoImage)
+        
+        // Configurar el texto con formato HTML para negritas
+        aboutText.text = getString(R.string.about_content)
+        
+        // Configurar el logo (puedes reemplazar esto con tu imagen PNG)
+        // Por defecto usamos el icono de la app, pero puedes cambiarlo por tu logo
+// logoImage.setImageResource(R.mipmap.ic_launcher)
+logoImage.setImageResource(R.drawable.logo_romaster)
+
+        githubButton.setOnClickListener {
+            openUrl("https://github.com/Romaster1985")
+        }
+        
+        emailButton.setOnClickListener {
+            sendEmail()
+        }
+    }
+    
+    private fun openUrl(url: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(intent)
+    }
+    
+    private fun sendEmail() {
+        val intent = Intent(Intent.ACTION_SENDTO).apply {
+            data = Uri.parse("mailto:roman.ignacio.romero@gmail.com")
+            putExtra(Intent.EXTRA_SUBJECT, "App Icon Scraper")
+        }
+        startActivity(Intent.createChooser(intent, "Enviar email"))
+    }
+}

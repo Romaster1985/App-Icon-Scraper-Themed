@@ -1,0 +1,163 @@
+name: Android Build
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Install ImageMagick for icon generation
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y imagemagick
+
+    - name: Generate professional app icons with larger text
+      run: |
+        # Crear estructura de directorios
+        mkdir -p app/src/main/res/mipmap-hdpi
+        mkdir -p app/src/main/res/mipmap-mdpi
+        mkdir -p app/src/main/res/mipmap-xhdpi
+        mkdir -p app/src/main/res/mipmap-xxhdpi
+        mkdir -p app/src/main/res/mipmap-xxxhdpi
+
+        echo "Generando iconos profesionales para App Icon Scraper..."
+
+        # Colores del tema
+        PRIMARY="#2196F3"
+        PRIMARY_DARK="#1976D2"
+        ACCENT="#FF4081"
+        WHITE="#FFFFFF"
+
+        # Tamaños para cada densidad
+        declare -A sizes=(
+          ["mdpi"]=48
+          ["hdpi"]=72  
+          ["xhdpi"]=96
+          ["xxhdpi"]=144
+          ["xxxhdpi"]=192
+        )
+
+        # Generar iconos para cada densidad
+        for density in "${!sizes[@]}"; do
+          size=${sizes[$density]}
+          folder="app/src/main/res/mipmap-${density}"
+          
+          echo "Generando iconos para $density (${size}x${size})..."
+
+          # Icono principal (cuadrado con diseño moderno) - TEXTO MÁS GRANDE
+          convert -size "${size}x${size}" \
+            gradient:"${PRIMARY}-${PRIMARY_DARK}" \
+            -fill "$WHITE" \
+            -gravity center \
+            -pointsize $((size/3)) \
+            -font Arial \
+            -annotate +0+0 "📱" \
+            -fill "$WHITE" \
+            -gravity south \
+            -pointsize $((size/6)) \
+            -annotate +0+$((size/12)) "AIS" \
+            "${folder}/ic_launcher.png"
+
+          # Icono redondeado - TEXTO MÁS GRANDE
+          convert -size "${size}x${size}" \
+            gradient:"${PRIMARY}-${PRIMARY_DARK}" \
+            -fill "$WHITE" \
+            -gravity center \
+            -pointsize $((size/3)) \
+            -font Arial \
+            -annotate +0+0 "📱" \
+            -fill "$WHITE" \
+            -gravity south \
+            -pointsize $((size/6)) \
+            -annotate +0+$((size/12)) "AIS" \
+            \( +clone -alpha extract -draw "circle $((size/2)),$((size/2)) $((size/2)),0" \) \
+            -alpha off -compose CopyOpacity -composite \
+            "${folder}/ic_launcher_round.png"
+
+          # Icono foreground para adaptive icons (Android 8.0+) - TEXTO MÁS GRANDE
+          convert -size "${size}x${size}" \
+            xc:none \
+            -fill "$WHITE" \
+            -gravity center \
+            -pointsize $((size/2)) \
+            -font Arial \
+            -annotate +0+0 "📱" \
+            "${folder}/ic_launcher_foreground.png"
+
+          # Icono background para adaptive icons
+          convert -size "${size}x${size}" \
+            gradient:"${PRIMARY}-${PRIMARY_DARK}" \
+            "${folder}/ic_launcher_background.png"
+        done
+
+        echo "✅ Iconos generados exitosamente para todas las densidades"
+
+    - name: Create additional UI assets
+      run: |
+        # Crear algunos assets adicionales para la UI
+        mkdir -p app/src/main/res/drawable-mdpi
+        mkdir -p app/src/main/res/drawable-hdpi
+        mkdir -p app/src/main/res/drawable-xhdpi
+        mkdir -p app/src/main/res/drawable-xxhdpi
+
+        # Badge para apps de sistema (punto azul)
+        convert -size 24x24 xc:none -fill "#2196F3" -draw "circle 12,12 12,2" app/src/main/res/drawable-mdpi/badge_system.png
+        convert -size 36x36 xc:none -fill "#2196F3" -draw "circle 18,18 18,3" app/src/main/res/drawable-hdpi/badge_system.png
+        convert -size 48x48 xc:none -fill "#2196F3" -draw "circle 24,24 24,4" app/src/main/res/drawable-xhdpi/badge_system.png
+
+        # Badge para Google Apps (punto rojo)
+        convert -size 24x24 xc:none -fill "#FF4081" -draw "circle 12,12 12,2" app/src/main/res/drawable-mdpi/badge_google.png
+        convert -size 36x36 xc:none -fill "#FF4081" -draw "circle 18,18 18,3" app/src/main/res/drawable-hdpi/badge_google.png
+        convert -size 48x48 xc:none -fill "#FF4081" -draw "circle 24,24 24,4" app/src/main/res/drawable-xhdpi/badge_google.png
+
+        echo "✅ Assets de UI generados"
+
+    - name: Verify generated icons
+      run: |
+        echo "Verificando estructura de iconos generados:"
+        find app/src/main/res -name "*.png" | sort
+        echo "✅ Estructura de iconos verificada"
+
+    - name: Setup Android SDK
+      run: |
+        yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
+        $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platform-tools"
+        $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "build-tools;34.0.0"
+        $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-34"
+
+    - name: Change wrapper permissions
+      run: chmod +x ./gradlew
+
+    - name: Build with Gradle
+      run: |
+        ./gradlew clean
+        ./gradlew assembleDebug --stacktrace
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: app-icon-scraper
+        path: app/build/outputs/apk/debug/app-debug.apk
+        retention-days: 7
+
+    - name: Upload generated icons report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: generated-icons-report
+        path: app/src/main/res/
+        retention-days: 1
