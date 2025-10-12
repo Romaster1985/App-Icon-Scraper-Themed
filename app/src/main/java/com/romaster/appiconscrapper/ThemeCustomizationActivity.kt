@@ -171,13 +171,17 @@ class ThemeCustomizationActivity : AppCompatActivity() {
             try {
                 val appInfo = packageManager.getApplicationInfo(selectedApps[0].packageName, 0)
                 val drawable = appInfo.loadIcon(packageManager)
-                sampleIcon = IconThemer.drawableToBitmap(drawable)
+                // USAR LA NUEVA FUNCIÓN QUE NORMALIZA AUTOMÁTICAMENTE
+                sampleIcon = IconThemer.drawableToNormalizedBitmap(drawable)
             } catch (e: Exception) {
                 e.printStackTrace()
-                sampleIcon = BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher)
+                // Si hay error, usar el launcher y normalizarlo también
+                val launcherBitmap = BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher)
+                sampleIcon = IconThemer.normalizeIconSize(launcherBitmap)
             }
         } else {
-            sampleIcon = BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher)
+            val launcherBitmap = BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher)
+            sampleIcon = IconThemer.normalizeIconSize(launcherBitmap)
         }
         updatePreview()
     }
@@ -250,7 +254,8 @@ class ThemeCustomizationActivity : AppCompatActivity() {
                 try {
                     val appInfo = packageManager.getApplicationInfo(app.packageName, 0)
                     val drawable = appInfo.loadIcon(packageManager)
-                    val originalIcon = IconThemer.drawableToBitmap(drawable)
+                    // USAR LA NUEVA FUNCIÓN QUE NORMALIZA AUTOMÁTICAMENTE
+                    val originalIcon = IconThemer.drawableToNormalizedBitmap(drawable)
                     
                     val themedIcon = IconThemer.applyTheme(
                         originalIcon, 
@@ -271,6 +276,7 @@ class ThemeCustomizationActivity : AppCompatActivity() {
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
+                    // Si hay error con una app, continuar con las demás
                 }
             }
 
@@ -278,7 +284,7 @@ class ThemeCustomizationActivity : AppCompatActivity() {
                 progressText.text = "¡Procesamiento completado!"
                 applyButton.isEnabled = true
                 exportButton.isEnabled = true
-                Toast.makeText(this, "$processedCount iconos procesados", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "$processedCount de ${selectedApps.size} iconos procesados exitosamente", Toast.LENGTH_SHORT).show()
             }
         }.start()
     }
