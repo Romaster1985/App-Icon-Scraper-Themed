@@ -20,14 +20,60 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
+    - name: Check for existing icons
+      id: check_icons
+      run: |
+        echo "Verificando iconos existentes..."
+        
+        # Lista de archivos de iconos requeridos
+        required_icons=(
+          "ic_launcher.png"
+          "ic_launcher_round.png" 
+          "ic_launcher_foreground.png"
+          "ic_launcher_background.png"
+        )
+        
+        # Lista de densidades a verificar (solo las necesarias para build)
+        densities=(
+          "mipmap-xxxhdpi"
+          "mipmap-xxhdpi" 
+          "mipmap-xhdpi"
+          "mipmap-hdpi"
+          "mipmap-mdpi"
+        )
+        
+        missing_icons=false
+        
+        for density in "${densities[@]}"; do
+          for icon in "${required_icons[@]}"; do
+            icon_path="app/src/main/res/${density}/${icon}"
+            if [ ! -f "$icon_path" ]; then
+              echo "❌ Icono faltante: $icon_path"
+              missing_icons=true
+            else
+              echo "✅ Icono encontrado: $icon_path"
+            fi
+          done
+        done
+        
+        if [ "$missing_icons" = true ]; then
+          echo "icons_exist=false" >> $GITHUB_OUTPUT
+          echo "Se requieren generar iconos nuevos"
+        else
+          echo "icons_exist=true" >> $GITHUB_OUTPUT
+          echo "Todos los iconos existen, se utilizarán los existentes"
+        fi
+
     - name: Install ImageMagick for icon generation
+      if: steps.check_icons.outputs.icons_exist == 'false'
       run: |
         sudo apt-get update
         sudo apt-get install -y imagemagick
 
     - name: Generate professional app icons with larger text
+      if: steps.check_icons.outputs.icons_exist == 'false'
       run: |
-        # Crear estructura de directorios
+        # Crear estructura de directorios (solo si no existen)
         mkdir -p app/src/main/res/mipmap-hdpi
         mkdir -p app/src/main/res/mipmap-mdpi
         mkdir -p app/src/main/res/mipmap-xhdpi
@@ -58,53 +104,62 @@ jobs:
           
           echo "Generando iconos para $density (${size}x${size})..."
 
-          # Icono principal (cuadrado con diseño moderno) - TEXTO MÁS GRANDE
-          convert -size "${size}x${size}" \
-            gradient:"${PRIMARY}-${PRIMARY_DARK}" \
-            -fill "$WHITE" \
-            -gravity center \
-            -pointsize $((size/3)) \
-            -font Arial \
-            -annotate +0+0 "📱" \
-            -fill "$WHITE" \
-            -gravity south \
-            -pointsize $((size/6)) \
-            -annotate +0+$((size/12)) "AIS" \
-            "${folder}/ic_launcher.png"
+          # Solo generar iconos si no existen
+          if [ ! -f "${folder}/ic_launcher.png" ]; then
+            # Icono principal (cuadrado con diseño moderno) - TEXTO MÁS GRANDE
+            convert -size "${size}x${size}" \
+              gradient:"${PRIMARY}-${PRIMARY_DARK}" \
+              -fill "$WHITE" \
+              -gravity center \
+              -pointsize $((size/3)) \
+              -font Arial \
+              -annotate +0+0 "📱" \
+              -fill "$WHITE" \
+              -gravity south \
+              -pointsize $((size/6)) \
+              -annotate +0+$((size/12)) "AIS" \
+              "${folder}/ic_launcher.png"
+          fi
 
-          # Icono redondeado - TEXTO MÁS GRANDE
-          convert -size "${size}x${size}" \
-            gradient:"${PRIMARY}-${PRIMARY_DARK}" \
-            -fill "$WHITE" \
-            -gravity center \
-            -pointsize $((size/3)) \
-            -font Arial \
-            -annotate +0+0 "📱" \
-            -fill "$WHITE" \
-            -gravity south \
-            -pointsize $((size/6)) \
-            -annotate +0+$((size/12)) "AIS" \
-            \( +clone -alpha extract -draw "circle $((size/2)),$((size/2)) $((size/2)),0" \) \
-            -alpha off -compose CopyOpacity -composite \
-            "${folder}/ic_launcher_round.png"
+          if [ ! -f "${folder}/ic_launcher_round.png" ]; then
+            # Icono redondeado - TEXTO MÁS GRANDE
+            convert -size "${size}x${size}" \
+              gradient:"${PRIMARY}-${PRIMARY_DARK}" \
+              -fill "$WHITE" \
+              -gravity center \
+              -pointsize $((size/3)) \
+              -font Arial \
+              -annotate +0+0 "📱" \
+              -fill "$WHITE" \
+              -gravity south \
+              -pointsize $((size/6)) \
+              -annotate +0+$((size/12)) "AIS" \
+              \( +clone -alpha extract -draw "circle $((size/2)),$((size/2)) $((size/2)),0" \) \
+              -alpha off -compose CopyOpacity -composite \
+              "${folder}/ic_launcher_round.png"
+          fi
 
-          # Icono foreground para adaptive icons (Android 8.0+) - TEXTO MÁS GRANDE
-          convert -size "${size}x${size}" \
-            xc:none \
-            -fill "$WHITE" \
-            -gravity center \
-            -pointsize $((size/2)) \
-            -font Arial \
-            -annotate +0+0 "📱" \
-            "${folder}/ic_launcher_foreground.png"
+          if [ ! -f "${folder}/ic_launcher_foreground.png" ]; then
+            # Icono foreground para adaptive icons (Android 8.0+) - TEXTO MÁS GRANDE
+            convert -size "${size}x${size}" \
+              xc:none \
+              -fill "$WHITE" \
+              -gravity center \
+              -pointsize $((size/2)) \
+              -font Arial \
+              -annotate +0+0 "📱" \
+              "${folder}/ic_launcher_foreground.png"
+          fi
 
-          # Icono background para adaptive icons
-          convert -size "${size}x${size}" \
-            gradient:"${PRIMARY}-${PRIMARY_DARK}" \
-            "${folder}/ic_launcher_background.png"
+          if [ ! -f "${folder}/ic_launcher_background.png" ]; then
+            # Icono background para adaptive icons
+            convert -size "${size}x${size}" \
+              gradient:"${PRIMARY}-${PRIMARY_DARK}" \
+              "${folder}/ic_launcher_background.png"
+          fi
         done
 
-        echo "✅ Iconos generados exitosamente para todas las densidades"
+        echo "✅ Iconos generados exitosamente para las densidades requeridas"
 
     - name: Create additional UI assets
       run: |
@@ -114,21 +169,26 @@ jobs:
         mkdir -p app/src/main/res/drawable-xhdpi
         mkdir -p app/src/main/res/drawable-xxhdpi
 
-        # Badge para apps de sistema (punto azul)
-        convert -size 24x24 xc:none -fill "#2196F3" -draw "circle 12,12 12,2" app/src/main/res/drawable-mdpi/badge_system.png
-        convert -size 36x36 xc:none -fill "#2196F3" -draw "circle 18,18 18,3" app/src/main/res/drawable-hdpi/badge_system.png
-        convert -size 48x48 xc:none -fill "#2196F3" -draw "circle 24,24 24,4" app/src/main/res/drawable-xhdpi/badge_system.png
+        # Solo generar badges si no existen
+        if [ ! -f "app/src/main/res/drawable-mdpi/badge_system.png" ]; then
+          # Badge para apps de sistema (punto azul)
+          convert -size 24x24 xc:none -fill "#2196F3" -draw "circle 12,12 12,2" app/src/main/res/drawable-mdpi/badge_system.png
+          convert -size 36x36 xc:none -fill "#2196F3" -draw "circle 18,18 18,3" app/src/main/res/drawable-hdpi/badge_system.png
+          convert -size 48x48 xc:none -fill "#2196F3" -draw "circle 24,24 24,4" app/src/main/res/drawable-xhdpi/badge_system.png
+        fi
 
-        # Badge para Google Apps (punto rojo)
-        convert -size 24x24 xc:none -fill "#FF4081" -draw "circle 12,12 12,2" app/src/main/res/drawable-mdpi/badge_google.png
-        convert -size 36x36 xc:none -fill "#FF4081" -draw "circle 18,18 18,3" app/src/main/res/drawable-hdpi/badge_google.png
-        convert -size 48x48 xc:none -fill "#FF4081" -draw "circle 24,24 24,4" app/src/main/res/drawable-xhdpi/badge_google.png
+        if [ ! -f "app/src/main/res/drawable-mdpi/badge_google.png" ]; then
+          # Badge para Google Apps (punto rojo)
+          convert -size 24x24 xc:none -fill "#FF4081" -draw "circle 12,12 12,2" app/src/main/res/drawable-mdpi/badge_google.png
+          convert -size 36x36 xc:none -fill "#FF4081" -draw "circle 18,18 18,3" app/src/main/res/drawable-hdpi/badge_google.png
+          convert -size 48x48 xc:none -fill "#FF4081" -draw "circle 24,24 24,4" app/src/main/res/drawable-xhdpi/badge_google.png
+        fi
 
-        echo "✅ Assets de UI generados"
+        echo "✅ Assets de UI verificados/generados"
 
     - name: Verify generated icons
       run: |
-        echo "Verificando estructura de iconos generados:"
+        echo "Verificando estructura de iconos:"
         find app/src/main/res -name "*.png" | sort
         echo "✅ Estructura de iconos verificada"
 

@@ -26,8 +26,12 @@ Una aplicación Android para extraer y exportar iconos de aplicaciones instalada
 - Java 17
 
 ### Build con Gradle
-```bash
+
+```
+bash
 ./gradlew build
+
+```
 
 GitHub Actions
 
@@ -62,6 +66,7 @@ app/
 │   ├── res/
 │   └── AndroidManifest.xml
 └── build.gradle
+
 ```
 
 Desarrollador
