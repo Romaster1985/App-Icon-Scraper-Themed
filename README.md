@@ -96,8 +96,8 @@ MIT License - ver archivo LICENSE para más detalles.
 
 # 📲 Descarga de la aplicación APK
 
-• Desde [**RELEASES**](https://github.com/Romaster1985/App-Icon-Scraper-Themed/releases) (Recomendado)
-• Desde GitHub Actions, entra en el último workflow y descarga el Artifact generado
+* Desde [**RELEASES**](https://github.com/Romaster1985/App-Icon-Scraper-Themed/releases) (Recomendado)
+* Desde GitHub Actions, entra en el último workflow y descarga el Artifact generado
 
 ## 🔗 Enlaces Útiles
 
