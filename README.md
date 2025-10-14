@@ -1,22 +1,27 @@
 # App Icon Scraper
 
-Una aplicación Android para extraer y exportar iconos de aplicaciones instaladas en el dispositivo.
+Una aplicación Android para extraer, personalizar y exportar iconos de aplicaciones instaladas en el dispositivo.
 
 ## Características
 
-- 📱 Lista todas las aplicaciones instaladas
-- 🎯 Filtrado por tipo (Sistema, Usuario, Google Apps)
-- ✅ Selección múltiple de aplicaciones
-- 📦 Exportación a archivo ZIP
-- 🎨 Interfaz de usuario moderna y profesional
+• 📱 Interfaz de usuario simple y profesional
+• 🔍Escanea y 📋 lista todas las aplicaciones instaladas
+• 🎯 Filtrado inteligente (Sistema, Usuario, Google Apps)
+• ✅ Selección múltiple de aplicaciones
+• 🎨 Sistema único de tematización de iconos
+•📍 Ajuste de posición, escala y transparencia
+• 🎛️ Control de intensidad de color
+• 👁️ Vista previa en tiempo real
+• 📦 Generación de packs de iconos personalizados
+• 🗜️Exportación a archivo ZIP
 
-## Tecnologías
+##Tecnologías:
 
-- Kotlin
-- Android SDK
-- Material Design 3
-- RecyclerView
-- Gradle
+• Kotlin
+• Android SDK
+• Material Design 3
+• RecyclerView
+• Gradle
 
 ## Compilación
 
@@ -37,22 +42,27 @@ GitHub Actions
 
 La aplicación se compila automáticamente en cada push a las ramas main/master mediante GitHub Actions.
 
-Uso
+##Uso
 
-1. Abre la aplicación
+1. Abre la aplicación y presiona "Escanear Apps"
 2. Usa los filtros para encontrar las aplicaciones deseadas
 3. Selecciona las aplicaciones (individualmente o usando "Seleccionar Todo")
-4. Presiona "Exportar Seleccionados"
-5. Los iconos se guardarán en un archivo ZIP en el almacenamiento interno
+4. Presiona "Tematizar"
+5. Selecciona la máscara/fondo para los íconos (png)
+6. Elige un color, intensidad, transparencia y ajusta los íconos dentro de la máscara a tu gusto
+7. Presiona "Aplicar a Todos Los Íconos"
+8. Presiona "Exportar Pack de Íconos"
+9. Los iconos se guardarán en un archivo ZIP en la carpeta de descargas del dispositivo
+10. El pack generado es compatible con Icon Packer
 
-Permisos
+##Permisos
 
 La aplicación requiere:
 
 · QUERY_ALL_PACKAGES: Para listar aplicaciones instaladas
 · WRITE_EXTERNAL_STORAGE: Para guardar el archivo ZIP (solo hasta Android 10)
 
-Estructura del Proyecto
+##Estructura del Proyecto
 
 ```
 app/
@@ -69,17 +79,32 @@ app/
 
 ```
 
-Desarrollador
+##Desarrollador
 
-Romaster
+##Romaster
 
 · Email: roman.ignacio.romero@gmail.com
-· GitHub: romaster
+· GitHub: Romaster1985
 
-Agradecimientos
+##Agradecimientos
 
 Esta aplicación fue diseñada con la ayuda de DeepSeek.
 
-Licencia
+##Licencia
 
 MIT License - ver archivo LICENSE para más detalles.
+
+#📲 Descarga de la aplicación APK
+
+• Desde [**RELEASES**](https://github.com/Romaster1985/App-Icon-Scraper-Themed/releases) (Recomendado)
+• Desde GitHub Actions, entra en el último workflow y descarga el Artifact generado
+
+## 🔗 Enlaces Útiles
+
+- 🐛 [Reportar Issues](https://github.com/Romaster1985/App-Icon-Scraper-Themed/issues) - ¿Encontraste un error?
+- 💡 [Sugerir Features](https://github.com/Romaster1985/App-Icon-Scraper-Themed/issues) - Ideas para mejorar la app
+- 🫂 [Apóyame en Patreon **Romaster Android Tuning**](https://www.patreon.com/romasterdroidtuning?utm_campaign=creatorshare_creator)
+
+---
+
+⭐ **¿Te gustó este proyecto? Dale una estrella en GitHub!**
