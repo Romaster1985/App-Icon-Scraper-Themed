@@ -1,4 +1,4 @@
-# App Icon Scraper
+# App Icon Scraper & Themer
 
 Una aplicación Android para extraer, personalizar y exportar iconos de aplicaciones instaladas en el dispositivo.
 
