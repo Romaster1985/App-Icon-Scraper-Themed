@@ -9,8 +9,8 @@ Una aplicación Android para extraer, personalizar y exportar iconos de aplicaci
 * 🎯 Filtrado inteligente (Sistema, Usuario, Google Apps)
 * ✅ Selección múltiple de aplicaciones
 * 🎨 Sistema único de tematización de iconos
-* 📍 Ajuste de posición, escala y transparencia
-* 🎛️ Control de intensidad de color
+* 📍 Ajuste de posición, escala, transparencia, tinte, saturación, brillo y contraste
+* 🎛️ Control de intensidad de color (fundido a color preseteado)
 * 👁️ Vista previa en tiempo real
 * 📦 Generación de packs de iconos personalizados
 * 🗜️Exportación a archivo ZIP

@@ -38,6 +38,16 @@ class ThemeCustomizationActivity : AppCompatActivity() {
     private lateinit var colorIntensityValueText: TextView
     private lateinit var progressText: TextView
 
+    // NUEVOS CONTROLES DE AJUSTE DE IMAGEN
+    private lateinit var seekBarHue: SeekBar
+    private lateinit var seekBarSaturation: SeekBar
+    private lateinit var seekBarBrightness: SeekBar
+    private lateinit var seekBarContrast: SeekBar
+    private lateinit var hueValueText: TextView
+    private lateinit var saturationValueText: TextView
+    private lateinit var brightnessValueText: TextView
+    private lateinit var contrastValueText: TextView
+
     private var selectedMask: Bitmap? = null
     private var selectedColor: Int = Color.CYAN
     private var offsetX: Int = 0
@@ -45,6 +55,13 @@ class ThemeCustomizationActivity : AppCompatActivity() {
     private var scalePercentage: Int = 100
     private var alphaPercentage: Int = 100
     private var colorIntensity: Int = 100
+    
+    // NUEVOS PARÁMETROS DE AJUSTE DE IMAGEN
+    private var hue: Float = 0f           // -180 a 180
+    private var saturation: Float = 1f    // 0 a 2 (100% = 1.0)
+    private var brightness: Float = 0f    // -100 a 100
+    private var contrast: Float = 1f      // 0 a 2 (100% = 1.0)
+
     private lateinit var selectedApps: List<AppInfo>
     private var sampleIcon: Bitmap? = null
     private val themedIcons = mutableMapOf<String, Bitmap>()
@@ -83,6 +100,17 @@ class ThemeCustomizationActivity : AppCompatActivity() {
         colorIntensityValueText = findViewById(R.id.colorIntensityValueText)
         progressText = findViewById(R.id.progressText)
 
+        // INICIALIZAR NUEVOS CONTROLES
+        seekBarHue = findViewById(R.id.seekBarHue)
+        seekBarSaturation = findViewById(R.id.seekBarSaturation)
+        seekBarBrightness = findViewById(R.id.seekBarBrightness)
+        seekBarContrast = findViewById(R.id.seekBarContrast)
+        hueValueText = findViewById(R.id.hueValueText)
+        saturationValueText = findViewById(R.id.saturationValueText)
+        brightnessValueText = findViewById(R.id.brightnessValueText)
+        contrastValueText = findViewById(R.id.contrastValueText)
+
+        // CONFIGURAR RANGOS EXISTENTES
         seekBarX.max = 200
         seekBarX.progress = 100
         seekBarY.max = 200
@@ -93,6 +121,19 @@ class ThemeCustomizationActivity : AppCompatActivity() {
         seekBarAlpha.progress = 100
         seekBarColorIntensity.max = 100
         seekBarColorIntensity.progress = 100
+        
+        // CONFIGURAR RANGOS DE NUEVOS CONTROLES
+        seekBarHue.max = 360          // -180 a +180 (0-360 con centro en 180)
+        seekBarHue.progress = 180     // 0 en el centro
+        
+        seekBarSaturation.max = 200   // 0% a 200%
+        seekBarSaturation.progress = 100 // 100% = valor normal
+        
+        seekBarBrightness.max = 200   // -100 a +100
+        seekBarBrightness.progress = 100 // 0 en el centro
+        
+        seekBarContrast.max = 200     // 0% a 200%
+        seekBarContrast.progress = 100 // 100% = valor normal
         
         // Configurar color inicial del botón
         colorPickerButton.setBackgroundColor(selectedColor)
@@ -107,6 +148,7 @@ class ThemeCustomizationActivity : AppCompatActivity() {
             showColorPickerDialog()
         }
 
+        // LISTENERS EXISTENTES
         seekBarX.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 offsetX = progress - 100
@@ -151,6 +193,47 @@ class ThemeCustomizationActivity : AppCompatActivity() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 colorIntensity = progress
                 colorIntensityValueText.text = "Intensidad de Color: $colorIntensity%"
+                updatePreview()
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        // NUEVOS LISTENERS PARA AJUSTES DE IMAGEN
+        seekBarHue.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                hue = (progress - 180).toFloat() // Convertir a -180 a 180
+                hueValueText.text = "Tinte: ${hue}°"
+                updatePreview()
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        seekBarSaturation.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                saturation = progress / 100.0f // Convertir a 0.0 a 2.0
+                saturationValueText.text = "Saturación: ${progress}%"
+                updatePreview()
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        seekBarBrightness.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                brightness = (progress - 100).toFloat() // Convertir a -100 a 100
+                brightnessValueText.text = "Brillo: ${brightness}%"
+                updatePreview()
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        seekBarContrast.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                contrast = progress / 100.0f // Convertir a 0.0 a 2.0
+                contrastValueText.text = "Contraste: ${progress}%"
                 updatePreview()
             }
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -219,16 +302,23 @@ class ThemeCustomizationActivity : AppCompatActivity() {
 
     private fun updatePreview() {
         if (selectedMask != null && sampleIcon != null) {
-            val processedIcon = IconThemer.applyTheme(
-                sampleIcon!!, 
-                selectedMask!!, 
-                selectedColor, 
-                offsetX, 
-                offsetY, 
-                scalePercentage,
-                alphaPercentage,
-                colorIntensity
+            // CREAR CONFIGURACIÓN CON LOS NUEVOS PARÁMETROS
+            val config = IconThemer.ThemeConfig(
+                mask = selectedMask!!,
+                color = selectedColor,
+                offsetX = offsetX,
+                offsetY = offsetY,
+                scalePercentage = scalePercentage,
+                alphaPercentage = alphaPercentage,
+                colorIntensity = colorIntensity,
+                // NUEVOS PARÁMETROS
+                hue = hue,
+                saturation = saturation,
+                brightness = brightness,
+                contrast = contrast
             )
+            
+            val processedIcon = IconThemer.applyTheme(sampleIcon!!, config)
             iconPreview.setImageBitmap(processedIcon)
         }
     }
@@ -250,23 +340,29 @@ class ThemeCustomizationActivity : AppCompatActivity() {
 
             themedIcons.clear()
 
+            // CREAR CONFIGURACIÓN UNA SOLA VEZ CON TODOS LOS PARÁMETROS
+            val config = IconThemer.ThemeConfig(
+                mask = selectedMask!!,
+                color = selectedColor,
+                offsetX = offsetX,
+                offsetY = offsetY,
+                scalePercentage = scalePercentage,
+                alphaPercentage = alphaPercentage,
+                colorIntensity = colorIntensity,
+                hue = hue,
+                saturation = saturation,
+                brightness = brightness,
+                contrast = contrast
+            )
+
             selectedApps.forEach { app ->
                 try {
                     val appInfo = packageManager.getApplicationInfo(app.packageName, 0)
                     val drawable = appInfo.loadIcon(packageManager)
-                    // USAR LA NUEVA FUNCIÓN QUE NORMALIZA AUTOMÁTICAMENTE
                     val originalIcon = IconThemer.drawableToNormalizedBitmap(drawable)
                     
-                    val themedIcon = IconThemer.applyTheme(
-                        originalIcon, 
-                        selectedMask!!, 
-                        selectedColor, 
-                        offsetX, 
-                        offsetY, 
-                        scalePercentage,
-                        alphaPercentage,
-                        colorIntensity
-                    )
+                    // USAR LA NUEVA CONFIGURACIÓN
+                    val themedIcon = IconThemer.applyTheme(originalIcon, config)
                     
                     themedIcons[app.packageName] = themedIcon
                     processedCount++

@@ -2,12 +2,66 @@ package com.romaster.appiconscrapper
 
 import android.graphics.*
 import android.graphics.drawable.Drawable
+import kotlin.math.PI
+import kotlin.math.cos
+import kotlin.math.sin
 
 object IconThemer {
 
     // Tamaño estándar para normalizar todos los iconos (recomendado para máscaras)
     private const val STANDARD_ICON_SIZE = 512
 
+    // NUEVA CLASE PARA CONFIGURACIÓN COMPLETA
+    data class ThemeConfig(
+        val mask: Bitmap,
+        val color: Int,
+        val offsetX: Int = 0,
+        val offsetY: Int = 0,
+        val scalePercentage: Int = 100,
+        val alphaPercentage: Int = 100,
+        val colorIntensity: Int = 100,
+        // NUEVOS PARÁMETROS DE AJUSTE DE IMAGEN
+        val hue: Float = 0f,           // -180 a 180
+        val saturation: Float = 1f,    // 0 a 2
+        val brightness: Float = 0f,    // -100 a 100
+        val contrast: Float = 1f       // 0 a 2
+    )
+
+    // MÉTODO PRINCIPAL MEJORADO
+    fun applyTheme(originalIcon: Bitmap, config: ThemeConfig): Bitmap {
+        // 1. Normalizar el icono a tamaño estándar manteniendo calidad
+        val normalizedIcon = normalizeIconSize(originalIcon)
+
+        // 2. Escalar el icono según el porcentaje
+        val scaledIcon = scaleIcon(normalizedIcon, config.scalePercentage)
+
+        // 3. APLICAR NUEVOS AJUSTES DE IMAGEN (antes del color)
+        val adjustedIcon = applyImageAdjustments(scaledIcon, config)
+
+        // 4. Aplicar color con intensidad controlada
+        val coloredIcon = applyColorWithIntensity(adjustedIcon, config.color, config.colorIntensity)
+
+        // 5. Aplicar transparencia
+        val transparentIcon = applyAlpha(coloredIcon, config.alphaPercentage)
+
+        // 6. Crear un bitmap del tamaño de la máscara
+        val result = Bitmap.createBitmap(config.mask.width, config.mask.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(result)
+
+        // 7. Dibujar la máscara como fondo primero
+        canvas.drawBitmap(config.mask, 0f, 0f, null)
+
+        // 8. Calcular la posición para centrar el icono y aplicar offsets
+        val x = (config.mask.width - transparentIcon.width) / 2 + config.offsetX
+        val y = (config.mask.height - transparentIcon.height) / 2 + config.offsetY
+
+        // 9. Dibujar el icono procesado encima de la máscara
+        canvas.drawBitmap(transparentIcon, x.toFloat(), y.toFloat(), null)
+
+        return result
+    }
+
+    // MÉTODO COMPATIBLE CON LA VERSIÓN ANTERIOR (para no romper código existente)
     fun applyTheme(
         originalIcon: Bitmap,
         mask: Bitmap,
@@ -18,80 +72,132 @@ object IconThemer {
         alphaPercentage: Int,
         colorIntensity: Int
     ): Bitmap {
-        // 1. Normalizar el icono a tamaño estándar manteniendo calidad
-        val normalizedIcon = normalizeIconSize(originalIcon)
+        val config = ThemeConfig(
+            mask = mask,
+            color = color,
+            offsetX = offsetX,
+            offsetY = offsetY,
+            scalePercentage = scalePercentage,
+            alphaPercentage = alphaPercentage,
+            colorIntensity = colorIntensity
+        )
+        return applyTheme(originalIcon, config)
+    }
 
-        // 2. Escalar el icono según el porcentaje (relativo al tamaño normalizado)
-        val scaledIcon = scaleIcon(normalizedIcon, scalePercentage)
+    // NUEVO MÉTODO PARA APLICAR AJUSTES DE IMAGEN
+    private fun applyImageAdjustments(icon: Bitmap, config: ThemeConfig): Bitmap {
+        // Si no hay ajustes que aplicar, retornar el icono original
+        if (config.hue == 0f && config.saturation == 1f && 
+            config.brightness == 0f && config.contrast == 1f) {
+            return icon
+        }
 
-        // 3. Aplicar color con intensidad controlada
-        val coloredIcon = applyColorWithIntensity(scaledIcon, color, colorIntensity)
-
-        // 4. Aplicar transparencia
-        val transparentIcon = applyAlpha(coloredIcon, alphaPercentage)
-
-        // 5. Crear un bitmap del tamaño de la máscara
-        val result = Bitmap.createBitmap(mask.width, mask.height, Bitmap.Config.ARGB_8888)
+        val result = Bitmap.createBitmap(icon.width, icon.height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(result)
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
-        // 6. Dibujar la máscara como fondo primero
-        canvas.drawBitmap(mask, 0f, 0f, null)
+        // Crear matriz de color combinada
+        val colorMatrix = ColorMatrix()
 
-        // 7. Calcular la posición para centrar el icono y aplicar offsets
-        val x = (mask.width - transparentIcon.width) / 2 + offsetX
-        val y = (mask.height - transparentIcon.height) / 2 + offsetY
+        // Aplicar ajustes en el orden correcto:
+        
+        // 1. Primero el matiz (hue)
+        if (config.hue != 0f) {
+            applyHueRotation(colorMatrix, config.hue)
+        }
 
-        // 8. Dibujar el icono procesado encima de la máscara
-        canvas.drawBitmap(transparentIcon, x.toFloat(), y.toFloat(), null)
+        // 2. Luego la saturación
+        if (config.saturation != 1f) {
+            colorMatrix.setSaturation(config.saturation)
+        }
+
+        // 3. Contraste y brillo juntos
+        if (config.contrast != 1f || config.brightness != 0f) {
+            applyContrastAndBrightness(colorMatrix, config.contrast, config.brightness)
+        }
+
+        paint.colorFilter = ColorMatrixColorFilter(colorMatrix)
+        canvas.drawBitmap(icon, 0f, 0f, paint)
 
         return result
     }
 
-    /**
-     * Normaliza el icono a un tamaño estándar manteniendo la relación de aspecto
-     * y calidad. Esto asegura que todos los iconos tengan consistencia.
-     */
-    fun normalizeIconSize(icon: Bitmap): Bitmap {  // CAMBIADO: de private a public
-        // Si el icono ya tiene el tamaño estándar, retornarlo directamente
+    // MÉTODO PARA ROTACIÓN DE MATIZ (HUE)
+    private fun applyHueRotation(matrix: ColorMatrix, hue: Float) {
+        val hueRad = hue * (PI / 180f).toFloat()
+        val cosVal = cos(hueRad.toDouble()).toFloat()
+        val sinVal = sin(hueRad.toDouble()).toFloat()
+        val lumR = 0.213f
+        val lumG = 0.715f
+        val lumB = 0.072f
+        
+        val hueMatrix = floatArrayOf(
+            lumR + cosVal * (1 - lumR) + sinVal * (-lumR),
+            lumG + cosVal * (-lumG) + sinVal * (-lumG),
+            lumB + cosVal * (-lumB) + sinVal * (1 - lumB),
+            0f, 0f,
+            
+            lumR + cosVal * (-lumR) + sinVal * (0.143f),
+            lumG + cosVal * (1 - lumG) + sinVal * (0.140f),
+            lumB + cosVal * (-lumB) + sinVal * (-0.283f),
+            0f, 0f,
+            
+            lumR + cosVal * (-lumR) + sinVal * (-(1 - lumR)),
+            lumG + cosVal * (-lumG) + sinVal * (lumG),
+            lumB + cosVal * (1 - lumB) + sinVal * (lumB),
+            0f, 0f,
+            
+            0f, 0f, 0f, 1f, 0f
+        )
+        
+        matrix.postConcat(ColorMatrix(hueMatrix))
+    }
+
+    // MÉTODO PARA CONTRASTE Y BRILLO
+    private fun applyContrastAndBrightness(matrix: ColorMatrix, contrast: Float, brightness: Float) {
+        // Convertir brillo de rango -100..100 a -255..255
+        val brightnessNormalized = brightness * 2.55f
+        
+        val contrastBrightnessMatrix = floatArrayOf(
+            contrast, 0f, 0f, 0f, brightnessNormalized,
+            0f, contrast, 0f, 0f, brightnessNormalized,
+            0f, 0f, contrast, 0f, brightnessNormalized,
+            0f, 0f, 0f, 1f, 0f
+        )
+        
+        matrix.postConcat(ColorMatrix(contrastBrightnessMatrix))
+    }
+
+    // MÉTODOS EXISTENTES (sin cambios)
+    fun normalizeIconSize(icon: Bitmap): Bitmap {
         if (icon.width == STANDARD_ICON_SIZE && icon.height == STANDARD_ICON_SIZE) {
             return icon
         }
 
-        // Calcular el nuevo tamaño manteniendo la relación de aspecto
         val aspectRatio = icon.width.toFloat() / icon.height.toFloat()
         val newWidth: Int
         val newHeight: Int
 
         if (aspectRatio > 1) {
-            // Icono horizontal
             newWidth = STANDARD_ICON_SIZE
             newHeight = (STANDARD_ICON_SIZE / aspectRatio).toInt()
         } else {
-            // Icono vertical o cuadrado
             newHeight = STANDARD_ICON_SIZE
             newWidth = (STANDARD_ICON_SIZE * aspectRatio).toInt()
         }
 
-        // Crear un bitmap con fondo transparente
         val normalized = Bitmap.createBitmap(STANDARD_ICON_SIZE, STANDARD_ICON_SIZE, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(normalized)
         
-        // Calcular posición para centrar el icono
         val x = (STANDARD_ICON_SIZE - newWidth) / 2
         val y = (STANDARD_ICON_SIZE - newHeight) / 2
 
-        // Redimensionar el icono manteniendo la calidad
         val scaledIcon = Bitmap.createScaledBitmap(icon, newWidth, newHeight, true)
-        
-        // Dibujar el icono redimensionado en el centro
         canvas.drawBitmap(scaledIcon, x.toFloat(), y.toFloat(), null)
 
         return normalized
     }
 
-    /**
-     * Escala un icono ya normalizado según el porcentaje deseado
-     */
     private fun scaleIcon(icon: Bitmap, scalePercentage: Int): Bitmap {
         val scale = scalePercentage / 100.0f
         val newWidth = (icon.width * scale).toInt().coerceAtLeast(1)
@@ -105,26 +211,20 @@ object IconThemer {
         val canvas = Canvas(result)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
-        // Calcular la intensidad (0 = icono original, 100 = color completo)
         val intensityFactor = intensity / 100.0f
 
         if (intensityFactor < 1.0f) {
-            // Mezclar el icono original con el color seleccionado
             val originalCopy = icon.copy(Bitmap.Config.ARGB_8888, true)
             val coloredCopy = applyFullColor(icon, color)
             
-            // Mezclar según la intensidad
             val mixer = PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP)
             paint.xfermode = mixer
             
-            // Dibujar el icono original
             canvas.drawBitmap(originalCopy, 0f, 0f, null)
             
-            // Aplicar transparencia al color según la intensidad
             paint.alpha = (intensityFactor * 255).toInt()
             canvas.drawBitmap(coloredCopy, 0f, 0f, paint)
         } else {
-            // Intensidad completa - usar color sólido
             canvas.drawBitmap(applyFullColor(icon, color), 0f, 0f, null)
         }
 
@@ -136,7 +236,6 @@ object IconThemer {
         val canvas = Canvas(result)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
-        // Convertir a escala de grises para preservar la forma
         val colorMatrix = ColorMatrix().apply {
             setSaturation(0f)
         }
@@ -144,7 +243,6 @@ object IconThemer {
         paint.colorFilter = ColorMatrixColorFilter(colorMatrix)
         canvas.drawBitmap(icon, 0f, 0f, paint)
 
-        // Aplicar el color
         paint.colorFilter = null
         paint.color = color
         paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
@@ -175,9 +273,6 @@ object IconThemer {
         return bitmap
     }
 
-    /**
-     * Método mejorado para convertir Drawable a Bitmap con normalización automática
-     */
     fun drawableToNormalizedBitmap(drawable: Drawable): Bitmap {
         val originalBitmap = drawableToBitmap(drawable)
         return normalizeIconSize(originalBitmap)

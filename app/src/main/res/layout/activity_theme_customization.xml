@@ -147,7 +147,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp" />
 
-        <!-- NUEVO: Transparencia -->
+        <!-- Transparencia -->
         <TextView
             android:id="@+id/alphaValueText"
             android:layout_width="match_parent"
@@ -162,7 +162,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp" />
 
-        <!-- NUEVO: Intensidad de Color -->
+        <!-- Intensidad de Color -->
         <TextView
             android:id="@+id/colorIntensityValueText"
             android:layout_width="match_parent"
@@ -173,6 +173,76 @@
 
         <SeekBar
             android:id="@+id/seekBarColorIntensity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp" />
+
+        <!-- NUEVOS CONTROLES: AJUSTES DE IMAGEN -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ajustes de Imagen"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Tinte -->
+        <TextView
+            android:id="@+id/hueValueText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tinte: 0°"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp" />
+
+        <SeekBar
+            android:id="@+id/seekBarHue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Saturación -->
+        <TextView
+            android:id="@+id/saturationValueText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Saturación: 100%"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp" />
+
+        <SeekBar
+            android:id="@+id/seekBarSaturation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Brillo -->
+        <TextView
+            android:id="@+id/brightnessValueText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Brillo: 0%"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp" />
+
+        <SeekBar
+            android:id="@+id/seekBarBrightness"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Contraste -->
+        <TextView
+            android:id="@+id/contrastValueText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Contraste: 100%"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp" />
+
+        <SeekBar
+            android:id="@+id/seekBarContrast"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp" />
