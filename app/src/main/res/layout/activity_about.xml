@@ -13,7 +13,7 @@
         <!-- Logo personalizado -->
         <ImageView
             android:id="@+id/logoImage"
-            android:layout_width="150dp"
+            android:layout_width="300dp"
             android:layout_height="150dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="30dp"
