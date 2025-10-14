@@ -4,24 +4,24 @@ Una aplicación Android para extraer, personalizar y exportar iconos de aplicaci
 
 ## Características
 
-• 📱 Interfaz de usuario simple y profesional
-• 🔍Escanea y 📋 lista todas las aplicaciones instaladas
-• 🎯 Filtrado inteligente (Sistema, Usuario, Google Apps)
-• ✅ Selección múltiple de aplicaciones
-• 🎨 Sistema único de tematización de iconos
-•📍 Ajuste de posición, escala y transparencia
-• 🎛️ Control de intensidad de color
-• 👁️ Vista previa en tiempo real
-• 📦 Generación de packs de iconos personalizados
-• 🗜️Exportación a archivo ZIP
+* 📱 Interfaz de usuario simple y profesional
+* 🔍Escanea y 📋 lista todas las aplicaciones instaladas
+* 🎯 Filtrado inteligente (Sistema, Usuario, Google Apps)
+* ✅ Selección múltiple de aplicaciones
+* 🎨 Sistema único de tematización de iconos
+* 📍 Ajuste de posición, escala y transparencia
+* 🎛️ Control de intensidad de color
+* 👁️ Vista previa en tiempo real
+* 📦 Generación de packs de iconos personalizados
+* 🗜️Exportación a archivo ZIP
 
-##Tecnologías:
+## Tecnologías:
 
-• Kotlin
-• Android SDK
-• Material Design 3
-• RecyclerView
-• Gradle
+* Kotlin
+* Android SDK
+* Material Design 3
+* RecyclerView
+* Gradle
 
 ## Compilación
 
@@ -42,7 +42,7 @@ GitHub Actions
 
 La aplicación se compila automáticamente en cada push a las ramas main/master mediante GitHub Actions.
 
-##Uso
+## Uso
 
 1. Abre la aplicación y presiona "Escanear Apps"
 2. Usa los filtros para encontrar las aplicaciones deseadas
@@ -55,14 +55,14 @@ La aplicación se compila automáticamente en cada push a las ramas main/master 
 9. Los iconos se guardarán en un archivo ZIP en la carpeta de descargas del dispositivo
 10. El pack generado es compatible con Icon Packer
 
-##Permisos
+## Permisos
 
 La aplicación requiere:
 
 · QUERY_ALL_PACKAGES: Para listar aplicaciones instaladas
 · WRITE_EXTERNAL_STORAGE: Para guardar el archivo ZIP (solo hasta Android 10)
 
-##Estructura del Proyecto
+## Estructura del Proyecto
 
 ```
 app/
@@ -79,22 +79,22 @@ app/
 
 ```
 
-##Desarrollador
+## Desarrollador
 
-##Romaster
+**Romaster**
 
 · Email: roman.ignacio.romero@gmail.com
-· GitHub: Romaster1985
+· GitHub: [Romaster1985](https://github.com/Romaster1985)
 
-##Agradecimientos
+## Agradecimientos
 
 Esta aplicación fue diseñada con la ayuda de DeepSeek.
 
-##Licencia
+## Licencia
 
 MIT License - ver archivo LICENSE para más detalles.
 
-#📲 Descarga de la aplicación APK
+# 📲 Descarga de la aplicación APK
 
 • Desde [**RELEASES**](https://github.com/Romaster1985/App-Icon-Scraper-Themed/releases) (Recomendado)
 • Desde GitHub Actions, entra en el último workflow y descarga el Artifact generado
