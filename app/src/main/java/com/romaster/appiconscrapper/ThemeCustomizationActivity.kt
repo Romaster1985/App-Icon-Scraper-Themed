@@ -581,8 +581,9 @@ class ThemeCustomizationActivity : AppCompatActivity() {
 			            useRound = useRoundIcon,
 			            useForeground = useForegroundLayer,
 			            useBackground = useBackgroundLayer
-			        ) //?: continue // Saltar si no se pudo obtener el icono
-        
+			        ) catch (e: Exception) {
+						e.printStackTrace() //?: continue // Saltar si no se pudo obtener el icono
+					}
 			        val themedIcon = IconThemer.applyTheme(originalIcon, config)
         
 			        themedIcons[app.packageName] = themedIcon
