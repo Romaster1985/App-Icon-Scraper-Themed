@@ -14,10 +14,8 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import java.io.ByteArrayOutputStream
-import java.io.FileInputStream
-import java.io.Serializable
 import java.io.File
+import java.io.FileInputStream
 import java.io.IOException
 import java.io.InputStream
 
@@ -429,6 +427,18 @@ class ThemeCustomizationActivity : AppCompatActivity() {
         }
     }
 
+    private fun previewAllIcons() {
+        if (themedIcons.isEmpty()) {
+            Toast.makeText(this, "Primero procesa los iconos", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val intent = Intent(this, IconPreviewActivity::class.java).apply {
+            putExtra("themed_icons", HashMap(themedIcons))
+        }
+        startActivity(intent)
+    }
+
     private fun loadSampleIcon() {
         if (selectedApps.isNotEmpty()) {
             try {
@@ -482,7 +492,8 @@ class ThemeCustomizationActivity : AppCompatActivity() {
         val builder = android.app.AlertDialog.Builder(this)
         builder.setTitle("Seleccionar Color")
         
-        val colorNames = arrayOf("Rojo", "Verde", "Azul", "Cian", "Magenta", "Amarillo", "Blanco", "Negro", "Gris", "Naranja", "Púrpura", "Azul Claro", "Verde Claro")
+        val colorNames = arrayOf("Rojo", "Verde", "Azul", "Cian", "Magenta", "Amarillo", 
+                               "Blanco", "Negro", "Gris", "Naranja", "Púrpura", "Azul Claro", "Verde Claro")
         
         builder.setItems(colorNames) { _, which ->
             selectedColor = colors[which]
@@ -554,31 +565,42 @@ class ThemeCustomizationActivity : AppCompatActivity() {
                 useBackgroundLayer = useBackgroundLayer
             )
 
-			selectedApps.forEach { app ->
-			    try {
-			        // Obtener el icono ya normalizado
-			        val originalIcon = IconScraper.getNormalizedIcon(
-			            packageManager = packageManager,
-			            packageName = app.packageName,
-			            useDefault = useDefaultIcon,
-			            useRound = useRoundIcon,
-			            useForeground = useForegroundLayer,
-			            useBackground = useBackgroundLayer
-			        ) //?: continue // Saltar si no se pudo obtener el icono
-					
-			        val themedIcon = IconThemer.applyTheme(originalIcon, config)
-        
-			        themedIcons[app.packageName] = themedIcon
-			        previewIconsList.add(themedIcon)
-			        processedCount++
-        
-			        runOnUiThread {
-			            progressText.text = "Procesando: $processedCount/$totalIcons"
-			        }
-			    } catch (e: Exception) {
-			        e.printStackTrace()
-			    }
-			}
+            selectedApps.forEach { app ->
+                try {
+                    // Obtener las capas del icono
+                    val layers = IconScraper.getIconLayers(packageManager, app.packageName)
+                    
+                    // Componer el icono según la configuración
+                    val composedIcon = IconScraper.composeIconFromLayers(
+                        layers = layers,
+                        useDefault = useDefaultIcon,
+                        useRound = useRoundIcon,
+                        useForeground = useForegroundLayer,
+                        useBackground = useBackgroundLayer
+                    )
+                    
+                    val originalIcon = if (composedIcon != null) {
+                        IconThemer.drawableToNormalizedBitmap(composedIcon)
+                    } else {
+                        // Fallback: obtener el icono por defecto directamente
+                        val appInfo = packageManager.getApplicationInfo(app.packageName, 0)
+                        val defaultDrawable = appInfo.loadIcon(packageManager)
+                        IconThemer.drawableToNormalizedBitmap(defaultDrawable)
+                    }
+                    
+                    val themedIcon = IconThemer.applyTheme(originalIcon, config)
+                    
+                    themedIcons[app.packageName] = themedIcon
+                    previewIconsList.add(themedIcon)
+                    processedCount++
+                    
+                    runOnUiThread {
+                        progressText.text = "Procesando: $processedCount/$totalIcons"
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
 
             runOnUiThread {
                 progressText.text = "¡Procesamiento completado!"
