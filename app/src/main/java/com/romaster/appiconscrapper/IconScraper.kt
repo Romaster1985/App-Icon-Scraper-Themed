@@ -153,38 +153,4 @@ object IconScraper {
             null
         }
     }
-      /**
-      * Obtiene un icono normalizado y procesado según la configuración
-      */
-    fun getNormalizedIcon(
-        packageManager: PackageManager, 
-        packageName: String,
-        useDefault: Boolean = true,
-        useRound: Boolean = false,
-        useForeground: Boolean = true,
-        useBackground: Boolean = true
-    ): Bitmap? {
-        return try {
-            val layers = getIconLayers(packageManager, packageName)
-            val composedIcon = composeIconFromLayers(
-                layers = layers,
-                useDefault = useDefault,
-                useRound = useRound,
-                useForeground = useForeground,
-                useBackground = useBackground
-            )
-        
-            composedIcon?.let { 
-                IconThemer.processAndNormalizeDrawable(it)
-            } ?: run {
-                // Fallback: icono por defecto normalizado
-                val appInfo = packageManager.getApplicationInfo(packageName, 0)
-                val defaultDrawable = appInfo.loadIcon(packageManager)
-                IconThemer.processAndNormalizeDrawable(defaultDrawable)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
-    }
 }
