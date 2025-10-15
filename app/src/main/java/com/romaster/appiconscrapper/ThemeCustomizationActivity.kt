@@ -370,48 +370,57 @@ class ThemeCustomizationActivity : AppCompatActivity() {
                 val nextApp = selectedApps[currentPreviewIndex]
                 
                 // Procesar el icono de nextApp con la configuración actual
-				Thread {
-				    try {
-				        val originalIcon = IconScraper.getNormalizedIcon(
-				            packageManager = packageManager,
-				            packageName = nextApp.packageName,
-				            useDefault = useDefaultIcon,
-				            useRound = useRoundIcon,
-				            useForeground = useForegroundLayer,
-				            useBackground = useBackgroundLayer
-				        ) ?: return@Thread
-        
-				        val config = IconThemer.ThemeConfig(
-				            mask = selectedMask!!,
-				            color = selectedColor,
-				            offsetX = offsetX,
-				            offsetY = offsetY,
-				            scalePercentage = scalePercentage,
-				            alphaPercentage = alphaPercentage,
-				            colorIntensity = colorIntensity,
-				            hue = hue,
-				            saturation = saturation,
-				            brightness = brightness,
-				            contrast = contrast,
-				            useDefaultIcon = useDefaultIcon,
-				            useRoundIcon = useRoundIcon,
-				            useForegroundLayer = useForegroundLayer,
-				            useBackgroundLayer = useBackgroundLayer
-				        )
-        
-				        val themedIcon = IconThemer.applyTheme(originalIcon, config)
-        
-				        runOnUiThread {
-				            iconPreview.setImageBitmap(themedIcon)
-				            Toast.makeText(this, "Icono ${currentPreviewIndex + 1} de ${selectedApps.size}: ${nextApp.name}", Toast.LENGTH_SHORT).show()
-				        }
-				    } catch (e: Exception) {
-				        e.printStackTrace()
-				        runOnUiThread {
-				            Toast.makeText(this, "Error al cargar el icono de ${nextApp.name}", Toast.LENGTH_SHORT).show()
-				        }
-				    }
-				}.start()                
+                Thread {
+                    try {
+                        val layers = IconScraper.getIconLayers(packageManager, nextApp.packageName)
+                        val composedIcon = IconScraper.composeIconFromLayers(
+                            layers = layers,
+                            useDefault = useDefaultIcon,
+                            useRound = useRoundIcon,
+                            useForeground = useForegroundLayer,
+                            useBackground = useBackgroundLayer
+                        )
+                        
+                        val originalIcon = if (composedIcon != null) {
+                            IconThemer.drawableToNormalizedBitmap(composedIcon)
+                        } else {
+                            val appInfo = packageManager.getApplicationInfo(nextApp.packageName, 0)
+                            val defaultDrawable = appInfo.loadIcon(packageManager)
+                            IconThemer.drawableToNormalizedBitmap(defaultDrawable)
+                        }
+                        
+                        val config = IconThemer.ThemeConfig(
+                            mask = selectedMask!!,
+                            color = selectedColor,
+                            offsetX = offsetX,
+                            offsetY = offsetY,
+                            scalePercentage = scalePercentage,
+                            alphaPercentage = alphaPercentage,
+                            colorIntensity = colorIntensity,
+                            hue = hue,
+                            saturation = saturation,
+                            brightness = brightness,
+                            contrast = contrast,
+                            useDefaultIcon = useDefaultIcon,
+                            useRoundIcon = useRoundIcon,
+                            useForegroundLayer = useForegroundLayer,
+                            useBackgroundLayer = useBackgroundLayer
+                        )
+                        
+                        val themedIcon = IconThemer.applyTheme(originalIcon, config)
+                        
+                        runOnUiThread {
+                            iconPreview.setImageBitmap(themedIcon)
+                            Toast.makeText(this, "Icono ${currentPreviewIndex + 1} de ${selectedApps.size}: ${nextApp.name}", 
+                                Toast.LENGTH_SHORT).show()
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        runOnUiThread {
+                            Toast.makeText(this, "Error al cargar el icono de ${nextApp.name}", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }.start()
             } else {
                 if (selectedMask == null) {
                     Toast.makeText(this, "Primero selecciona una máscara", Toast.LENGTH_SHORT).show()
@@ -419,32 +428,6 @@ class ThemeCustomizationActivity : AppCompatActivity() {
             }
         }
     }
-    // En el método previewAllIcons(), reemplazar con:
-	private fun previewAllIcons() {
- 	   if (themedIcons.isEmpty()) {
- 	       Toast.makeText(this, "Primero procesa los iconos", Toast.LENGTH_SHORT).show()
-  	      return
- 	   }
-	
-		try {
-    	    // Convertir los bitmaps a bytes para transferencia segura
-			val iconList = themedIcons.map { (packageName, bitmap) ->
-            	val stream = ByteArrayOutputStream()
-				bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, stream)
-                IconItem(packageName, stream.toByteArray())
-	        }
-        
-			val iconData = IconData(iconList)
-        
-			val intent = Intent(this, IconPreviewActivity::class.java).apply {
-                putExtra("icon_data", iconData)
-    		}
- 	       startActivity(intent)
- 	   } catch (e: Exception) {
- 	       e.printStackTrace()
-  	      Toast.makeText(this, "Error al abrir previsualización: ${e.message}", Toast.LENGTH_LONG).show()
-  	  }
-	}
 
     private fun loadSampleIcon() {
         if (selectedApps.isNotEmpty()) {
