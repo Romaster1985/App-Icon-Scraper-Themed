@@ -14,8 +14,10 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import java.io.File
+import java.io.ByteArrayOutputStream
 import java.io.FileInputStream
+import java.io.Serializable
+import java.io.File
 import java.io.IOException
 import java.io.InputStream
 
@@ -579,7 +581,7 @@ class ThemeCustomizationActivity : AppCompatActivity() {
 			            useRound = useRoundIcon,
 			            useForeground = useForegroundLayer,
 			            useBackground = useBackgroundLayer
-			        ) ?: continue // Saltar si no se pudo obtener el icono
+			        ) //?: continue // Saltar si no se pudo obtener el icono
         
 			        val themedIcon = IconThemer.applyTheme(originalIcon, config)
         
