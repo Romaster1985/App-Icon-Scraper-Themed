@@ -8,10 +8,10 @@ Una aplicación Android para extraer, personalizar y exportar iconos de aplicaci
 * 🔍Escanea y 📋 lista todas las aplicaciones instaladas
 * 🎯 Filtrado inteligente (Sistema, Usuario, Google Apps)
 * ✅ Selección múltiple de aplicaciones
-* 🎨 Sistema único de tematización de iconos
+* 🎨 Sistema único de tematización de iconos (agregados iconos multicapa)
 * 📍 Ajuste de posición, escala, transparencia, tinte, saturación, brillo y contraste
 * 🎛️ Control de intensidad de color (fundido a color preseteado)
-* 👁️ Vista previa en tiempo real
+* 👁️ Vista previa en tiempo real + vista previa de todos los íconos
 * 📦 Generación de packs de iconos personalizados
 * 🗜️Exportación a archivo ZIP
 
@@ -49,8 +49,9 @@ La aplicación se compila automáticamente en cada push a las ramas main/master 
 3. Selecciona las aplicaciones (individualmente o usando "Seleccionar Todo")
 4. Presiona "Tematizar"
 5. Selecciona la máscara/fondo para los íconos (png)
-6. Elige un color, intensidad, transparencia y ajusta los íconos dentro de la máscara a tu gusto
+6. Elige un color, intensidad, transparencia, capas, etc. y ajusta los íconos dentro de la máscara a tu gusto
 7. Presiona "Aplicar a Todos Los Íconos"
+7b. Previsualiza todos los íconos seleccionados
 8. Presiona "Exportar Pack de Íconos"
 9. Los iconos se guardarán en un archivo ZIP en la carpeta de descargas del dispositivo
 10. El pack generado es compatible con Icon Packer
@@ -71,10 +72,21 @@ app/
 │   │   ├── MainActivity.kt
 │   │   ├── AboutActivity.kt
 │   │   ├── AppInfo.kt
+│   │   ├── IconThemer.kt
 │   │   ├── AppAdapter.kt
+│   │   ├── ThemeCustomizationActivity.kt
+│   │   ├── IconPreviewActivity.kt
 │   │   └── IconScraper.kt
 │   ├── res/
+│   │   ├── layout/*.xml
+│   │   ├── drawable/*.xml *.png
+│   │   ├── mipmap-*/iconos de app (png) (xml)
+│   │   ├── values/*.xml
+│   │   ├── drawable-(m;h;xh)dpi/*.png
+│   │   ├── xml/file_paths.xml
+│   │   └── menu/main_menu.xml
 │   └── AndroidManifest.xml
+├── xproguard-rules.pro
 └── build.gradle
 
 ```

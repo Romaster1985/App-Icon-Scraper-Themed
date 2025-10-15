@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:orientation="vertical">
 
+    <!-- SECCIÓN FIJA - PREVIEW -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@color/white"
+        android:elevation="4dp">
 
         <!-- Título -->
         <TextView
@@ -17,23 +21,15 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:gravity="center"
-            android:layout_marginBottom="24dp" />
+            android:layout_marginBottom="16dp" />
 
         <!-- Vista Previa -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Vista Previa"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginBottom="24dp">
+            android:layout_marginBottom="16dp">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -51,8 +47,8 @@
 
                 <ImageView
                     android:id="@+id/maskPreview"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:background="@drawable/bg_card"
                     android:scaleType="fitCenter" />
 
@@ -74,208 +70,310 @@
 
                 <ImageView
                     android:id="@+id/iconPreview"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:background="@drawable/bg_card"
-                    android:scaleType="fitCenter" />
+                    android:scaleType="fitCenter"
+                    android:clickable="true"
+                    android:focusable="true" />
 
             </LinearLayout>
 
         </LinearLayout>
 
-        <!-- Controles -->
-        <Button
-            android:id="@+id/selectMaskButton"
+        <!-- Botones de selección -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Seleccionar Máscara PNG"
-            android:background="@drawable/button_primary"
-            android:textColor="@color/white"
-            android:layout_marginBottom="12dp" />
+            android:orientation="horizontal"
+            android:weightSum="2">
 
-        <Button
-            android:id="@+id/colorPickerButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Seleccionar Color"
-            android:background="@drawable/button_primary"
-            android:textColor="@color/white"
-            android:layout_marginBottom="24dp" />
+            <Button
+                android:id="@+id/selectMaskButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp"
+                android:text="Seleccionar Máscara"
+                android:background="@drawable/button_primary"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
 
-        <!-- Posición X -->
-        <TextView
-            android:id="@+id/xValueText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Posición X: 0"
-            android:textSize="14sp"
-            android:layout_marginBottom="4dp" />
+            <Button
+                android:id="@+id/colorPickerButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="4dp"
+                android:text="Seleccionar Color"
+                android:background="@drawable/button_primary"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
 
-        <SeekBar
-            android:id="@+id/seekBarX"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp" />
-
-        <!-- Posición Y -->
-        <TextView
-            android:id="@+id/yValueText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Posición Y: 0"
-            android:textSize="14sp"
-            android:layout_marginBottom="4dp" />
-
-        <SeekBar
-            android:id="@+id/seekBarY"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp" />
-
-        <!-- Escala -->
-        <TextView
-            android:id="@+id/scaleValueText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Escala: 100%"
-            android:textSize="14sp"
-            android:layout_marginBottom="4dp" />
-
-        <SeekBar
-            android:id="@+id/seekBarScale"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp" />
-
-        <!-- Transparencia -->
-        <TextView
-            android:id="@+id/alphaValueText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Transparencia: 100%"
-            android:textSize="14sp"
-            android:layout_marginBottom="4dp" />
-
-        <SeekBar
-            android:id="@+id/seekBarAlpha"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp" />
-
-        <!-- Intensidad de Color -->
-        <TextView
-            android:id="@+id/colorIntensityValueText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Intensidad de Color: 100%"
-            android:textSize="14sp"
-            android:layout_marginBottom="4dp" />
-
-        <SeekBar
-            android:id="@+id/seekBarColorIntensity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp" />
-
-        <!-- NUEVOS CONTROLES: AJUSTES DE IMAGEN -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Ajustes de Imagen"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginBottom="16dp" />
-
-        <!-- Tinte -->
-        <TextView
-            android:id="@+id/hueValueText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Tinte: 0°"
-            android:textSize="14sp"
-            android:layout_marginBottom="4dp" />
-
-        <SeekBar
-            android:id="@+id/seekBarHue"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp" />
-
-        <!-- Saturación -->
-        <TextView
-            android:id="@+id/saturationValueText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Saturación: 100%"
-            android:textSize="14sp"
-            android:layout_marginBottom="4dp" />
-
-        <SeekBar
-            android:id="@+id/seekBarSaturation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp" />
-
-        <!-- Brillo -->
-        <TextView
-            android:id="@+id/brightnessValueText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Brillo: 0%"
-            android:textSize="14sp"
-            android:layout_marginBottom="4dp" />
-
-        <SeekBar
-            android:id="@+id/seekBarBrightness"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp" />
-
-        <!-- Contraste -->
-        <TextView
-            android:id="@+id/contrastValueText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Contraste: 100%"
-            android:textSize="14sp"
-            android:layout_marginBottom="4dp" />
-
-        <SeekBar
-            android:id="@+id/seekBarContrast"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp" />
-
-        <!-- Progreso -->
-        <TextView
-            android:id="@+id/progressText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Listo para procesar"
-            android:textSize="14sp"
-            android:gravity="center"
-            android:layout_marginBottom="16dp" />
-
-        <!-- Botones de Acción -->
-        <Button
-            android:id="@+id/applyButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Aplicar a Todos los Iconos"
-            android:background="@drawable/button_primary"
-            android:textColor="@color/white"
-            android:layout_marginBottom="8dp" />
-
-        <Button
-            android:id="@+id/exportButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Exportar Pack de Iconos"
-            android:background="@drawable/button_primary"
-            android:textColor="@color/white"
-            android:enabled="false" />
+        </LinearLayout>
 
     </LinearLayout>
 
-</ScrollView>
+    <!-- SECCIÓN DESPLAZABLE - CONTROLES -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Posición X -->
+            <TextView
+                android:id="@+id/xValueText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Posición X: 0"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp" />
+
+            <SeekBar
+                android:id="@+id/seekBarX"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Posición Y -->
+            <TextView
+                android:id="@+id/yValueText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Posición Y: 0"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp" />
+
+            <SeekBar
+                android:id="@+id/seekBarY"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Escala -->
+            <TextView
+                android:id="@+id/scaleValueText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Escala: 100%"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp" />
+
+            <SeekBar
+                android:id="@+id/seekBarScale"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Transparencia -->
+            <TextView
+                android:id="@+id/alphaValueText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Transparencia: 100%"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp" />
+
+            <SeekBar
+                android:id="@+id/seekBarAlpha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Intensidad de Color -->
+            <TextView
+                android:id="@+id/colorIntensityValueText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Intensidad de Color: 100%"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp" />
+
+            <SeekBar
+                android:id="@+id/seekBarColorIntensity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp" />
+
+            <!-- Ajustes de Imagen -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ajustes de Imagen"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Tinte -->
+            <TextView
+                android:id="@+id/hueValueText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tinte: 0°"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp" />
+
+            <SeekBar
+                android:id="@+id/seekBarHue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Saturación -->
+            <TextView
+                android:id="@+id/saturationValueText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Saturación: 100%"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp" />
+
+            <SeekBar
+                android:id="@+id/seekBarSaturation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Brillo -->
+            <TextView
+                android:id="@+id/brightnessValueText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Brillo: 0%"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp" />
+
+            <SeekBar
+                android:id="@+id/seekBarBrightness"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Contraste -->
+            <TextView
+                android:id="@+id/contrastValueText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Contraste: 100%"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp" />
+
+            <SeekBar
+                android:id="@+id/seekBarContrast"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp" />
+
+            <!-- Configuración de Capas de Icono -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Configuración de Capas de Icono"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_marginBottom="8dp" />
+
+            <CheckBox
+                android:id="@+id/useDefaultIconCheckbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Usar icono por defecto (recomendado)"
+                android:checked="true"
+                android:layout_marginBottom="8dp" />
+
+            <CheckBox
+                android:id="@+id/useRoundIconCheckbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Usar icono redondo (ic_launcher_round)"
+                android:checked="false"
+                android:layout_marginBottom="8dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:layout_marginBottom="8dp">
+
+                <CheckBox
+                    android:id="@+id/foregroundLayerCheckbox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Capa frontal"
+                    android:checked="true" />
+
+                <CheckBox
+                    android:id="@+id/backgroundLayerCheckbox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Capa de fondo"
+                    android:checked="true" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/layerInfoText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cargando información de capas..."
+                android:textSize="12sp"
+                android:background="@color/card_background"
+                android:padding="8dp"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Progreso -->
+            <TextView
+                android:id="@+id/progressText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Listo para procesar"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Botones de Acción -->
+            <Button
+                android:id="@+id/applyButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Aplicar a Todos los Iconos"
+                android:background="@drawable/button_primary"
+                android:textColor="@color/white"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Botón Previsualizar Todos -->
+            <Button
+                android:id="@+id/previewAllButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Previsualizar Todos"
+                android:background="@drawable/bg_card"
+                android:textColor="@color/text_secondary"
+                android:layout_marginBottom="8dp"
+                android:enabled="false" />
+
+            <Button
+                android:id="@+id/exportButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Exportar Pack de Iconos"
+                android:background="@drawable/button_primary"
+                android:textColor="@color/white"
+                android:enabled="false" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

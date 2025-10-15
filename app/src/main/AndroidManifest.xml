@@ -44,6 +44,13 @@
             android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.AppIconScraper" />
         
+        <!-- Nueva actividad de previsualización -->
+        <activity
+           android:name=".IconPreviewActivity"
+           android:label="Vista Previa de Iconos"
+           android:parentActivityName=".ThemeCustomizationActivity"
+           android:theme="@style/Theme.AppIconScraper" />
+        
         <!-- FileProvider para compartir archivos -->
         <provider
             android:name="androidx.core.content.FileProvider"

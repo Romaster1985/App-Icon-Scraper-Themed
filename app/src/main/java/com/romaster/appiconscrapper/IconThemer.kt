@@ -8,10 +8,10 @@ import kotlin.math.sin
 
 object IconThemer {
 
-    // Tamaño estándar para normalizar todos los iconos (recomendado para máscaras)
-    private const val STANDARD_ICON_SIZE = 512
+    // Tamaño estándar para normalizar todos los iconos - tamaño de Launcher típico
+    private const val STANDARD_ICON_SIZE = 192 // Tamaño común para iconos de Android
 
-    // NUEVA CLASE PARA CONFIGURACIÓN COMPLETA
+    // Configuración extendida con opciones de capas
     data class ThemeConfig(
         val mask: Bitmap,
         val color: Int,
@@ -20,11 +20,14 @@ object IconThemer {
         val scalePercentage: Int = 100,
         val alphaPercentage: Int = 100,
         val colorIntensity: Int = 100,
-        // NUEVOS PARÁMETROS DE AJUSTE DE IMAGEN
-        val hue: Float = 0f,           // -180 a 180
-        val saturation: Float = 1f,    // 0 a 2
-        val brightness: Float = 0f,    // -100 a 100
-        val contrast: Float = 1f       // 0 a 2
+        val hue: Float = 0f,
+        val saturation: Float = 1f,
+        val brightness: Float = 0f,
+        val contrast: Float = 1f,
+        val useDefaultIcon: Boolean = true,
+        val useRoundIcon: Boolean = false,
+        val useForegroundLayer: Boolean = true,
+        val useBackgroundLayer: Boolean = true
     )
 
     // MÉTODO PRINCIPAL MEJORADO
@@ -61,32 +64,100 @@ object IconThemer {
         return result
     }
 
-    // MÉTODO COMPATIBLE CON LA VERSIÓN ANTERIOR (para no romper código existente)
-    fun applyTheme(
-        originalIcon: Bitmap,
-        mask: Bitmap,
-        color: Int,
-        offsetX: Int,
-        offsetY: Int,
-        scalePercentage: Int,
-        alphaPercentage: Int,
-        colorIntensity: Int
-    ): Bitmap {
-        val config = ThemeConfig(
-            mask = mask,
-            color = color,
-            offsetX = offsetX,
-            offsetY = offsetY,
-            scalePercentage = scalePercentage,
-            alphaPercentage = alphaPercentage,
-            colorIntensity = colorIntensity
-        )
-        return applyTheme(originalIcon, config)
+    // NUEVO: Método mejorado para normalizar iconos que garantiza tamaño consistente
+    fun normalizeIconSize(icon: Bitmap): Bitmap {
+        // Si el icono ya tiene el tamaño estándar, retornarlo directamente
+        if (icon.width == STANDARD_ICON_SIZE && icon.height == STANDARD_ICON_SIZE) {
+            return icon
+        }
+
+        // Crear un bitmap con fondo transparente del tamaño estándar
+        val normalized = Bitmap.createBitmap(STANDARD_ICON_SIZE, STANDARD_ICON_SIZE, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(normalized)
+        
+        // Calcular el escalado manteniendo la relación de aspecto
+        val scale: Float
+        val dx: Float
+        val dy: Float
+        
+        if (icon.width > icon.height) {
+            // Icono horizontal
+            scale = STANDARD_ICON_SIZE.toFloat() / icon.width.toFloat()
+            dx = 0f
+            dy = (STANDARD_ICON_SIZE - icon.height * scale) / 2
+        } else {
+            // Icono vertical o cuadrado
+            scale = STANDARD_ICON_SIZE.toFloat() / icon.height.toFloat()
+            dx = (STANDARD_ICON_SIZE - icon.width * scale) / 2
+            dy = 0f
+        }
+        
+        // Crear matriz de transformación
+        val matrix = Matrix()
+        matrix.setScale(scale, scale)
+        matrix.postTranslate(dx, dy)
+        
+        // Dibujar el icono escalado y centrado
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        canvas.drawBitmap(icon, matrix, paint)
+        
+        return normalized
     }
 
-    // NUEVO MÉTODO PARA APLICAR AJUSTES DE IMAGEN
+    // NUEVO: Método para procesar y normalizar cualquier drawable
+    fun processAndNormalizeDrawable(
+        drawable: Drawable,
+        targetWidth: Int = STANDARD_ICON_SIZE,
+        targetHeight: Int = STANDARD_ICON_SIZE
+    ): Bitmap {
+        val bitmap = drawableToBitmap(drawable)
+        return normalizeToExactSize(bitmap, targetWidth, targetHeight)
+    }
+
+    // NUEVO: Método para normalizar a un tamaño exacto
+    private fun normalizeToExactSize(icon: Bitmap, width: Int, height: Int): Bitmap {
+        if (icon.width == width && icon.height == height) {
+            return icon
+        }
+
+        val normalized = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(normalized)
+        
+        // Calcular el escalado manteniendo la relación de aspecto
+        val scale: Float
+        val dx: Float
+        val dy: Float
+        
+        val scaleX = width.toFloat() / icon.width.toFloat()
+        val scaleY = height.toFloat() / icon.height.toFloat()
+        scale = scaleX.coerceAtMost(scaleY) // Usar la escala más pequeña para mantener aspecto
+        
+        val scaledWidth = icon.width * scale
+        val scaledHeight = icon.height * scale
+        
+        dx = (width - scaledWidth) / 2
+        dy = (height - scaledHeight) / 2
+        
+        val matrix = Matrix()
+        matrix.setScale(scale, scale)
+        matrix.postTranslate(dx, dy)
+        
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        canvas.drawBitmap(icon, matrix, paint)
+        
+        return normalized
+    }
+
+    // Resto de los métodos permanecen igual...
+    private fun scaleIcon(icon: Bitmap, scalePercentage: Int): Bitmap {
+        val scale = scalePercentage / 100.0f
+        val newWidth = (icon.width * scale).toInt().coerceAtLeast(1)
+        val newHeight = (icon.height * scale).toInt().coerceAtLeast(1)
+        
+        return Bitmap.createScaledBitmap(icon, newWidth, newHeight, true)
+    }
+
     private fun applyImageAdjustments(icon: Bitmap, config: ThemeConfig): Bitmap {
-        // Si no hay ajustes que aplicar, retornar el icono original
         if (config.hue == 0f && config.saturation == 1f && 
             config.brightness == 0f && config.contrast == 1f) {
             return icon
@@ -96,22 +167,16 @@ object IconThemer {
         val canvas = Canvas(result)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
-        // Crear matriz de color combinada
         val colorMatrix = ColorMatrix()
 
-        // Aplicar ajustes en el orden correcto:
-        
-        // 1. Primero el matiz (hue)
         if (config.hue != 0f) {
             applyHueRotation(colorMatrix, config.hue)
         }
 
-        // 2. Luego la saturación
         if (config.saturation != 1f) {
             colorMatrix.setSaturation(config.saturation)
         }
 
-        // 3. Contraste y brillo juntos
         if (config.contrast != 1f || config.brightness != 0f) {
             applyContrastAndBrightness(colorMatrix, config.contrast, config.brightness)
         }
@@ -122,7 +187,6 @@ object IconThemer {
         return result
     }
 
-    // MÉTODO PARA ROTACIÓN DE MATIZ (HUE)
     private fun applyHueRotation(matrix: ColorMatrix, hue: Float) {
         val hueRad = hue * (PI / 180f).toFloat()
         val cosVal = cos(hueRad.toDouble()).toFloat()
@@ -153,9 +217,7 @@ object IconThemer {
         matrix.postConcat(ColorMatrix(hueMatrix))
     }
 
-    // MÉTODO PARA CONTRASTE Y BRILLO
     private fun applyContrastAndBrightness(matrix: ColorMatrix, contrast: Float, brightness: Float) {
-        // Convertir brillo de rango -100..100 a -255..255
         val brightnessNormalized = brightness * 2.55f
         
         val contrastBrightnessMatrix = floatArrayOf(
@@ -166,44 +228,6 @@ object IconThemer {
         )
         
         matrix.postConcat(ColorMatrix(contrastBrightnessMatrix))
-    }
-
-    // MÉTODOS EXISTENTES (sin cambios)
-    fun normalizeIconSize(icon: Bitmap): Bitmap {
-        if (icon.width == STANDARD_ICON_SIZE && icon.height == STANDARD_ICON_SIZE) {
-            return icon
-        }
-
-        val aspectRatio = icon.width.toFloat() / icon.height.toFloat()
-        val newWidth: Int
-        val newHeight: Int
-
-        if (aspectRatio > 1) {
-            newWidth = STANDARD_ICON_SIZE
-            newHeight = (STANDARD_ICON_SIZE / aspectRatio).toInt()
-        } else {
-            newHeight = STANDARD_ICON_SIZE
-            newWidth = (STANDARD_ICON_SIZE * aspectRatio).toInt()
-        }
-
-        val normalized = Bitmap.createBitmap(STANDARD_ICON_SIZE, STANDARD_ICON_SIZE, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(normalized)
-        
-        val x = (STANDARD_ICON_SIZE - newWidth) / 2
-        val y = (STANDARD_ICON_SIZE - newHeight) / 2
-
-        val scaledIcon = Bitmap.createScaledBitmap(icon, newWidth, newHeight, true)
-        canvas.drawBitmap(scaledIcon, x.toFloat(), y.toFloat(), null)
-
-        return normalized
-    }
-
-    private fun scaleIcon(icon: Bitmap, scalePercentage: Int): Bitmap {
-        val scale = scalePercentage / 100.0f
-        val newWidth = (icon.width * scale).toInt().coerceAtLeast(1)
-        val newHeight = (icon.height * scale).toInt().coerceAtLeast(1)
-        
-        return Bitmap.createScaledBitmap(icon, newWidth, newHeight, true)
     }
 
     private fun applyColorWithIntensity(icon: Bitmap, color: Int, intensity: Int): Bitmap {
