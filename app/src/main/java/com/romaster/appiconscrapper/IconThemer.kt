@@ -9,7 +9,7 @@ import kotlin.math.sin
 object IconThemer {
 
     // Tamaño estándar para normalizar todos los iconos (recomendado para máscaras)
-    private const val STANDARD_ICON_SIZE = 512
+    private const val STANDARD_ICON_SIZE = 128
 
     // NUEVO: Configuración extendida con opciones de capas
     data class ThemeConfig(
@@ -17,7 +17,7 @@ object IconThemer {
         val color: Int,
         val offsetX: Int = 0,
         val offsetY: Int = 0,
-        val scalePercentage: Int = 100,
+        val scalePercentage: Int = 38,
         val alphaPercentage: Int = 100,
         val colorIntensity: Int = 100,
         // NUEVOS PARÁMETROS DE AJUSTE DE IMAGEN
@@ -283,4 +283,4 @@ object IconThemer {
         )
         return applyTheme(originalIcon, config)
     }
-}
+}}
