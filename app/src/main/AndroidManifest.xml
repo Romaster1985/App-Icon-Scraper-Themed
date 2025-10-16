@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" 
-                     android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
 
     <queries>
@@ -14,13 +13,14 @@
     </queries>
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.AppIconScraper"
         android:requestLegacyExternalStorage="true"
         tools:ignore="GoogleAppIndexingWarning">
-        
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -30,28 +30,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
+
         <activity
             android:name=".AboutActivity"
             android:label="@string/about_title"
             android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.AppIconScraper" />
-        
-        <!-- Nueva actividad de tematización -->
+
         <activity
             android:name=".ThemeCustomizationActivity"
             android:label="Personalizar Iconos"
             android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.AppIconScraper" />
-        
-        <!-- Nueva actividad de previsualización -->
+
         <activity
-           android:name=".IconPreviewActivity"
-           android:label="Vista Previa de Iconos"
-           android:parentActivityName=".ThemeCustomizationActivity"
-           android:theme="@style/Theme.AppIconScraper" />
-        
-        <!-- FileProvider para compartir archivos -->
+            android:name=".IconPreviewActivity"
+            android:label="Vista Previa de Iconos"
+            android:parentActivityName=".ThemeCustomizationActivity"
+            android:theme="@style/Theme.AppIconScraper" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
