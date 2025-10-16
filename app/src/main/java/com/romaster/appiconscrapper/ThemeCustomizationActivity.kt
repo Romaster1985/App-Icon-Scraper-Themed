@@ -428,15 +428,18 @@ class ThemeCustomizationActivity : AppCompatActivity() {
     }
 
     private fun previewAllIcons() {
-        if (themedIcons.isEmpty()) {
-            Toast.makeText(this, "Primero procesa los iconos", Toast.LENGTH_SHORT).show()
-            return
-        }
+        try {
+            // Guarda la lista de íconos procesados en memoria compartida
+            IconCache.iconsProcessed = previewIconsList // tu lista actual de bitmaps
 
-        val intent = Intent(this, IconPreviewActivity::class.java).apply {
-            putExtra("themed_icons", HashMap(themedIcons))
+            // Lanza la previsualización sin pasar extras pesados
+            val intent = Intent(this, IconPreviewActivity::class.java)
+            startActivity(intent)
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Error al abrir la previsualización: ${e.message}", Toast.LENGTH_LONG).show()
         }
-        startActivity(intent)
     }
 
     private fun loadSampleIcon() {

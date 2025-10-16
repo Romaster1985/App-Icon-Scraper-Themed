@@ -1,74 +1,66 @@
 package com.romaster.appiconscrapper
 
+import android.graphics.Bitmap
 import android.os.Bundle
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class IconPreviewActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
-    private var themedIcons: HashMap<String, android.graphics.Bitmap> = hashMapOf()
+    private var icons: List<Bitmap> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_icon_preview)
 
-        // Obtener los iconos tematizados del intent
-        themedIcons = intent.getSerializableExtra("themed_icons") as? HashMap<String, android.graphics.Bitmap>
-            ?: hashMapOf()
+        recyclerView = findViewById(R.id.iconGridRecyclerView) // Cambia el ID aquí
 
-        if (themedIcons.isEmpty()) {
-            Toast.makeText(this, "No hay iconos para previsualizar", Toast.LENGTH_SHORT).show()
+        // Recuperar íconos desde el caché global
+        icons = IconCache.iconsProcessed ?: emptyList()
+
+        if (icons.isEmpty()) {
             finish()
             return
         }
 
-        initViews()
-        setupRecyclerView()
+        // Configurar GridLayoutManager para el RecyclerView
+        recyclerView.layoutManager = GridLayoutManager(this, 4) // 4 columnas
+        recyclerView.adapter = IconAdapter(icons)
     }
 
-    private fun initViews() {
-        recyclerView = findViewById(R.id.iconGridRecyclerView)
+    override fun onDestroy() {
+        super.onDestroy()
+        // Limpieza de bitmaps
+        icons.forEach { bitmap ->
+            if (!bitmap.isRecycled) {
+                bitmap.recycle()
+            }
+        }
+        IconCache.clear()
     }
 
-    private fun setupRecyclerView() {
-        // Convertir el mapa a lista para el adapter
-        val iconList = themedIcons.entries.map { it.toPair() }
-        
-        val adapter = IconPreviewAdapter(iconList)
-        recyclerView.layoutManager = GridLayoutManager(this, 3) // 3 columnas
-        recyclerView.adapter = adapter
+    private class IconAdapter(private val icons: List<Bitmap>) : RecyclerView.Adapter<IconAdapter.ViewHolder>() {
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_icon_preview, parent, false)
+            return ViewHolder(view)
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            holder.imageView.setImageBitmap(icons[position])
+        }
+
+        override fun getItemCount() = icons.size
+
+        class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+            val imageView: ImageView = view.findViewById(R.id.iconPreviewImage)
+        }
     }
-}
-
-class IconPreviewAdapter(
-    private val icons: List<Pair<String, android.graphics.Bitmap>>
-) : RecyclerView.Adapter<IconPreviewAdapter.ViewHolder>() {
-
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val iconPreview: ImageView = view.findViewById(R.id.iconPreviewImage)
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_icon_preview, parent, false)
-        return ViewHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val (_, bitmap) = icons[position]
-        holder.iconPreview.setImageBitmap(bitmap)
-        
-        // Añadir un pequeño margen y fondo para mejor visualización
-        holder.itemView.setBackgroundResource(R.drawable.bg_card)
-    }
-
-    override fun getItemCount(): Int = icons.size
 }

@@ -4,12 +4,15 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="8dp"
-    android:gravity="center">
+    android:gravity="center"
+    android:layout_margin="4dp"
+    android:background="@drawable/bg_card">
 
     <ImageView
         android:id="@+id/iconPreviewImage"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:scaleType="fitCenter" />
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true" />
 
 </LinearLayout>
