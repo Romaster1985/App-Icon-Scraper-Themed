@@ -309,7 +309,16 @@ class ThemeCustomizationActivity : AppCompatActivity() {
         }
 
         previewAllButton.setOnClickListener {
-            previewAllIcons()
+            // CORREGIDO: Verificar si hay cambios antes de previsualizar
+            if (viewModel.hasConfigChanged() || previewIconsList.isEmpty()) {
+                Toast.makeText(this, "Aplicando cambios antes de previsualizar...", Toast.LENGTH_SHORT).show()
+                processAllIcons {
+                    // Una vez procesados, mostrar la previsualización
+                    previewAllIconsAfterProcessing()
+                }
+            } else {
+                previewAllIconsAfterProcessing()
+            }
         }
 
         applyButton.setOnClickListener {
@@ -318,6 +327,22 @@ class ThemeCustomizationActivity : AppCompatActivity() {
 
         exportButton.setOnClickListener {
             exportThemedIcons()
+        }
+    }
+
+    // NUEVO: Método para previsualizar después del procesamiento
+    private fun previewAllIconsAfterProcessing() {
+        try {
+            // Guarda la lista de íconos procesados en memoria compartida
+            IconCache.iconsProcessed = previewIconsList
+
+            // Lanza la previsualización sin pasar extras pesados
+            val intent = Intent(this, IconPreviewActivity::class.java)
+            startActivity(intent)
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Error al abrir la previsualización: ${e.message}", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -531,115 +556,10 @@ class ThemeCustomizationActivity : AppCompatActivity() {
         }
     }
 
-    private fun previewAllIcons() {
-        try {
-            // Guarda la lista de íconos procesados en memoria compartida
-            IconCache.iconsProcessed = previewIconsList
-
-            // Lanza la previsualización sin pasar extras pesados
-            val intent = Intent(this, IconPreviewActivity::class.java)
-            startActivity(intent)
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Toast.makeText(this, "Error al abrir la previsualización: ${e.message}", Toast.LENGTH_LONG).show()
-        }
-    }
-
-    private fun loadSampleIcon() {
-        if (selectedApps.isNotEmpty()) {
-            try {
-                sampleAppPackage = selectedApps[0].packageName
-                val layers = IconScraper.getIconLayers(packageManager, sampleAppPackage)
-                
-                // Obtener el icono compuesto según la configuración actual
-                val composedIcon = IconScraper.composeIconFromLayers(
-                    layers = layers,
-                    useDefault = useDefaultIcon,
-                    useRound = useRoundIcon,
-                    useForeground = useForegroundLayer,
-                    useBackground = useBackgroundLayer
-                )
-                
-                sampleIcon = if (composedIcon != null) {
-                    IconThemer.drawableToNormalizedBitmap(composedIcon)
-                } else {
-                    // Fallback al icono por defecto
-                    val defaultDrawable = IconScraper.getSimpleIcon(packageManager, sampleAppPackage)
-                    defaultDrawable?.let { IconThemer.drawableToNormalizedBitmap(it) } 
-                        ?: IconThemer.normalizeIconSize(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher))
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                sampleIcon = IconThemer.normalizeIconSize(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher))
-            }
-        } else {
-            sampleIcon = IconThemer.normalizeIconSize(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher))
-        }
-        updatePreview()
-        updateLayerInfo()
-    }
-
-    private fun selectMaskImage() {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-            addCategory(Intent.CATEGORY_OPENABLE)
-            type = "image/*"
-            putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/png"))
-        }
-        startActivityForResult(intent, PICK_MASK_REQUEST)
-    }
-
-    private fun showColorPickerDialog() {
-        val colors = intArrayOf(
-            Color.RED, Color.GREEN, Color.BLUE, Color.CYAN, Color.MAGENTA, Color.YELLOW,
-            Color.WHITE, Color.BLACK, Color.GRAY, Color.parseColor("#FF5722"),
-            Color.parseColor("#9C27B0"), Color.parseColor("#2196F3"), Color.parseColor("#4CAF50")
-        )
-
-        val builder = android.app.AlertDialog.Builder(this)
-        builder.setTitle("Seleccionar Color")
-        
-        val colorNames = arrayOf("Rojo", "Verde", "Azul", "Cian", "Magenta", "Amarillo", 
-                               "Blanco", "Negro", "Gris", "Naranja", "Púrpura", "Azul Claro", "Verde Claro")
-        
-        builder.setItems(colorNames) { _, which ->
-            selectedColor = colors[which]
-            viewModel.selectedColor = selectedColor
-            colorPickerButton.setBackgroundColor(selectedColor)
-            updatePreview()
-        }
-        
-        builder.show()
-    }
-
-    private fun updatePreview() {
-        if (selectedMask != null && sampleIcon != null) {
-            val config = IconThemer.ThemeConfig(
-                mask = selectedMask!!,
-                color = selectedColor,
-                offsetX = offsetX,
-                offsetY = offsetY,
-                scalePercentage = scalePercentage,
-                alphaPercentage = alphaPercentage,
-                colorIntensity = colorIntensity,
-                hue = hue,
-                saturation = saturation,
-                brightness = brightness,
-                contrast = contrast,
-                useDefaultIcon = useDefaultIcon,
-                useRoundIcon = useRoundIcon,
-                useForegroundLayer = useForegroundLayer,
-                useBackgroundLayer = useBackgroundLayer
-            )
-            
-            val processedIcon = IconThemer.applyTheme(sampleIcon!!, config)
-            iconPreview.setImageBitmap(processedIcon)
-        }
-    }
-
-    private fun processAllIcons() {
+    private fun processAllIcons(onComplete: (() -> Unit)? = null) {
         if (selectedMask == null) {
             Toast.makeText(this, "Primero selecciona una máscara", Toast.LENGTH_SHORT).show()
+            onComplete?.invoke()
             return
         }
 
@@ -652,8 +572,8 @@ class ThemeCustomizationActivity : AppCompatActivity() {
                 applyButton.isEnabled = false
             }
 
-            themedIcons.clear()
-            previewIconsList.clear()
+            // Limpiar íconos anteriores antes de procesar nuevos
+            cleanUpCurrentIcons()
 
             val config = IconThemer.ThemeConfig(
                 mask = selectedMask!!,
@@ -716,6 +636,7 @@ class ThemeCustomizationActivity : AppCompatActivity() {
                 exportButton.isEnabled = true
                 previewAllButton.isEnabled = true
                 viewModel.isProcessingComplete = true
+                viewModel.updateConfigHash() // Actualizar hash después del procesamiento
                 
                 // Guardar estado en ViewModel
                 saveStateToViewModel()
@@ -727,8 +648,31 @@ class ThemeCustomizationActivity : AppCompatActivity() {
                 if (previewIconsList.isNotEmpty()) {
                     iconPreview.setImageBitmap(previewIconsList[0])
                 }
+                
+                // Ejecutar callback si existe
+                onComplete?.invoke()
             }
         }.start()
+    }
+
+    // NUEVO: Método para limpiar íconos actuales de forma segura
+    private fun cleanUpCurrentIcons() {
+        try {
+            themedIcons.values.forEach { bitmap ->
+                if (!bitmap.isRecycled) {
+                    bitmap.recycle()
+                }
+            }
+            previewIconsList.forEach { bitmap ->
+                if (!bitmap.isRecycled) {
+                    bitmap.recycle()
+                }
+            }
+            themedIcons.clear()
+            previewIconsList.clear()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun exportThemedIcons() {
@@ -826,6 +770,39 @@ class ThemeCustomizationActivity : AppCompatActivity() {
         }
     }
 
+    // FUNCIONES QUE FALTABAN - MOVÍ ESTAS AL FINAL
+    private fun selectMaskImage() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "image/*"
+            putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/png"))
+        }
+        startActivityForResult(intent, PICK_MASK_REQUEST)
+    }
+
+    private fun showColorPickerDialog() {
+        val colors = intArrayOf(
+            Color.RED, Color.GREEN, Color.BLUE, Color.CYAN, Color.MAGENTA, Color.YELLOW,
+            Color.WHITE, Color.BLACK, Color.GRAY, Color.parseColor("#FF5722"),
+            Color.parseColor("#9C27B0"), Color.parseColor("#2196F3"), Color.parseColor("#4CAF50")
+        )
+
+        val builder = android.app.AlertDialog.Builder(this)
+        builder.setTitle("Seleccionar Color")
+        
+        val colorNames = arrayOf("Rojo", "Verde", "Azul", "Cian", "Magenta", "Amarillo", 
+                               "Blanco", "Negro", "Gris", "Naranja", "Púrpura", "Azul Claro", "Verde Claro")
+        
+        builder.setItems(colorNames) { _, which ->
+            selectedColor = colors[which]
+            viewModel.selectedColor = selectedColor
+            colorPickerButton.setBackgroundColor(selectedColor)
+            updatePreview()
+        }
+        
+        builder.show()
+    }
+
     private fun loadMaskFromUri(uri: Uri) {
         try {
             val inputStream: InputStream? = contentResolver.openInputStream(uri)
@@ -838,6 +815,65 @@ class ThemeCustomizationActivity : AppCompatActivity() {
         } catch (e: IOException) {
             Toast.makeText(this, "Error cargando máscara: ${e.message}", Toast.LENGTH_LONG).show()
         }
+    }
+
+    private fun updatePreview() {
+        if (selectedMask != null && sampleIcon != null) {
+            val config = IconThemer.ThemeConfig(
+                mask = selectedMask!!,
+                color = selectedColor,
+                offsetX = offsetX,
+                offsetY = offsetY,
+                scalePercentage = scalePercentage,
+                alphaPercentage = alphaPercentage,
+                colorIntensity = colorIntensity,
+                hue = hue,
+                saturation = saturation,
+                brightness = brightness,
+                contrast = contrast,
+                useDefaultIcon = useDefaultIcon,
+                useRoundIcon = useRoundIcon,
+                useForegroundLayer = useForegroundLayer,
+                useBackgroundLayer = useBackgroundLayer
+            )
+            
+            val processedIcon = IconThemer.applyTheme(sampleIcon!!, config)
+            iconPreview.setImageBitmap(processedIcon)
+        }
+    }
+
+    private fun loadSampleIcon() {
+        if (selectedApps.isNotEmpty()) {
+            try {
+                sampleAppPackage = selectedApps[0].packageName
+                val layers = IconScraper.getIconLayers(packageManager, sampleAppPackage)
+                
+                // Obtener el icono compuesto según la configuración actual
+                val composedIcon = IconScraper.composeIconFromLayers(
+                    layers = layers,
+                    useDefault = useDefaultIcon,
+                    useRound = useRoundIcon,
+                    useForeground = useForegroundLayer,
+                    useBackground = useBackgroundLayer
+                )
+                
+                sampleIcon = if (composedIcon != null) {
+                    IconThemer.drawableToNormalizedBitmap(composedIcon)
+                } else {
+                    // Fallback al icono por defecto
+                    val defaultDrawable = IconScraper.getSimpleIcon(packageManager, sampleAppPackage)
+                    defaultDrawable?.let { IconThemer.drawableToNormalizedBitmap(it) } 
+                        ?: IconThemer.normalizeIconSize(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher))
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                sampleIcon = IconThemer.normalizeIconSize(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher))
+            }
+        } else {
+            sampleIcon = IconThemer.normalizeIconSize(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher))
+        }
+        updatePreview()
+        updateLayerInfo()
     }
 
     override fun onPause() {

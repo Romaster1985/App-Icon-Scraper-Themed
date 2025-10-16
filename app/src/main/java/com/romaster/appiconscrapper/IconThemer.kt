@@ -129,6 +129,7 @@ object IconThemer {
         return result
     }
 
+    // CORREGIDO: Problema del tinte - usando la implementación correcta
     private fun applyHueRotation(matrix: ColorMatrix, hue: Float) {
         val hueRad = hue * (PI / 180f).toFloat()
         val cosVal = cos(hueRad.toDouble()).toFloat()

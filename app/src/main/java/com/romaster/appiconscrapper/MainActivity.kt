@@ -97,13 +97,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         selectAllButton.setOnClickListener {
-            viewModel.selectAll()
+            // CORREGIDO: Solo selecciona los apps del filtro actual
+            viewModel.selectAll(filteredApps)
             applyFilter(viewModel.currentFilter)
             updateUI()
         }
 
         deselectAllButton.setOnClickListener {
-            viewModel.deselectAll()
+            // CORREGIDO: Solo deselecciona los apps del filtro actual
+            viewModel.deselectAll(filteredApps)
             applyFilter(viewModel.currentFilter)
             updateUI()
         }

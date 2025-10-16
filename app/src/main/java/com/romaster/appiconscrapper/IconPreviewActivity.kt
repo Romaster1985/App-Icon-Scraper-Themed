@@ -41,14 +41,9 @@ class IconPreviewActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        // Solo limpiar si la actividad se está destruyendo permanentemente
+        // NO reciclamos los bitmaps aquí - el ViewModel de ThemeCustomizationActivity es el dueño
+        // Solo limpiamos el cache si la actividad se está finalizando completamente
         if (isFinishing) {
-            // Limpiar solo si se está finalizando, no cuando se rota la pantalla
-            icons.forEach { bitmap ->
-                if (!bitmap.isRecycled) {
-                    bitmap.recycle()
-                }
-            }
             IconCache.clear()
         }
     }
@@ -62,7 +57,14 @@ class IconPreviewActivity : AppCompatActivity() {
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.imageView.setImageBitmap(icons[position])
+            // CORREGIDO: Verificar que el bitmap no esté reciclado antes de mostrarlo
+            val bitmap = icons[position]
+            if (!bitmap.isRecycled) {
+                holder.imageView.setImageBitmap(bitmap)
+            } else {
+                // Si está reciclado, mostrar un placeholder o manejar el error
+                holder.imageView.setImageResource(R.mipmap.ic_launcher)
+            }
         }
 
         override fun getItemCount() = icons.size
