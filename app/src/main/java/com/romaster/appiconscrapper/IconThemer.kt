@@ -100,10 +100,15 @@ object IconThemer {
         return applyTheme(originalIcon, config)
     }
 
-    // Resto de los métodos existentes (sin cambios)...
+	// CORREGIDO: Problema del tinte - usando la implementación correcta
     private fun applyImageAdjustments(icon: Bitmap, config: ThemeConfig): Bitmap {
-		if (config.hue == 0f && config.saturation == 1f && 
-			config.brightness == 0f && config.contrast == 1f) {
+		// Verificar si realmente hay ajustes para aplicar
+		val hasHue = config.hue != 0f
+		val hasSaturation = config.saturation != 1f
+		val hasBrightness = config.brightness != 0f
+		val hasContrast = config.contrast != 1f
+		
+		if (!hasHue && !hasSaturation && !hasBrightness && !hasContrast) {
 			return icon
 		}
 
@@ -113,19 +118,16 @@ object IconThemer {
 
 		val colorMatrix = ColorMatrix()
 
-		// CORREGIDO: Aplicar los ajustes en el orden correcto
-		// 1. Primero contraste y brillo
-		if (config.contrast != 1f || config.brightness != 0f) {
+		// Aplicar CADA ajuste individualmente
+		if (hasContrast || hasBrightness) {
 			applyContrastAndBrightness(colorMatrix, config.contrast, config.brightness)
 		}
-    
-		// 2. Luego el tinte (hue)
-		if (config.hue != 0f) {
+		
+		if (hasHue) {
 			applyHueRotation(colorMatrix, config.hue)
 		}
-    
-		// 3. Finalmente la saturación
-		if (config.saturation != 1f) {
+		
+		if (hasSaturation) {
 			colorMatrix.setSaturation(config.saturation)
 		}
 
@@ -135,7 +137,6 @@ object IconThemer {
 		return result
 	}
 
-    // CORREGIDO: Problema del tinte - usando la implementación correcta
     private fun applyHueRotation(matrix: ColorMatrix, hue: Float) {
         val hueRad = hue * (PI / 180f).toFloat()
         val cosVal = cos(hueRad.toDouble()).toFloat()
@@ -167,17 +168,17 @@ object IconThemer {
     }
 
     private fun applyContrastAndBrightness(matrix: ColorMatrix, contrast: Float, brightness: Float) {
-        val brightnessNormalized = brightness * 2.55f
-        
-        val contrastBrightnessMatrix = floatArrayOf(
-            contrast, 0f, 0f, 0f, brightnessNormalized,
-            0f, contrast, 0f, 0f, brightnessNormalized,
-            0f, 0f, contrast, 0f, brightnessNormalized,
-            0f, 0f, 0f, 1f, 0f
-        )
-        
-        matrix.postConcat(ColorMatrix(contrastBrightnessMatrix))
-    }
+		val brightnessNormalized = brightness * 2.55f
+		
+		val contrastBrightnessMatrix = floatArrayOf(
+			contrast, 0f, 0f, 0f, brightnessNormalized,
+			0f, contrast, 0f, 0f, brightnessNormalized,
+			0f, 0f, contrast, 0f, brightnessNormalized,
+			0f, 0f, 0f, 1f, 0f
+		)
+		
+		matrix.postConcat(ColorMatrix(contrastBrightnessMatrix))
+	}
 
     fun normalizeIconSize(icon: Bitmap): Bitmap {
         if (icon.width == STANDARD_ICON_SIZE && icon.height == STANDARD_ICON_SIZE) {
