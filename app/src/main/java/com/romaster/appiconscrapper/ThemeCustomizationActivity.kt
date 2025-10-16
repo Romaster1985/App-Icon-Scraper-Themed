@@ -14,6 +14,7 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
@@ -81,10 +82,12 @@ class ThemeCustomizationActivity : AppCompatActivity() {
     private var sampleIcon: Bitmap? = null
     private var sampleAppPackage: String = ""
     private val themedIcons = mutableMapOf<String, Bitmap>()
+    private val previewIconsList = mutableListOf<Bitmap>()
 
     // Para la secuencia de preview
     private var currentPreviewIndex = 0
-    private var previewIconsList = mutableListOf<Bitmap>()
+
+    private lateinit var viewModel: ThemeCustomizationViewModel
 
     companion object {
         private const val PICK_MASK_REQUEST = 1001
@@ -94,14 +97,92 @@ class ThemeCustomizationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_theme_customization)
 
-        selectedApps = intent.getParcelableArrayListExtra<AppInfo>("selected_apps") ?: emptyList()
+        // Inicializar ViewModel
+        viewModel = ViewModelProvider(this).get(ThemeCustomizationViewModel::class.java)
+
+        // Obtener apps seleccionadas solo si es la primera vez
+        if (viewModel.selectedApps.isEmpty()) {
+            viewModel.selectedApps = intent.getParcelableArrayListExtra<AppInfo>("selected_apps") ?: emptyList()
+        }
+
+        selectedApps = viewModel.selectedApps
+
+        // Restaurar estado desde ViewModel
+        restoreStateFromViewModel()
 
         initViews()
         setupListeners()
         loadSampleIcon()
         setupPreviewCycle()
         updateLayerInfo()
-        updateButtonStyles() // NUEVO: Actualizar estilos de botones
+        updateButtonStyles()
+
+        // Restaurar máscara si existe
+        if (selectedMask != null) {
+            maskPreview.setImageBitmap(selectedMask)
+        }
+
+        // Restaurar color del botón
+        colorPickerButton.setBackgroundColor(selectedColor)
+
+        // Si el procesamiento ya estaba completo, habilitar botones
+        if (viewModel.isProcessingComplete) {
+            exportButton.isEnabled = true
+            previewAllButton.isEnabled = true
+            updateButtonStyles()
+        }
+
+        // Actualizar controles con valores guardados
+        updateSeekBars()
+        updatePreview()
+    }
+
+    private fun restoreStateFromViewModel() {
+        selectedMask = viewModel.selectedMask
+        selectedColor = viewModel.selectedColor
+        offsetX = viewModel.offsetX
+        offsetY = viewModel.offsetY
+        scalePercentage = viewModel.scalePercentage
+        alphaPercentage = viewModel.alphaPercentage
+        colorIntensity = viewModel.colorIntensity
+        hue = viewModel.hue
+        saturation = viewModel.saturation
+        brightness = viewModel.brightness
+        contrast = viewModel.contrast
+        useDefaultIcon = viewModel.useDefaultIcon
+        useRoundIcon = viewModel.useRoundIcon
+        useForegroundLayer = viewModel.useForegroundLayer
+        useBackgroundLayer = viewModel.useBackgroundLayer
+        
+        // Restaurar íconos procesados
+        themedIcons.clear()
+        themedIcons.putAll(viewModel.themedIcons)
+        previewIconsList.clear()
+        previewIconsList.addAll(viewModel.previewIconsList)
+    }
+
+    private fun saveStateToViewModel() {
+        viewModel.selectedMask = selectedMask
+        viewModel.selectedColor = selectedColor
+        viewModel.offsetX = offsetX
+        viewModel.offsetY = offsetY
+        viewModel.scalePercentage = scalePercentage
+        viewModel.alphaPercentage = alphaPercentage
+        viewModel.colorIntensity = colorIntensity
+        viewModel.hue = hue
+        viewModel.saturation = saturation
+        viewModel.brightness = brightness
+        viewModel.contrast = contrast
+        viewModel.useDefaultIcon = useDefaultIcon
+        viewModel.useRoundIcon = useRoundIcon
+        viewModel.useForegroundLayer = useForegroundLayer
+        viewModel.useBackgroundLayer = useBackgroundLayer
+        
+        // Guardar íconos procesados
+        viewModel.themedIcons.clear()
+        viewModel.themedIcons.putAll(themedIcons)
+        viewModel.previewIconsList.clear()
+        viewModel.previewIconsList.addAll(previewIconsList)
     }
 
     private fun initViews() {
@@ -143,32 +224,37 @@ class ThemeCustomizationActivity : AppCompatActivity() {
 
         // Configurar rangos existentes
         seekBarX.max = 200
-        seekBarX.progress = 100
         seekBarY.max = 200
-        seekBarY.progress = 100
         seekBarScale.max = 200
-        seekBarScale.progress = 100
         seekBarAlpha.max = 100
-        seekBarAlpha.progress = 100
         seekBarColorIntensity.max = 100
-        seekBarColorIntensity.progress = 100
         
         // Configurar rangos de nuevos controles
         seekBarHue.max = 360
-        seekBarHue.progress = 180
         seekBarSaturation.max = 200
-        seekBarSaturation.progress = 100
         seekBarBrightness.max = 200
-        seekBarBrightness.progress = 100
         seekBarContrast.max = 200
-        seekBarContrast.progress = 100
         
-        // Configurar color inicial del botón
-        colorPickerButton.setBackgroundColor(selectedColor)
-        
-        // NUEVO: Inicialmente deshabilitar botones
+        // Inicialmente deshabilitar botones
         previewAllButton.isEnabled = false
         exportButton.isEnabled = false
+    }
+
+    private fun updateSeekBars() {
+        seekBarX.progress = offsetX + 100
+        seekBarY.progress = offsetY + 100
+        seekBarScale.progress = scalePercentage
+        seekBarAlpha.progress = alphaPercentage
+        seekBarColorIntensity.progress = colorIntensity
+        seekBarHue.progress = (hue + 180).toInt()
+        seekBarSaturation.progress = (saturation * 100).toInt()
+        seekBarBrightness.progress = (brightness + 100).toInt()
+        seekBarContrast.progress = (contrast * 100).toInt()
+        
+        useDefaultIconCheckbox.isChecked = useDefaultIcon
+        useRoundIconCheckbox.isChecked = useRoundIcon
+        foregroundLayerCheckbox.isChecked = useForegroundLayer
+        backgroundLayerCheckbox.isChecked = useBackgroundLayer
     }
 
     private fun setupListeners() {
@@ -181,103 +267,16 @@ class ThemeCustomizationActivity : AppCompatActivity() {
         }
 
         // Listeners para seekbars existentes
-        seekBarX.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                offsetX = progress - 100
-                xValueText.text = "X: $offsetX"
-                updatePreview()
-            }
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
-
-        seekBarY.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                offsetY = progress - 100
-                yValueText.text = "Y: $offsetY"
-                updatePreview()
-            }
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
-
-        seekBarScale.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                scalePercentage = progress
-                scaleValueText.text = "Escala: $scalePercentage%"
-                updatePreview()
-            }
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
-
-        seekBarAlpha.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                alphaPercentage = progress
-                alphaValueText.text = "Transparencia: $alphaPercentage%"
-                updatePreview()
-            }
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
-
-        seekBarColorIntensity.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                colorIntensity = progress
-                colorIntensityValueText.text = "Intensidad de Color: $colorIntensity%"
-                updatePreview()
-            }
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
-
-        // Listeners para ajustes de imagen
-        seekBarHue.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                hue = (progress - 180).toFloat()
-                hueValueText.text = "Tinte: ${hue}°"
-                updatePreview()
-            }
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
-
-        seekBarSaturation.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                saturation = progress / 100.0f
-                saturationValueText.text = "Saturación: ${progress}%"
-                updatePreview()
-            }
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
-
-        seekBarBrightness.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                brightness = (progress - 100).toFloat()
-                brightnessValueText.text = "Brillo: ${brightness}%"
-                updatePreview()
-            }
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
-
-        seekBarContrast.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                contrast = progress / 100.0f
-                contrastValueText.text = "Contraste: ${progress}%"
-                updatePreview()
-            }
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
-
+        setupSeekBarListeners()
+        
         // Listeners para configuración de capas
         useDefaultIconCheckbox.setOnCheckedChangeListener { _, isChecked ->
             useDefaultIcon = isChecked
+            viewModel.useDefaultIcon = useDefaultIcon
             if (isChecked) {
                 useRoundIconCheckbox.isChecked = false
                 useRoundIcon = false
+                viewModel.useRoundIcon = useRoundIcon
             }
             updatePreview()
             updateLayerInfo()
@@ -285,9 +284,11 @@ class ThemeCustomizationActivity : AppCompatActivity() {
 
         useRoundIconCheckbox.setOnCheckedChangeListener { _, isChecked ->
             useRoundIcon = isChecked
+            viewModel.useRoundIcon = useRoundIcon
             if (isChecked) {
                 useDefaultIconCheckbox.isChecked = false
                 useDefaultIcon = false
+                viewModel.useDefaultIcon = useDefaultIcon
             }
             updatePreview()
             updateLayerInfo()
@@ -295,12 +296,14 @@ class ThemeCustomizationActivity : AppCompatActivity() {
 
         foregroundLayerCheckbox.setOnCheckedChangeListener { _, isChecked ->
             useForegroundLayer = isChecked
+            viewModel.useForegroundLayer = useForegroundLayer
             updatePreview()
             updateLayerInfo()
         }
 
         backgroundLayerCheckbox.setOnCheckedChangeListener { _, isChecked ->
             useBackgroundLayer = isChecked
+            viewModel.useBackgroundLayer = useBackgroundLayer
             updatePreview()
             updateLayerInfo()
         }
@@ -318,7 +321,108 @@ class ThemeCustomizationActivity : AppCompatActivity() {
         }
     }
 
-    // NUEVO: Método para actualizar estilos de botones
+    private fun setupSeekBarListeners() {
+        seekBarX.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                offsetX = progress - 100
+                viewModel.offsetX = offsetX
+                xValueText.text = "X: $offsetX"
+                updatePreview()
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        seekBarY.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                offsetY = progress - 100
+                viewModel.offsetY = offsetY
+                yValueText.text = "Y: $offsetY"
+                updatePreview()
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        seekBarScale.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                scalePercentage = progress
+                viewModel.scalePercentage = scalePercentage
+                scaleValueText.text = "Escala: $scalePercentage%"
+                updatePreview()
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        seekBarAlpha.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                alphaPercentage = progress
+                viewModel.alphaPercentage = alphaPercentage
+                alphaValueText.text = "Transparencia: $alphaPercentage%"
+                updatePreview()
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        seekBarColorIntensity.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                colorIntensity = progress
+                viewModel.colorIntensity = colorIntensity
+                colorIntensityValueText.text = "Intensidad de Color: $colorIntensity%"
+                updatePreview()
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        // Listeners para ajustes de imagen
+        seekBarHue.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                hue = (progress - 180).toFloat()
+                viewModel.hue = hue
+                hueValueText.text = "Tinte: ${hue}°"
+                updatePreview()
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        seekBarSaturation.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                saturation = progress / 100.0f
+                viewModel.saturation = saturation
+                saturationValueText.text = "Saturación: ${progress}%"
+                updatePreview()
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        seekBarBrightness.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                brightness = (progress - 100).toFloat()
+                viewModel.brightness = brightness
+                brightnessValueText.text = "Brillo: ${brightness}%"
+                updatePreview()
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        seekBarContrast.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                contrast = progress / 100.0f
+                viewModel.contrast = contrast
+                contrastValueText.text = "Contraste: ${progress}%"
+                updatePreview()
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+    }
+
     private fun updateButtonStyles() {
         // Botón Previsualizar Todos
         if (previewAllButton.isEnabled) {
@@ -430,7 +534,7 @@ class ThemeCustomizationActivity : AppCompatActivity() {
     private fun previewAllIcons() {
         try {
             // Guarda la lista de íconos procesados en memoria compartida
-            IconCache.iconsProcessed = previewIconsList // tu lista actual de bitmaps
+            IconCache.iconsProcessed = previewIconsList
 
             // Lanza la previsualización sin pasar extras pesados
             val intent = Intent(this, IconPreviewActivity::class.java)
@@ -500,6 +604,7 @@ class ThemeCustomizationActivity : AppCompatActivity() {
         
         builder.setItems(colorNames) { _, which ->
             selectedColor = colors[which]
+            viewModel.selectedColor = selectedColor
             colorPickerButton.setBackgroundColor(selectedColor)
             updatePreview()
         }
@@ -610,7 +715,12 @@ class ThemeCustomizationActivity : AppCompatActivity() {
                 applyButton.isEnabled = true
                 exportButton.isEnabled = true
                 previewAllButton.isEnabled = true
-                updateButtonStyles() // NUEVO: Actualizar estilos después de procesar
+                viewModel.isProcessingComplete = true
+                
+                // Guardar estado en ViewModel
+                saveStateToViewModel()
+                
+                updateButtonStyles()
                 Toast.makeText(this, "$processedCount de ${selectedApps.size} iconos procesados exitosamente", Toast.LENGTH_SHORT).show()
                 
                 currentPreviewIndex = 0
@@ -720,11 +830,19 @@ class ThemeCustomizationActivity : AppCompatActivity() {
         try {
             val inputStream: InputStream? = contentResolver.openInputStream(uri)
             selectedMask = BitmapFactory.decodeStream(inputStream)
+            viewModel.selectedMask = selectedMask
+            viewModel.maskUri = uri
             inputStream?.close()
             maskPreview.setImageBitmap(selectedMask)
             updatePreview()
         } catch (e: IOException) {
             Toast.makeText(this, "Error cargando máscara: ${e.message}", Toast.LENGTH_LONG).show()
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // Guardar estado cuando la actividad se pausa
+        saveStateToViewModel()
     }
 }

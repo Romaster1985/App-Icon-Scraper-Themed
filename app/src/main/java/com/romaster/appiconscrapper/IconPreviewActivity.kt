@@ -19,7 +19,7 @@ class IconPreviewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_icon_preview)
 
-        recyclerView = findViewById(R.id.iconGridRecyclerView) // Cambia el ID aquí
+        recyclerView = findViewById(R.id.iconGridRecyclerView)
 
         // Recuperar íconos desde el caché global
         icons = IconCache.iconsProcessed ?: emptyList()
@@ -34,15 +34,23 @@ class IconPreviewActivity : AppCompatActivity() {
         recyclerView.adapter = IconAdapter(icons)
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        // No limpiar aquí para permitir volver a ThemeCustomizationActivity
+    }
+
     override fun onDestroy() {
         super.onDestroy()
-        // Limpieza de bitmaps
-        icons.forEach { bitmap ->
-            if (!bitmap.isRecycled) {
-                bitmap.recycle()
+        // Solo limpiar si la actividad se está destruyendo permanentemente
+        if (isFinishing) {
+            // Limpiar solo si se está finalizando, no cuando se rota la pantalla
+            icons.forEach { bitmap ->
+                if (!bitmap.isRecycled) {
+                    bitmap.recycle()
+                }
             }
+            IconCache.clear()
         }
-        IconCache.clear()
     }
 
     private class IconAdapter(private val icons: List<Bitmap>) : RecyclerView.Adapter<IconAdapter.ViewHolder>() {

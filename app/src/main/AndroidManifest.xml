@@ -23,8 +23,10 @@
 
         <activity
             android:name=".MainActivity"
+            android:launchMode="singleTop"
             android:exported="true"
-            android:theme="@style/Theme.AppIconScraper">
+            android:theme="@style/Theme.AppIconScraper"
+            android:alwaysRetainTaskState="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -39,6 +41,7 @@
 
         <activity
             android:name=".ThemeCustomizationActivity"
+            android:launchMode="singleTop"
             android:label="Personalizar Iconos"
             android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.AppIconScraper" />

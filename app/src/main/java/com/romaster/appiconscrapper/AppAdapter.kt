@@ -30,6 +30,8 @@ class AppAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        if (position !in 0 until apps.size) return
+        
         val app = apps[position]
         
         try {
@@ -62,14 +64,6 @@ class AppAdapter(
 
     fun updateList(newList: List<AppInfo>) {
         apps = newList
-        notifyDataSetChanged()
-    }
-
-    fun selectAll() {
-        notifyDataSetChanged()
-    }
-
-    fun deselectAll() {
         notifyDataSetChanged()
     }
 

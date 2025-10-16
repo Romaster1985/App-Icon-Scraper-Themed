@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -23,21 +24,29 @@ class MainActivity : AppCompatActivity() {
     private lateinit var deselectAllButton: Button
     private lateinit var scrapeButton: Button
 
-    private val allApps = mutableListOf<AppInfo>()
-    private var filteredApps = listOf<AppInfo>()
+    private lateinit var viewModel: MainActivityViewModel
     private lateinit var adapter: AppAdapter
-    private var currentFilter = FilterType.ALL
+    private var filteredApps = listOf<AppInfo>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        
+        // Inicializar ViewModel
+        viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
         
         initViews()
         setupRecyclerView()
         setupButtons()
         setupFilterTabs()
         
-        setFiltersEnabled(false)
+        // Si ya hay datos cargados, restaurar la UI
+        if (viewModel.isDataLoaded) {
+            restoreUIState()
+        } else {
+            setFiltersEnabled(false)
+        }
+        
         updateFilterSelection()
         updateButtonStyles()
     }
@@ -50,7 +59,6 @@ class MainActivity : AppCompatActivity() {
         deselectAllButton = findViewById(R.id.deselectAllButton)
         scrapeButton = findViewById(R.id.scrapeButton)
         
-        // Texto inicial sin contador
         exportButton.text = "Tematizar"
     }
 
@@ -59,7 +67,8 @@ class MainActivity : AppCompatActivity() {
             if (position < filteredApps.size) {
                 val app = filteredApps[position]
                 app.isSelected = isChecked
-                allApps.find { it.packageName == app.packageName }?.isSelected = isChecked
+                // Actualizar también en la lista principal del ViewModel
+                viewModel.updateAppSelection(app.packageName, isChecked)
                 updateUI()
             }
         }
@@ -67,6 +76,15 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
         recyclerView.setHasFixedSize(false)
+    }
+
+    private fun restoreUIState() {
+        setFiltersEnabled(true)
+        applyFilter(viewModel.currentFilter)
+        
+        val message = "${viewModel.allApps.size} aplicaciones encontradas"
+        Toast.makeText(this, "Estado restaurado - $message", Toast.LENGTH_SHORT).show()
+        updateButtonStyles()
     }
 
     private fun setupButtons() {
@@ -79,62 +97,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         selectAllButton.setOnClickListener {
-            filteredApps.forEach { it.isSelected = true }
-            allApps.forEach { allApp ->
-                if (filteredApps.any { it.packageName == allApp.packageName }) {
-                    allApp.isSelected = true
-                }
-            }
-            adapter.notifyDataSetChanged()
+            viewModel.selectAll()
+            applyFilter(viewModel.currentFilter)
             updateUI()
         }
 
         deselectAllButton.setOnClickListener {
-            filteredApps.forEach { it.isSelected = false }
-            allApps.forEach { allApp ->
-                if (filteredApps.any { it.packageName == allApp.packageName }) {
-                    allApp.isSelected = false
-                }
-            }
-            adapter.notifyDataSetChanged()
+            viewModel.deselectAll()
+            applyFilter(viewModel.currentFilter)
             updateUI()
         }
-    }
-
-    private fun scrapeApps() {
-        Toast.makeText(this, "Escrapeando aplicaciones...", Toast.LENGTH_SHORT).show()
-        scrapeButton.isEnabled = false
-        scrapeButton.text = "Escaneando..."
-        
-        Thread {
-            try {
-                val apps = IconScraper.getInstalledApps(packageManager)
-                Log.d("MainActivity", "Apps encontradas: ${apps.size}")
-                
-                runOnUiThread {
-                    allApps.clear()
-                    allApps.addAll(apps)
-                    
-                    applyFilter(FilterType.ALL)
-                    setFiltersEnabled(true)
-                    scrapeButton.isEnabled = true
-                    scrapeButton.text = "Escrapear Apps"
-                    
-                    val message = "${apps.size} aplicaciones encontradas"
-                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-                    Log.d("MainActivity", "UI actualizada - Filtradas: ${filteredApps.size}")
-                    
-                    updateButtonStyles()
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                runOnUiThread {
-                    Toast.makeText(this, "Error al escrapear apps: ${e.message}", Toast.LENGTH_LONG).show()
-                    scrapeButton.isEnabled = true
-                    scrapeButton.text = "Escrapear Apps"
-                }
-            }
-        }.start()
     }
 
     private fun updateButtonStyles() {
@@ -174,22 +146,22 @@ class MainActivity : AppCompatActivity() {
         val filterGapps = findViewById<TextView>(R.id.filterGapps)
 
         filterAll.setOnClickListener { 
-            currentFilter = FilterType.ALL
+            viewModel.currentFilter = FilterType.ALL
             applyFilter(FilterType.ALL)
             updateFilterSelection()
         }
         filterSystem.setOnClickListener { 
-            currentFilter = FilterType.SYSTEM
+            viewModel.currentFilter = FilterType.SYSTEM
             applyFilter(FilterType.SYSTEM)
             updateFilterSelection()
         }
         filterUser.setOnClickListener { 
-            currentFilter = FilterType.USER
+            viewModel.currentFilter = FilterType.USER
             applyFilter(FilterType.USER)
             updateFilterSelection()
         }
         filterGapps.setOnClickListener { 
-            currentFilter = FilterType.GAPPS
+            viewModel.currentFilter = FilterType.GAPPS
             applyFilter(FilterType.GAPPS)
             updateFilterSelection()
         }
@@ -206,7 +178,7 @@ class MainActivity : AppCompatActivity() {
         filterUser.setBackgroundResource(R.drawable.bg_card)
         filterGapps.setBackgroundResource(R.drawable.bg_card)
 
-        when (currentFilter) {
+        when (viewModel.currentFilter) {
             FilterType.ALL -> filterAll.setBackgroundResource(R.drawable.bg_card_selected)
             FilterType.SYSTEM -> filterSystem.setBackgroundResource(R.drawable.bg_card_selected)
             FilterType.USER -> filterUser.setBackgroundResource(R.drawable.bg_card_selected)
@@ -215,13 +187,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun applyFilter(filterType: FilterType) {
-        Log.d("MainActivity", "Aplicando filtro: $filterType a ${allApps.size} apps")
+        Log.d("MainActivity", "Aplicando filtro: $filterType a ${viewModel.allApps.size} apps")
+        
+        viewModel.currentFilter = filterType
         
         filteredApps = when (filterType) {
-            FilterType.ALL -> allApps.toList()
-            FilterType.SYSTEM -> allApps.filter { it.isSystemApp }
-            FilterType.USER -> allApps.filter { !it.isSystemApp }
-            FilterType.GAPPS -> allApps.filter { it.isGoogleApp }
+            FilterType.ALL -> viewModel.allApps.toList()
+            FilterType.SYSTEM -> viewModel.allApps.filter { it.isSystemApp }
+            FilterType.USER -> viewModel.allApps.filter { !it.isSystemApp }
+            FilterType.GAPPS -> viewModel.allApps.filter { it.isGoogleApp }
         }
         
         Log.d("MainActivity", "Filtro aplicado: ${filteredApps.size} apps")
@@ -236,7 +210,6 @@ class MainActivity : AppCompatActivity() {
         appsCountText.text = "$totalCount aplicaciones"
         exportButton.isEnabled = selectedCount > 0
         
-        // Actualizar texto con contador
         exportButton.text = if (selectedCount > 0) {
             "Tematizar ($selectedCount)"
         } else {
@@ -246,17 +219,52 @@ class MainActivity : AppCompatActivity() {
         updateButtonStyles()
     }
 
+    private fun scrapeApps() {
+        Toast.makeText(this, "Escrapeando aplicaciones...", Toast.LENGTH_SHORT).show()
+        scrapeButton.isEnabled = false
+        scrapeButton.text = "Escaneando..."
+        
+        Thread {
+            try {
+                val apps = IconScraper.getInstalledApps(packageManager)
+                Log.d("MainActivity", "Apps encontradas: ${apps.size}")
+                
+                runOnUiThread {
+                    viewModel.allApps.clear()
+                    viewModel.allApps.addAll(apps)
+                    viewModel.isDataLoaded = true
+                    
+                    applyFilter(FilterType.ALL)
+                    setFiltersEnabled(true)
+                    scrapeButton.isEnabled = true
+                    scrapeButton.text = "Escrapear Apps"
+                    
+                    val message = "${apps.size} aplicaciones encontradas"
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                    Log.d("MainActivity", "UI actualizada - Filtradas: ${filteredApps.size}")
+                    
+                    updateButtonStyles()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                runOnUiThread {
+                    Toast.makeText(this, "Error al escrapear apps: ${e.message}", Toast.LENGTH_LONG).show()
+                    scrapeButton.isEnabled = true
+                    scrapeButton.text = "Escrapear Apps"
+                }
+            }
+        }.start()
+    }
+
     private fun thematizeSelectedApps() {
-        val selectedApps = filteredApps.filter { it.isSelected }
+        val selectedApps = viewModel.getSelectedApps()
         if (selectedApps.isEmpty()) {
             Toast.makeText(this, "No hay aplicaciones seleccionadas", Toast.LENGTH_SHORT).show()
             return
         }
 
         val intent = Intent(this, ThemeCustomizationActivity::class.java).apply {
-            putParcelableArrayListExtra("selected_apps", ArrayList(selectedApps.map { 
-                AppInfo(it.packageName, it.name, it.isSystemApp, it.isGoogleApp, it.isSelected)
-            }))
+            putParcelableArrayListExtra("selected_apps", ArrayList(selectedApps))
         }
         startActivity(intent)
     }
