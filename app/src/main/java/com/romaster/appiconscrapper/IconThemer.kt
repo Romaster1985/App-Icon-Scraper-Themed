@@ -9,7 +9,7 @@ import kotlin.math.sin
 object IconThemer {
 
     // Tamaño estándar para normalizar todos los iconos (recomendado para máscaras)
-    private const val STANDARD_ICON_SIZE = 128
+    private const val STANDARD_ICON_SIZE = 512
 
     // NUEVO: Configuración extendida con opciones de capas
     data class ThemeConfig(
@@ -17,7 +17,7 @@ object IconThemer {
         val color: Int,
         val offsetX: Int = 0,
         val offsetY: Int = 0,
-        val scalePercentage: Int = 38,
+        val scalePercentage: Int = 100,
         val alphaPercentage: Int = 100,
         val colorIntensity: Int = 100,
         // NUEVOS PARÁMETROS DE AJUSTE DE IMAGEN
@@ -25,31 +25,26 @@ object IconThemer {
         val saturation: Float = 1f,
         val brightness: Float = 0f,
         val contrast: Float = 1f,
-        // NUEVOS PARÁMETROS DE CAPAS
+        // NUEVOS PARÁMETROS DE CAPAS		
         val useDefaultIcon: Boolean = true,
         val useRoundIcon: Boolean = false,
         val useForegroundLayer: Boolean = true,
         val useBackgroundLayer: Boolean = true
     )
 
-    // MÉTODO PRINCIPAL MEJORADO
     fun applyTheme(originalIcon: Bitmap, config: ThemeConfig): Bitmap {
         // 1. Normalizar el icono a tamaño estándar manteniendo calidad
         val normalizedIcon = normalizeIconSize(originalIcon)
-
         // 2. Escalar el icono según el porcentaje
         val scaledIcon = scaleIcon(normalizedIcon, config.scalePercentage)
-
         // 3. APLICAR NUEVOS AJUSTES DE IMAGEN (antes del color)
         val adjustedIcon = applyImageAdjustments(scaledIcon, config)
-
         // 4. Aplicar color con intensidad controlada
         val coloredIcon = applyColorWithIntensity(adjustedIcon, config.color, config.colorIntensity)
-
-        // 5. Aplicar transparencia
+		// 5. Aplicar transparencia
         val transparentIcon = applyAlpha(coloredIcon, config.alphaPercentage)
 
-        // 6. Crear un bitmap del tamaño de la máscara
+		// 6. Crear un bitmap del tamaño de la máscara
         val result = Bitmap.createBitmap(config.mask.width, config.mask.height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(result)
 
@@ -66,76 +61,59 @@ object IconThemer {
         return result
     }
 
-    // NUEVO: Método para aplicar tema directamente desde Drawable con configuración de capas
-    fun applyThemeFromDrawable(
-        drawable: Drawable,
-        config: ThemeConfig
-    ): Bitmap {
-        val iconBitmap = drawableToNormalizedBitmap(drawable)
-        return applyTheme(iconBitmap, config)
-    }
-
-    // MÉTODO COMPATIBLE CON LA VERSIÓN ANTERIOR
-    fun applyTheme(
-        originalIcon: Bitmap,
-        mask: Bitmap,
-        color: Int,
-        offsetX: Int,
-        offsetY: Int,
-        scalePercentage: Int,
-        alphaPercentage: Int,
-        colorIntensity: Int,
-        hue: Float 
-    ): Bitmap {
-        val config = ThemeConfig(
-            mask = mask,
-            color = color,
-            offsetX = offsetX,
-            offsetY = offsetY,
-            scalePercentage = scalePercentage,
-            alphaPercentage = alphaPercentage,
-            colorIntensity = colorIntensity,
-            hue = hue
-        )
-        return applyTheme(originalIcon, config)
-    }
-
-	// CORREGIDO: Problema del tinte - usando la implementación correcta
     private fun applyImageAdjustments(icon: Bitmap, config: ThemeConfig): Bitmap {
-		// Verificar si realmente hay ajustes para aplicar
-		val hasHue = config.hue != 0f
-		val hasSaturation = config.saturation != 1f
-		val hasBrightness = config.brightness != 0f
-		val hasContrast = config.contrast != 1f
-		
-		if (!hasHue && !hasSaturation && !hasBrightness && !hasContrast) {
-			return icon
-		}
+        // CORREGIDO: Crear una matriz combinada para TODOS los ajustes
+        val combinedMatrix = ColorMatrix()
+        
+        // 1. Aplicar contraste y brillo PRIMERO
+        applyContrastAndBrightness(combinedMatrix, config.contrast, config.brightness)
+        
+        // 2. Aplicar tinte (hue rotation)
+        if (config.hue != 0f) {
+            applyHueRotation(combinedMatrix, config.hue)
+        }
+        
+        // 3. Aplicar saturación
+        if (config.saturation != 1f) {
+            // CORREGIDO: Usar postConcat para combinar con la matriz existente
+            val saturationMatrix = ColorMatrix()
+            saturationMatrix.setSaturation(config.saturation)
+            combinedMatrix.postConcat(saturationMatrix)
+        }
 
-		val result = Bitmap.createBitmap(icon.width, icon.height, Bitmap.Config.ARGB_8888)
-		val canvas = Canvas(result)
-		val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        // Solo aplicar la matriz si hay cambios reales
+        val hasAdjustments = config.contrast != 1f || config.brightness != 0f || 
+                            config.hue != 0f || config.saturation != 1f
+        
+        if (!hasAdjustments) {
+            return icon
+        }
 
-		val colorMatrix = ColorMatrix()
+        val result = Bitmap.createBitmap(icon.width, icon.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(result)
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        
+        paint.colorFilter = ColorMatrixColorFilter(combinedMatrix)
+        canvas.drawBitmap(icon, 0f, 0f, paint)
 
-		// Aplicar CADA ajuste individualmente
-		if (hasContrast || hasBrightness) {
-			applyContrastAndBrightness(colorMatrix, config.contrast, config.brightness)
-		}
-		
-		if (hasHue) {
-			applyHueRotation(colorMatrix, config.hue)
-		}
-		
-		if (hasSaturation) {
-			colorMatrix.setSaturation(config.saturation)
-		}
+        return result
+    }
 
-		paint.colorFilter = ColorMatrixColorFilter(colorMatrix)
-		canvas.drawBitmap(icon, 0f, 0f, paint)
-
-		return result
-	}
+    private fun applyContrastAndBrightness(matrix: ColorMatrix, contrast: Float, brightness: Float) {
+        if (contrast != 1f || brightness != 0f) {
+            val brightnessNormalized = brightness * 2.55f // Convertir porcentaje a valor 0-255
+            
+            val contrastBrightnessMatrix = floatArrayOf(
+                contrast, 0f, 0f, 0f, brightnessNormalized,
+                0f, contrast, 0f, 0f, brightnessNormalized,
+                0f, 0f, contrast, 0f, brightnessNormalized,
+                0f, 0f, 0f, 1f, 0f
+            )
+            
+            // CORREGIDO: Usar postConcat para combinar con la matriz existente
+            matrix.postConcat(ColorMatrix(contrastBrightnessMatrix))
+        }
+    }
 
     private fun applyHueRotation(matrix: ColorMatrix, hue: Float) {
         val hueRad = hue * (PI / 180f).toFloat()
@@ -164,22 +142,11 @@ object IconThemer {
             0f, 0f, 0f, 1f, 0f
         )
         
+        // CORREGIDO: Usar postConcat para combinar con la matriz existente
         matrix.postConcat(ColorMatrix(hueMatrix))
     }
 
-    private fun applyContrastAndBrightness(matrix: ColorMatrix, contrast: Float, brightness: Float) {
-		val brightnessNormalized = brightness * 2.55f
-		
-		val contrastBrightnessMatrix = floatArrayOf(
-			contrast, 0f, 0f, 0f, brightnessNormalized,
-			0f, contrast, 0f, 0f, brightnessNormalized,
-			0f, 0f, contrast, 0f, brightnessNormalized,
-			0f, 0f, 0f, 1f, 0f
-		)
-		
-		matrix.postConcat(ColorMatrix(contrastBrightnessMatrix))
-	}
-
+    // El resto de los métodos se mantienen igual...
     fun normalizeIconSize(icon: Bitmap): Bitmap {
         if (icon.width == STANDARD_ICON_SIZE && icon.height == STANDARD_ICON_SIZE) {
             return icon
@@ -287,5 +254,33 @@ object IconThemer {
     fun drawableToNormalizedBitmap(drawable: Drawable): Bitmap {
         val originalBitmap = drawableToBitmap(drawable)
         return normalizeIconSize(originalBitmap)
+    }
+
+    // Métodos de compatibilidad...
+    fun applyThemeFromDrawable(drawable: Drawable, config: ThemeConfig): Bitmap {
+        val iconBitmap = drawableToNormalizedBitmap(drawable)
+        return applyTheme(iconBitmap, config)
+    }
+
+    fun applyTheme(
+        originalIcon: Bitmap,
+        mask: Bitmap,
+        color: Int,
+        offsetX: Int,
+        offsetY: Int,
+        scalePercentage: Int,
+        alphaPercentage: Int,
+        colorIntensity: Int
+    ): Bitmap {
+        val config = ThemeConfig(
+            mask = mask,
+            color = color,
+            offsetX = offsetX,
+            offsetY = offsetY,
+            scalePercentage = scalePercentage,
+            alphaPercentage = alphaPercentage,
+            colorIntensity = colorIntensity
+        )
+        return applyTheme(originalIcon, config)
     }
 }
