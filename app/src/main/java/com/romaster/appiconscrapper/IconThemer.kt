@@ -102,34 +102,38 @@ object IconThemer {
 
     // Resto de los métodos existentes (sin cambios)...
     private fun applyImageAdjustments(icon: Bitmap, config: ThemeConfig): Bitmap {
-        if (config.hue == 0f && config.saturation == 1f && 
-            config.brightness == 0f && config.contrast == 1f) {
-            return icon
-        }
+		if (config.hue == 0f && config.saturation == 1f && 
+			config.brightness == 0f && config.contrast == 1f) {
+			return icon
+		}
 
-        val result = Bitmap.createBitmap(icon.width, icon.height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(result)
-        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+		val result = Bitmap.createBitmap(icon.width, icon.height, Bitmap.Config.ARGB_8888)
+		val canvas = Canvas(result)
+		val paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
-        val colorMatrix = ColorMatrix()
+		val colorMatrix = ColorMatrix()
 
-        if (config.hue != 0f) {
-            applyHueRotation(colorMatrix, config.hue)
-        }
+		// CORREGIDO: Aplicar los ajustes en el orden correcto
+		// 1. Primero contraste y brillo
+		if (config.contrast != 1f || config.brightness != 0f) {
+			applyContrastAndBrightness(colorMatrix, config.contrast, config.brightness)
+		}
+    
+		// 2. Luego el tinte (hue)
+		if (config.hue != 0f) {
+			applyHueRotation(colorMatrix, config.hue)
+		}
+    
+		// 3. Finalmente la saturación
+		if (config.saturation != 1f) {
+			colorMatrix.setSaturation(config.saturation)
+		}
 
-        if (config.saturation != 1f) {
-            colorMatrix.setSaturation(config.saturation)
-        }
+		paint.colorFilter = ColorMatrixColorFilter(colorMatrix)
+		canvas.drawBitmap(icon, 0f, 0f, paint)
 
-        if (config.contrast != 1f || config.brightness != 0f) {
-            applyContrastAndBrightness(colorMatrix, config.contrast, config.brightness)
-        }
-
-        paint.colorFilter = ColorMatrixColorFilter(colorMatrix)
-        canvas.drawBitmap(icon, 0f, 0f, paint)
-
-        return result
-    }
+		return result
+	}
 
     // CORREGIDO: Problema del tinte - usando la implementación correcta
     private fun applyHueRotation(matrix: ColorMatrix, hue: Float) {

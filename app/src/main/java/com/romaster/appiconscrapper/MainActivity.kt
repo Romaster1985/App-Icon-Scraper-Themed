@@ -99,14 +99,14 @@ class MainActivity : AppCompatActivity() {
         selectAllButton.setOnClickListener {
             // CORREGIDO: Solo selecciona los apps del filtro actual
             viewModel.selectAll(filteredApps)
-            applyFilter(viewModel.currentFilter)
+            applyFilter(viewModel.currentFilter) // Actualizar la vista del filtro actual
             updateUI()
         }
 
         deselectAllButton.setOnClickListener {
-            // CORREGIDO: Solo deselecciona los apps del filtro actual
-            viewModel.deselectAll(filteredApps)
-            applyFilter(viewModel.currentFilter)
+            // CORREGIDO: Deselecciona TODAS las apps (filtro "Todas")
+            viewModel.deselectAll()
+            applyFilter(viewModel.currentFilter) // Actualizar la vista del filtro actual
             updateUI()
         }
     }
@@ -206,10 +206,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateUI() {
-        val selectedCount = filteredApps.count { it.isSelected }
+        // CORREGIDO: Mostrar siempre el contador TOTAL de seleccionadas
+        val selectedCount = viewModel.getSelectedCount()
         val totalCount = filteredApps.size
         
+        // Mostrar contador del filtro actual
         appsCountText.text = "$totalCount aplicaciones"
+        
+        // CORREGIDO: El botón de tematizar muestra el TOTAL de seleccionadas
         exportButton.isEnabled = selectedCount > 0
         
         exportButton.text = if (selectedCount > 0) {

@@ -11,21 +11,24 @@ class MainActivityViewModel : ViewModel() {
         return allApps.filter { it.isSelected }
     }
     
-    fun selectAll(filteredApps: List<AppInfo>) {
-        // Solo seleccionar los apps de la lista filtrada
-        val filteredPackageNames = filteredApps.map { it.packageName }
-        allApps.forEach { app ->
-            app.isSelected = app.packageName in filteredPackageNames
-        }
+    fun getSelectedCount(): Int {
+        return allApps.count { it.isSelected }
     }
     
-    fun deselectAll(filteredApps: List<AppInfo>) {
-        // Solo deseleccionar los apps de la lista filtrada
+    fun selectAll(filteredApps: List<AppInfo>) {
+        // Solo seleccionar los apps de la lista filtrada actual
         val filteredPackageNames = filteredApps.map { it.packageName }
         allApps.forEach { app ->
             if (app.packageName in filteredPackageNames) {
-                app.isSelected = false
+                app.isSelected = true
             }
+        }
+    }
+    
+    fun deselectAll() {
+        // CORREGIDO: Deseleccionar TODAS las apps (filtro "Todas")
+        allApps.forEach { app ->
+            app.isSelected = false
         }
     }
     
