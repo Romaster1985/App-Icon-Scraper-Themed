@@ -283,4 +283,4 @@ object IconThemer {
         )
         return applyTheme(originalIcon, config)
     }
-}}
+}

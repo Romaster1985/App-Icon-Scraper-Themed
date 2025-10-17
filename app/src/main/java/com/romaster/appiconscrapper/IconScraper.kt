@@ -9,6 +9,8 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
+import android.graphics.Rect
+import android.graphics.Canvas
 
 object IconScraper {
 
@@ -153,4 +155,124 @@ object IconScraper {
             null
         }
     }
+	
+    // NUEVO: Método para extraer y normalizar solo la capa frontal
+    fun extractAndNormalizeForeground(
+        packageManager: PackageManager, 
+        packageName: String,
+        targetSize: Int = 128
+    ): Bitmap? {
+        return try {
+            val layers = getIconLayers(packageManager, packageName)
+            
+            // Intentar obtener la capa frontal
+            val foregroundDrawable = when {
+                layers.foregroundIcon != null -> layers.foregroundIcon
+                layers.adaptiveIcon != null -> {
+                    (layers.adaptiveIcon as? AdaptiveIconDrawable)?.foreground
+                }
+                else -> null
+            }
+            
+            if (foregroundDrawable != null) {
+                val foregroundBitmap = drawableToBitmap(foregroundDrawable)
+                normalizeForegroundSize(foregroundBitmap, targetSize)
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+    
+    // NUEVO: Convertir Drawable a Bitmap
+    private fun drawableToBitmap(drawable: Drawable): Bitmap {
+        val bitmap = Bitmap.createBitmap(
+            drawable.intrinsicWidth.coerceAtLeast(1),
+            drawable.intrinsicHeight.coerceAtLeast(1),
+            Bitmap.Config.ARGB_8888
+        )
+        val canvas = android.graphics.Canvas(bitmap)
+        drawable.setBounds(0, 0, canvas.width, canvas.height)
+        drawable.draw(canvas)
+        return bitmap
+    }
+    
+    // NUEVO: Método simplificado de normalización
+    private fun normalizeForegroundSize(bitmap: Bitmap, targetSize: Int): Bitmap {
+        // Versión simplificada - solo escalar al tamaño objetivo
+        val aspectRatio = bitmap.width.toFloat() / bitmap.height.toFloat()
+        val newWidth: Int
+        val newHeight: Int
+    
+        if (aspectRatio > 1) {
+            newWidth = targetSize
+            newHeight = (targetSize / aspectRatio).toInt()
+        } else {
+            newHeight = targetSize
+            newWidth = (targetSize * aspectRatio).toInt()
+        }
+    
+        val scaled = Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true)
+        
+        // Centrar en canvas del tamaño objetivo
+        val result = Bitmap.createBitmap(targetSize, targetSize, Bitmap.Config.ARGB_8888)
+        val canvas = android.graphics.Canvas(result)
+        val x = (targetSize - scaled.width) / 2
+        val y = (targetSize - scaled.height) / 2
+        canvas.drawBitmap(scaled, x.toFloat(), y.toFloat(), null)
+        
+        return result
+    }
+
+}
+	return GraphicsRect(left, top, right, bottom)
+	}
+
+	// NUEVO: Escalar bitmap manteniendo relación de aspecto
+	private fun scaleToFit(bitmap: Bitmap, targetSize: Int): Bitmap {
+		val aspectRatio = bitmap.width.toFloat() / bitmap.height.toFloat()
+		val newWidth: Int
+		val newHeight: Int
+
+		if (aspectRatio > 1) {
+			// Más ancho que alto
+			newWidth = targetSize
+			newHeight = (targetSize / aspectRatio).toInt()
+		} else {
+			// Más alto que ancho o cuadrado
+			newHeight = targetSize
+			newWidth = (targetSize * aspectRatio).toInt()
+		}
+
+		val scaled = Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true)
+		return centerBitmapInSize(scaled, targetSize)
+	}
+
+	// NUEVO: Centrar bitmap en un canvas del tamaño objetivo
+	private fun centerBitmapInSize(bitmap: Bitmap, targetSize: Int): Bitmap {
+		val result = Bitmap.createBitmap(targetSize, targetSize, Bitmap.Config.ARGB_8888)
+		val canvas = GraphicsCanvas(result)
+		
+		val x = (targetSize - bitmap.width) / 2
+		val y = (targetSize - bitmap.height) / 2
+		
+		canvas.drawBitmap(bitmap, x.toFloat(), y.toFloat(), null)
+		return result
+	}
+
+	// NUEVO: Convertir Drawable a Bitmap (si no existe ya)
+	private fun drawableToBitmap(drawable: Drawable): Bitmap {
+		val bitmap = Bitmap.createBitmap(
+			drawable.intrinsicWidth.coerceAtLeast(1),
+			drawable.intrinsicHeight.coerceAtLeast(1),
+			Bitmap.Config.ARGB_8888
+		)
+		val canvas = GraphicsCanvas(bitmap)
+		drawable.setBounds(0, 0, canvas.width, canvas.height)
+		drawable.draw(canvas)
+		return bitmap
+	}
+
 }
