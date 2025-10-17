@@ -2,7 +2,7 @@
 
 Una aplicación Android para extraer, personalizar y exportar iconos de aplicaciones instaladas en el dispositivo. Diseñada principalmente para cargar y aplicar las imágenes de los íconos del propio dispositivo en la aplicación Icon Packer sin necesidad de depender de fuentes externas.
 
-![image alt](https://github.com/Romaster1985/App-Icon-Scraper-Themed/blob/d7f3478c74f9ae569d34b729bcb57e338cdfb96b/app/src/main/res/ic_launcher-web.png)
+![image alt](https://github.com/Romaster1985/App-Icon-Scraper-Themed/blob/d7f3478c74f9ae569d34b729bcb57e338cdfb96b/app/src/main/res/ic_launcher-web.png?raw=true)
 
 ## Características
 
