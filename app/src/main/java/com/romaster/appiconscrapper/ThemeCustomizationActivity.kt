@@ -272,42 +272,42 @@ class ThemeCustomizationActivity : AppCompatActivity() {
         
         // Listeners para configuración de capas
         useDefaultIconCheckbox.setOnCheckedChangeListener { _, isChecked ->
-			useDefaultIcon = isChecked
-			viewModel.useDefaultIcon = useDefaultIcon
-			if (isChecked) {
-				useRoundIconCheckbox.isChecked = false
-				useRoundIcon = false
-				viewModel.useRoundIcon = useRoundIcon
-			}
-			resetToSampleIcon() // Recargar ícono con nueva configuración
-			updateLayerInfo()
-		}
+            useDefaultIcon = isChecked
+            viewModel.useDefaultIcon = useDefaultIcon
+            if (isChecked) {
+                useRoundIconCheckbox.isChecked = false
+                useRoundIcon = false
+                viewModel.useRoundIcon = useRoundIcon
+            }
+            updatePreview()
+            updateLayerInfo()
+        }
 
         useRoundIconCheckbox.setOnCheckedChangeListener { _, isChecked ->
-			useRoundIcon = isChecked
-			viewModel.useRoundIcon = useRoundIcon
-			if (isChecked) {
-				useDefaultIconCheckbox.isChecked = false
-				useDefaultIcon = false
-				viewModel.useDefaultIcon = useDefaultIcon
-			}
-			resetToSampleIcon() // Recargar ícono con nueva configuración
-			updateLayerInfo()
-		}
+            useRoundIcon = isChecked
+            viewModel.useRoundIcon = useRoundIcon
+            if (isChecked) {
+                useDefaultIconCheckbox.isChecked = false
+                useDefaultIcon = false
+                viewModel.useDefaultIcon = useDefaultIcon
+            }
+            updatePreview()
+            updateLayerInfo()
+        }
 
-		foregroundLayerCheckbox.setOnCheckedChangeListener { _, isChecked ->
-			useForegroundLayer = isChecked
-			viewModel.useForegroundLayer = useForegroundLayer
-			resetToSampleIcon() // Recargar ícono con nueva configuración
-			updateLayerInfo()
-		}
+        foregroundLayerCheckbox.setOnCheckedChangeListener { _, isChecked ->
+            useForegroundLayer = isChecked
+            viewModel.useForegroundLayer = useForegroundLayer
+            updatePreview()
+            updateLayerInfo()
+        }
 
-		backgroundLayerCheckbox.setOnCheckedChangeListener { _, isChecked ->
-			useBackgroundLayer = isChecked
-			viewModel.useBackgroundLayer = useBackgroundLayer
-			resetToSampleIcon() // Recargar ícono con nueva configuración
-			updateLayerInfo()
-		}
+        backgroundLayerCheckbox.setOnCheckedChangeListener { _, isChecked ->
+            useBackgroundLayer = isChecked
+            viewModel.useBackgroundLayer = useBackgroundLayer
+            updatePreview()
+            updateLayerInfo()
+        }
 
         previewAllButton.setOnClickListener {
             // CORREGIDO: Verificar si hay cambios antes de previsualizar
@@ -539,44 +539,56 @@ class ThemeCustomizationActivity : AppCompatActivity() {
 				// Procesar el icono de nextApp con la configuración actual
 				Thread {
 					try {
-						val originalIcon = if (useForegroundLayer && !useBackgroundLayer) {
-							// Modo minimalista - solo capa frontal normalizada
-							IconScraper.extractAndNormalizeForeground(
-								packageManager, 
-								app.packageName,
-								128  // CORREGIDO: Usar 128 directamente
-							) ?: run {
-								// Fallback si no se puede extraer la capa frontal
-								val appInfo = packageManager.getApplicationInfo(app.packageName, 0)
-								val defaultDrawable = appInfo.loadIcon(packageManager)
-								IconThemer.drawableToNormalizedBitmap(defaultDrawable)
-							}
+						val layers = IconScraper.getIconLayers(packageManager, nextApp.packageName)
+						val composedIcon = IconScraper.composeIconFromLayers(
+							layers = layers,
+							useDefault = useDefaultIcon,
+							useRound = useRoundIcon,
+							useForeground = useForegroundLayer,
+							useBackground = useBackgroundLayer
+						)
+						
+						val originalIcon = if (composedIcon != null) {
+							IconThemer.drawableToNormalizedBitmap(composedIcon)
 						} else {
-							// Modo normal
-							val layers = IconScraper.getIconLayers(packageManager, nextApp.packageName)
-							val composedIcon = IconScraper.composeIconFromLayers(
-								layers = layers,
-								useDefault = useDefaultIcon,
-								useRound = useRoundIcon,
-								useForeground = useForegroundLayer,
-								useBackground = useBackgroundLayer
-							)
-							
-							if (composedIcon != null) {
-								IconThemer.drawableToNormalizedBitmap(composedIcon)
-							} else {
-								val appInfo = packageManager.getApplicationInfo(nextApp.packageName, 0)
-								val defaultDrawable = appInfo.loadIcon(packageManager)
-								IconThemer.drawableToNormalizedBitmap(defaultDrawable)
-							}
+							val appInfo = packageManager.getApplicationInfo(nextApp.packageName, 0)
+							val defaultDrawable = appInfo.loadIcon(packageManager)
+							IconThemer.drawableToNormalizedBitmap(defaultDrawable)
 						}
 						
 						// Guardar el ícono original para usarlo en el preview
 						currentPreviewBitmap = originalIcon
 						
-						// ... resto del código igual
+						val config = IconThemer.ThemeConfig(
+							mask = selectedMask!!,
+							color = selectedColor,
+							offsetX = offsetX,
+							offsetY = offsetY,
+							scalePercentage = scalePercentage,
+							alphaPercentage = alphaPercentage,
+							colorIntensity = colorIntensity,
+							hue = hue,
+							saturation = saturation,
+							brightness = brightness,
+							contrast = contrast,
+							useDefaultIcon = useDefaultIcon,
+							useRoundIcon = useRoundIcon,
+							useForegroundLayer = useForegroundLayer,
+							useBackgroundLayer = useBackgroundLayer
+						)
+						
+						val themedIcon = IconThemer.applyTheme(originalIcon, config)
+						
+						runOnUiThread {
+							iconPreview.setImageBitmap(themedIcon)
+							Toast.makeText(this, "Icono ${currentPreviewIndex + 1} de ${selectedApps.size}: ${nextApp.name}", 
+								Toast.LENGTH_SHORT).show()
+						}
 					} catch (e: Exception) {
 						e.printStackTrace()
+						runOnUiThread {
+							Toast.makeText(this, "Error al cargar el icono de ${nextApp.name}", Toast.LENGTH_SHORT).show()
+						}
 					}
 				}.start()
 			} else {
@@ -600,19 +612,19 @@ class ThemeCustomizationActivity : AppCompatActivity() {
             onComplete?.invoke()
             return
         }
-    
+
         Thread {
             val totalIcons = selectedApps.size
             var processedCount = 0
-    
+
             runOnUiThread {
                 progressText.text = "Procesando: 0/$totalIcons"
                 applyButton.isEnabled = false
             }
-    
+
             // Limpiar íconos anteriores antes de procesar nuevos
             cleanUpCurrentIcons()
-    
+
             val config = IconThemer.ThemeConfig(
                 mask = selectedMask!!,
                 color = selectedColor,
@@ -630,44 +642,33 @@ class ThemeCustomizationActivity : AppCompatActivity() {
                 useForegroundLayer = useForegroundLayer,
                 useBackgroundLayer = useBackgroundLayer
             )
-    
-            selectedApps.forEach { currentApp ->
+
+            selectedApps.forEach { app ->
                 try {
-                    val originalIcon = if (useForegroundLayer && !useBackgroundLayer) {
-                        // Modo minimalista - solo capa frontal normalizada
-                        IconScraper.extractAndNormalizeForeground(
-                            packageManager, 
-                            currentApp.packageName,
-                            128
-                        ) ?: run {
-                            // Fallback si no se puede extraer la capa frontal
-                            val appInfo = packageManager.getApplicationInfo(currentApp.packageName, 0)
-                            val defaultDrawable = appInfo.loadIcon(packageManager)
-                            IconThemer.drawableToNormalizedBitmap(defaultDrawable)
-                        }
+                    // Obtener las capas del icono
+                    val layers = IconScraper.getIconLayers(packageManager, app.packageName)
+                    
+                    // Componer el icono según la configuración
+                    val composedIcon = IconScraper.composeIconFromLayers(
+                        layers = layers,
+                        useDefault = useDefaultIcon,
+                        useRound = useRoundIcon,
+                        useForeground = useForegroundLayer,
+                        useBackground = useBackgroundLayer
+                    )
+                    
+                    val originalIcon = if (composedIcon != null) {
+                        IconThemer.drawableToNormalizedBitmap(composedIcon)
                     } else {
-                        // Modo normal - usar todas las capas configuradas
-                        val layers = IconScraper.getIconLayers(packageManager, currentApp.packageName)
-                        val composedIcon = IconScraper.composeIconFromLayers(
-                            layers = layers,
-                            useDefault = useDefaultIcon,
-                            useRound = useRoundIcon,
-                            useForeground = useForegroundLayer,
-                            useBackground = useBackgroundLayer
-                        )
-                        
-                        if (composedIcon != null) {
-                            IconThemer.drawableToNormalizedBitmap(composedIcon)
-                        } else {
-                            val appInfo = packageManager.getApplicationInfo(currentApp.packageName, 0)
-                            val defaultDrawable = appInfo.loadIcon(packageManager)
-                            IconThemer.drawableToNormalizedBitmap(defaultDrawable)
-                        }
+                        // Fallback: obtener el icono por defecto directamente
+                        val appInfo = packageManager.getApplicationInfo(app.packageName, 0)
+                        val defaultDrawable = appInfo.loadIcon(packageManager)
+                        IconThemer.drawableToNormalizedBitmap(defaultDrawable)
                     }
                     
                     val themedIcon = IconThemer.applyTheme(originalIcon, config)
                     
-                    themedIcons[currentApp.packageName] = themedIcon
+                    themedIcons[app.packageName] = themedIcon
                     previewIconsList.add(themedIcon)
                     processedCount++
                     
@@ -678,7 +679,7 @@ class ThemeCustomizationActivity : AppCompatActivity() {
                     e.printStackTrace()
                 }
             }
-    
+
             runOnUiThread {
                 progressText.text = "¡Procesamiento completado!"
                 applyButton.isEnabled = true
@@ -703,7 +704,7 @@ class ThemeCustomizationActivity : AppCompatActivity() {
             }
         }.start()
     }
-    
+
     // NUEVO: Método para limpiar íconos actuales de forma segura
     private fun cleanUpCurrentIcons() {
         try {
@@ -902,53 +903,38 @@ class ThemeCustomizationActivity : AppCompatActivity() {
 	}
 
     private fun loadSampleIcon() {
-		if (selectedApps.isNotEmpty()) {
-			try {
-				sampleAppPackage = selectedApps[0].packageName
-				
-				// CORREGIDO: Usar 128 directamente en lugar de STANDARD_ICON_SIZE
-				sampleIcon = if (useForegroundLayer && !useBackgroundLayer) {
-					// Modo minimalista - extraer y normalizar solo la capa frontal
-					IconScraper.extractAndNormalizeForeground(
-						packageManager, 
-						sampleAppPackage,
-						128  // Usar 128 directamente
-					) ?: run {
-						// Fallback si no se puede extraer la capa frontal
-						val defaultDrawable = IconScraper.getSimpleIcon(packageManager, sampleAppPackage)
-						defaultDrawable?.let { IconThemer.drawableToNormalizedBitmap(it) } 
-							?: IconThemer.normalizeIconSize(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher))
-					}
-				} else {
-					// Modo normal - usar todas las capas configuradas
-					val layers = IconScraper.getIconLayers(packageManager, sampleAppPackage)
-					val composedIcon = IconScraper.composeIconFromLayers(
-						layers = layers,
-						useDefault = useDefaultIcon,
-						useRound = useRoundIcon,
-						useForeground = useForegroundLayer,
-						useBackground = useBackgroundLayer
-					)
-					
-					if (composedIcon != null) {
-						IconThemer.drawableToNormalizedBitmap(composedIcon)
-					} else {
-						// Fallback al icono por defecto
-						val defaultDrawable = IconScraper.getSimpleIcon(packageManager, sampleAppPackage)
-						defaultDrawable?.let { IconThemer.drawableToNormalizedBitmap(it) } 
-							?: IconThemer.normalizeIconSize(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher))
-					}
-				}
-			} catch (e: Exception) {
-				e.printStackTrace()
-				sampleIcon = IconThemer.normalizeIconSize(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher))
-			}
-		} else {
-			sampleIcon = IconThemer.normalizeIconSize(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher))
-		}
-		updatePreview()
-		updateLayerInfo()
-	}
+        if (selectedApps.isNotEmpty()) {
+            try {
+                sampleAppPackage = selectedApps[0].packageName
+                val layers = IconScraper.getIconLayers(packageManager, sampleAppPackage)
+                
+                // Obtener el icono compuesto según la configuración actual
+                val composedIcon = IconScraper.composeIconFromLayers(
+                    layers = layers,
+                    useDefault = useDefaultIcon,
+                    useRound = useRoundIcon,
+                    useForeground = useForegroundLayer,
+                    useBackground = useBackgroundLayer
+                )
+                
+                sampleIcon = if (composedIcon != null) {
+                    IconThemer.drawableToNormalizedBitmap(composedIcon)
+                } else {
+                    // Fallback al icono por defecto
+                    val defaultDrawable = IconScraper.getSimpleIcon(packageManager, sampleAppPackage)
+                    defaultDrawable?.let { IconThemer.drawableToNormalizedBitmap(it) } 
+                        ?: IconThemer.normalizeIconSize(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher))
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                sampleIcon = IconThemer.normalizeIconSize(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher))
+            }
+        } else {
+            sampleIcon = IconThemer.normalizeIconSize(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher))
+        }
+        updatePreview()
+        updateLayerInfo()
+    }
 
     override fun onPause() {
         super.onPause()
