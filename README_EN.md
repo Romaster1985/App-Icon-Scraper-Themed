@@ -1,22 +1,22 @@
 # App Icon Scraper & Themer
 
-Una aplicación Android para extraer, personalizar y exportar iconos de aplicaciones instaladas en el dispositivo. Diseñada principalmente para cargar y aplicar las imágenes de los íconos del propio dispositivo en la aplicación Icon Packer sin necesidad de depender de fuentes externas.
+An Android application to extract, customize, and export icons from installed apps on your device. It is mainly designed to load and apply icons from your own device into the **Icon Packer** app without relying on external sources.
 
-## Características
+## Features
 
-* 📱 Interfaz de usuario simple y profesional.
-* 🔍Escanea y 📋 lista todas las aplicaciones instaladas.
-* 🎯 Filtrado inteligente (Sistema, Usuario, Google Apps).
-* ✅ Selección múltiple de aplicaciones.
-* 🎨 Sistema único de tematización de iconos (v1.2⬆️ agregados iconos multicapa).
-* 📍 Ajuste de posición, escala, transparencia, tinte, saturación, brillo y contraste.
-* 🎛️ Control de intensidad de color (fundido a color preseteado).
-* 👁️ Vista previa en tiempo real + vista previa de todos los íconos (v1.2⬆️).
-* 📦 Generación de packs de iconos personalizados.
-* 🗜️Exportación a archivo ZIP listo para cargar en Icon Packer.
-* 🤖📝 Crash Guard Loger incorporado para autodiagnóstico de errores ⛓️‍💥💥 (v1.2⬆️).
+* 📱 Simple and professional user interface.
+* 🔍 Scans and 📋 lists all installed applications.
+* 🎯 Smart filtering (System, User, Google Apps).
+* ✅ Multiple app selection.
+* 🎨 Unique icon theming system (v1.2⬆️ added multilayer icons).
+* 📍 Adjust position, scale, transparency, tint, saturation, brightness, and contrast.
+* 🎛️ Color intensity control (fade to preset color).
+* 👁️ Real-time preview + full icon set preview (v1.2⬆️).
+* 📦 Generate fully customized icon packs.
+* 🗜️ Export to ZIP file ready to upload to Icon Packer.
+* 🤖📝 Built-in Crash Guard Logger for automatic error diagnostics ⛓️‍💥💥 (v1.2⬆️).
 
-## Tecnologías:
+## Technologies
 
 * Kotlin
 * Android SDK
@@ -26,59 +26,57 @@ Una aplicación Android para extraer, personalizar y exportar iconos de aplicaci
 * Gradle
 * Active Internal Cache (v1.2 ⬆️)
 
-## Compilación
+## Build Instructions
 
-### Requisitos
-- Android Studio Hedgehog o superior
+### Requirements
+- Android Studio Hedgehog or higher
 - Android SDK 34
 - Java 17
 
-### Build con Gradle (Wrapper Incluido)
+### Build with Gradle (Wrapper Included)
 
-```
-bash
+```bash
 git clone https://github.com/Romaster1985/App-Icon-Scraper-Themed.git
 cd App-Icon-Scraper-Themed
-# Dar permisos de ejecución
+# Grant execution permissions
 chmod +x ./gradlew
-## Opción 1: Compilación básica debug
+## Option 1: Basic debug build
 ./gradlew assembleDebug
-## Opción 2: Con limpieza previa
+## Option 2: Clean and rebuild
 #./gradlew clean assembleDebug
-## Opción 3: Con más información de depuración
+## Option 3: With detailed debug output
 #./gradlew clean assembleDebug --stacktrace --info
-# El APK estará en:
+# The APK will be located at:
 ls -la app/build/outputs/apk/debug/app-debug.apk
-# Para ver el tamaño y confirmar que se generó correctamente
+# To verify size and confirm proper generation
 file app/build/outputs/apk/debug/app-debug.apk
-
 ```
 
-GitHub Actions
+### GitHub Actions
 
-La aplicación se compila automáticamente en cada push a las ramas main/master mediante GitHub Actions.
+The app is automatically built on every push to the main/master branches via GitHub Actions.
 
-## Uso
+## Usage
 
-1. Abre la aplicación y presiona "Escanear Apps"
-2. Usa los filtros para encontrar las aplicaciones deseadas
-3. Selecciona las aplicaciones (individualmente o usando "Seleccionar Todo")
-4. Presiona "Tematizar"
-5. Selecciona la máscara/fondo para los íconos (png)
-6. Elige un color, intensidad, transparencia, capas, etc. y ajusta los íconos dentro de la máscara a tu gusto
-7. Presiona "Aplicar a Todos Los Íconos" / Opcional Previsualiza Todos los Íconos Seleccionados
-8. Presiona "Exportar Pack de Íconos"
-9. Los iconos se guardarán en un archivo ZIP en la carpeta de descargas del dispositivo
-10. El pack generado es compatible con Icon Packer
+1. Open the app and press **“Scan Apps”**
+2. Use filters to find the desired apps
+3. Select the apps (individually or “Select All”)
+4. Press **“Theme”**
+5. Choose the mask/background for the icons (PNG)
+6. Select color, intensity, transparency, layers, etc., and adjust icons inside the mask to your preference
+7. Press **“Apply to All Icons”** / Optionally preview all themed icons
+8. Press **“Export Icon Pack”**
+9. Icons will be saved as a ZIP file in your device’s Downloads folder
+10. The generated pack is fully compatible with **Icon Packer**
 
-## Permisos
+## Permissions
 
-La aplicación requiere:
+The app requires:
 
-* QUERY_ALL_PACKAGES: Para listar aplicaciones instaladas
-* WRITE_EXTERNAL_STORAGE: Para guardar el archivo ZIP (solo hasta Android 10)
+* `QUERY_ALL_PACKAGES`: To list installed apps
+* `WRITE_EXTERNAL_STORAGE`: To save the ZIP file (up to Android 10 only)
 
-## Estructura del Proyecto
+## Project Structure
 
 ```
 App-Icon-Scraper-Themed
@@ -189,35 +187,35 @@ App-Icon-Scraper-Themed
 ├── gradlew
 ├── gradlew.bat
 └── settings.gradle
-
 ```
 
-## Desarrollador
+## Developer
 
 **Romaster**
 
-· Email: roman.ignacio.romero@gmail.com
+· Email: roman.ignacio.romero@gmail.com  
 · GitHub: [Romaster1985](https://github.com/Romaster1985)
 
-## Agradecimientos
+## Acknowledgements
 
-Esta aplicación fue diseñada con la ayuda de DeepSeek.
+This application was designed with the help of **DeepSeek**.
 
-## Licencia
+## License
 
-MIT License - ver archivo LICENSE para más detalles.
+MIT License – see the LICENSE file for details.
 
-# 📲 Descarga de la aplicación APK
+# 📲 APK Download
 
-* Desde [**RELEASES**](https://github.com/Romaster1985/App-Icon-Scraper-Themed/releases) (Recomendado)
-* Desde GitHub Actions, entra en el último workflow y descarga el Artifact generado
+* From [**RELEASES**](https://github.com/Romaster1985/App-Icon-Scraper-Themed/releases) (Recommended)
+* From GitHub Actions — open the latest workflow and download the generated artifact
 
-## 🔗 Enlaces Útiles
+## 🔗 Useful Links
 
-- 🐛 [Reportar Issues](https://github.com/Romaster1985/App-Icon-Scraper-Themed/issues) - ¿Encontraste un error?
-- 💡 [Sugerir Features](https://github.com/Romaster1985/App-Icon-Scraper-Themed/issues) - Ideas para mejorar la app
-- 🫂 [Apóyame en Patreon **Romaster Android Tuning**](https://www.patreon.com/romasterdroidtuning?utm_campaign=creatorshare_creator)
+- 🐛 [Report Issues](https://github.com/Romaster1985/App-Icon-Scraper-Themed/issues) – Found a bug?
+- 💡 [Suggest Features](https://github.com/Romaster1985/App-Icon-Scraper-Themed/issues) – Share your ideas for improvements
+- 🫂 [Support me on Patreon **Romaster Android Tuning**](https://www.patreon.com/romasterdroidtuning?utm_campaign=creatorshare_creator)
 
 ---
 
-⭐ **¿Te gustó este proyecto? Dale una estrella en GitHub!**
+⭐ **Did you like this project? Give it a star on GitHub!**
+!**
