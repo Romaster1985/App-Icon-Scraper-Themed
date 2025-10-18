@@ -220,7 +220,6 @@ MIT License - ver archivo LICENSE para más detalles.
 - 🐛 [Reportar Issues](https://github.com/Romaster1985/App-Icon-Scraper-Themed/issues) - ¿Encontraste un error?
 - 💡 [Sugerir Features](https://github.com/Romaster1985/App-Icon-Scraper-Themed/issues) - Ideas para mejorar la app
 - 🫂 [Apóyame en Patreon **Romaster Android Tuning**](https://www.patreon.com/romasterdroidtuning?utm_campaign=creatorshare_creator)
-- ☕[También puedes apoyarme con un café](buymeacoffee.com/romaster)
 
 ---
 
