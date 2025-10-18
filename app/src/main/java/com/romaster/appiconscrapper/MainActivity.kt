@@ -268,9 +268,12 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "No hay aplicaciones seleccionadas", Toast.LENGTH_SHORT).show()
             return
         }
-
+    
+        val useForegroundProcessing = findViewById<CheckBox>(R.id.checkBoxForegroundProcessing).isChecked
+    
         val intent = Intent(this, ThemeCustomizationActivity::class.java).apply {
             putParcelableArrayListExtra("selected_apps", ArrayList(selectedApps))
+            putExtra("use_foreground_processing", useForegroundProcessing)
         }
         startActivity(intent)
     }

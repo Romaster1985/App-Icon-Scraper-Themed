@@ -331,6 +331,40 @@
                 android:background="@color/card_background"
                 android:padding="8dp"
                 android:layout_marginBottom="16dp" />
+                
+            <!-- Agregar después de los controles de capas y antes del progreso -->
+            <LinearLayout
+                android:id="@+id/foregroundScaleContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:layout_marginBottom="16dp">
+            
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ajustes de Capa Frontal"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:layout_marginBottom="8dp" />
+            
+                <TextView
+                    android:id="@+id/foregroundScaleValueText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Escala Capa Frontal: 100%"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="4dp" />
+            
+                <SeekBar
+                    android:id="@+id/seekBarForegroundScale"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp" />
+            
+            </LinearLayout>
 
             <!-- Progreso -->
             <TextView

@@ -70,6 +70,15 @@
         android:layout_marginTop="8dp"
         android:scrollbars="vertical" />
 
+    <!-- Checkbox para procesar capas frontales -->
+    <CheckBox
+        android:id="@+id/checkBoxForegroundProcessing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Procesar Capas Frontales"
+        android:layout_marginBottom="8dp"
+        android:checked="false" />
+
     <!-- Botón de exportar -->
     <Button
         android:id="@+id/exportButton"
