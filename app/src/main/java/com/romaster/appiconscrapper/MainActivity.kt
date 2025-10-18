@@ -1,5 +1,6 @@
 package com.romaster.appiconscrapper
 
+import android.widget.CheckBox 
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -273,7 +274,20 @@ class MainActivity : AppCompatActivity() {
     
         val intent = Intent(this, ThemeCustomizationActivity::class.java).apply {
             putParcelableArrayListExtra("selected_apps", ArrayList(selectedApps))
-            putExtra("use_foreground_processing", useForegroundProcessing)
+            putExtra("use_foreground_processing", useForegroundProcessing)  // ESTA LÍNEA CORREGIDA
+        }
+        startActivity(intent)
+    }
+    
+    private fun launchForegroundPreprocessor() {
+        val selectedApps = viewModel.getSelectedApps()
+        if (selectedApps.isEmpty()) {
+            Toast.makeText(this, "Primero selecciona algunas aplicaciones", Toast.LENGTH_SHORT).show()
+            return
+        }
+    
+        val intent = Intent(this, ForegroundPreprocessorActivity::class.java).apply {
+            putParcelableArrayListExtra("selected_apps", ArrayList(selectedApps))
         }
         startActivity(intent)
     }

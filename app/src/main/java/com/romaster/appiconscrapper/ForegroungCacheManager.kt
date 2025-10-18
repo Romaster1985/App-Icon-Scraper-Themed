@@ -2,6 +2,7 @@ package com.romaster.appiconscrapper
 
 import android.content.pm.PackageManager
 import android.graphics.*
+import android.graphics.drawable.AdaptiveIconDrawable 
 import java.util.*
 
 object ForegroundCacheManager {
