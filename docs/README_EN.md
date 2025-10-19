@@ -1,4 +1,4 @@
-[***👉🏻 README SP 🇪🇸 👈🏻***](README.md)
+[***👉🏻 README SP 🇪🇸 👈🏻***](https://github.com/Romaster1985/App-Icon-Scraper-Themed/blob/main/README.md)
 # App Icon Scraper & Themer
 
 An Android application to extract, customize, and export icons from installed apps on your device. It is mainly designed to load and apply icons from your own device into the **Icon Packer** app without relying on external sources.
