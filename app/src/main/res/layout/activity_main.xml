@@ -50,6 +50,14 @@
 
     </LinearLayout>
 
+    <!-- Contenedor para el checkbox de pre-procesamiento -->
+    <LinearLayout
+        android:id="@+id/checkboxContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp" />
+
     <!-- Contador de aplicaciones -->
     <TextView
         android:id="@+id/appsCountText"

@@ -6,9 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
@@ -23,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var selectAllButton: Button
     private lateinit var deselectAllButton: Button
     private lateinit var scrapeButton: Button
+    private lateinit var preprocessForegroundCheckbox: CheckBox
 
     private lateinit var viewModel: MainActivityViewModel
     private lateinit var adapter: AppAdapter
@@ -60,6 +59,19 @@ class MainActivity : AppCompatActivity() {
         scrapeButton = findViewById(R.id.scrapeButton)
         
         exportButton.text = "Tematizar"
+        
+        // Crear y configurar el checkbox de pre-procesamiento
+        preprocessForegroundCheckbox = CheckBox(this).apply {
+            text = "Pre-procesar capas foreground para estilo minimalista"
+            setTextColor(ContextCompat.getColor(this@MainActivity, R.color.text_primary))
+            setOnCheckedChangeListener { _, isChecked ->
+                ForegroundCache.isPreprocessingEnabled = isChecked
+            }
+        }
+
+        // Agregar el checkbox al contenedor dedicado
+        val checkboxContainer = findViewById<LinearLayout>(R.id.checkboxContainer)
+        checkboxContainer.addView(preprocessForegroundCheckbox)
     }
 
     private fun setupRecyclerView() {
@@ -268,8 +280,14 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "No hay aplicaciones seleccionadas", Toast.LENGTH_SHORT).show()
             return
         }
-
-        val intent = Intent(this, ThemeCustomizationActivity::class.java).apply {
+    
+        val intent = if (ForegroundCache.isPreprocessingEnabled) {
+            // Ir a la actividad de pre-procesamiento
+            Intent(this, ForegroundProcessingActivity::class.java)
+        } else {
+            // Flujo normal
+            Intent(this, ThemeCustomizationActivity::class.java)
+        }.apply {
             putParcelableArrayListExtra("selected_apps", ArrayList(selectedApps))
         }
         startActivity(intent)

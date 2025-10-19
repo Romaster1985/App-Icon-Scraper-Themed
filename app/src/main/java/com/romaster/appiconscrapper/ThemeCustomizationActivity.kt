@@ -10,6 +10,8 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
+import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -23,7 +25,7 @@ import java.io.InputStream
 class ThemeCustomizationActivity : AppCompatActivity() {
 
     private var currentPreviewBitmap: Bitmap? = null
-	private lateinit var maskPreview: ImageView
+    private lateinit var maskPreview: ImageView
     private lateinit var iconPreview: ImageView
     private lateinit var selectMaskButton: Button
     private lateinit var colorPickerButton: Button
@@ -87,11 +89,18 @@ class ThemeCustomizationActivity : AppCompatActivity() {
 
     // Para la secuencia de preview
     private var currentPreviewIndex = 0
+    private var currentPreviewApp: AppInfo? = null
 
     private lateinit var viewModel: ThemeCustomizationViewModel
+    
+    private lateinit var seekBarForegroundScale: SeekBar
+    private lateinit var foregroundScaleValueText: TextView
+    private var foregroundScalePercentage: Int = 100
+    private var isForegroundPreprocessed: Boolean = false
 
     companion object {
         private const val PICK_MASK_REQUEST = 1001
+        private const val TAG = "ThemeCustomization"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -110,6 +119,9 @@ class ThemeCustomizationActivity : AppCompatActivity() {
 
         // Restaurar estado desde ViewModel
         restoreStateFromViewModel()
+
+        // Verificar si venimos de pre-procesamiento
+        isForegroundPreprocessed = intent.getBooleanExtra("foreground_preprocessed", false)
 
         initViews()
         setupListeners()
@@ -132,10 +144,35 @@ class ThemeCustomizationActivity : AppCompatActivity() {
             previewAllButton.isEnabled = true
             updateButtonStyles()
         }
-
+        
         // Actualizar controles con valores guardados
         updateSeekBars()
         updatePreview()
+        
+        // Forzar actualización de visibilidad
+        updateForegroundScaleVisibility()
+    }
+    
+    private fun updateForegroundScaleVisibility() {
+        val shouldShow = isForegroundPreprocessed && 
+                        useForegroundLayer && 
+                        !useBackgroundLayer && 
+                        !useDefaultIcon && 
+                        !useRoundIcon
+        
+        if (shouldShow) {
+            seekBarForegroundScale.visibility = View.VISIBLE
+            foregroundScaleValueText.visibility = View.VISIBLE
+            // Ocultar la escala normal cuando usamos foreground pre-procesado
+            seekBarScale.visibility = View.GONE
+            scaleValueText.visibility = View.GONE
+        } else {
+            seekBarForegroundScale.visibility = View.GONE
+            foregroundScaleValueText.visibility = View.GONE
+            // Mostrar la escala normal
+            seekBarScale.visibility = View.VISIBLE
+            scaleValueText.visibility = View.VISIBLE
+        }
     }
 
     private fun restoreStateFromViewModel() {
@@ -223,6 +260,10 @@ class ThemeCustomizationActivity : AppCompatActivity() {
         backgroundLayerCheckbox = findViewById(R.id.backgroundLayerCheckbox)
         layerInfoText = findViewById(R.id.layerInfoText)
 
+        // Inicializar controles de foreground scale
+        seekBarForegroundScale = findViewById(R.id.seekBarForegroundScale)
+        foregroundScaleValueText = findViewById(R.id.foregroundScaleValueText)
+        
         // Configurar rangos existentes
         seekBarX.max = 200
         seekBarY.max = 200
@@ -235,6 +276,20 @@ class ThemeCustomizationActivity : AppCompatActivity() {
         seekBarSaturation.max = 200
         seekBarBrightness.max = 200
         seekBarContrast.max = 200
+        
+        // Configurar seekbar de foreground
+        seekBarForegroundScale.max = 200
+        seekBarForegroundScale.progress = foregroundScalePercentage
+        
+        seekBarForegroundScale.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                foregroundScalePercentage = progress
+                foregroundScaleValueText.text = "Escala Foreground: $foregroundScalePercentage%"
+                updatePreview()
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
         
         // Inicialmente deshabilitar botones
         previewAllButton.isEnabled = false
@@ -279,6 +334,7 @@ class ThemeCustomizationActivity : AppCompatActivity() {
                 useRoundIcon = false
                 viewModel.useRoundIcon = useRoundIcon
             }
+            updateForegroundScaleVisibility()
             updatePreview()
             updateLayerInfo()
         }
@@ -291,6 +347,7 @@ class ThemeCustomizationActivity : AppCompatActivity() {
                 useDefaultIcon = false
                 viewModel.useDefaultIcon = useDefaultIcon
             }
+            updateForegroundScaleVisibility()
             updatePreview()
             updateLayerInfo()
         }
@@ -298,6 +355,7 @@ class ThemeCustomizationActivity : AppCompatActivity() {
         foregroundLayerCheckbox.setOnCheckedChangeListener { _, isChecked ->
             useForegroundLayer = isChecked
             viewModel.useForegroundLayer = useForegroundLayer
+            updateForegroundScaleVisibility()
             updatePreview()
             updateLayerInfo()
         }
@@ -305,16 +363,15 @@ class ThemeCustomizationActivity : AppCompatActivity() {
         backgroundLayerCheckbox.setOnCheckedChangeListener { _, isChecked ->
             useBackgroundLayer = isChecked
             viewModel.useBackgroundLayer = useBackgroundLayer
+            updateForegroundScaleVisibility()
             updatePreview()
             updateLayerInfo()
         }
 
         previewAllButton.setOnClickListener {
-            // CORREGIDO: Verificar si hay cambios antes de previsualizar
             if (viewModel.hasConfigChanged() || previewIconsList.isEmpty()) {
                 Toast.makeText(this, "Aplicando cambios antes de previsualizar...", Toast.LENGTH_SHORT).show()
                 processAllIcons {
-                    // Una vez procesados, mostrar la previsualización
                     previewAllIconsAfterProcessing()
                 }
             } else {
@@ -329,57 +386,13 @@ class ThemeCustomizationActivity : AppCompatActivity() {
         exportButton.setOnClickListener {
             exportThemedIcons()
         }
-		
-		// Listeners para resetear cuando cambien configuraciones de capas
-		useDefaultIconCheckbox.setOnCheckedChangeListener { _, isChecked ->
-			useDefaultIcon = isChecked
-			viewModel.useDefaultIcon = useDefaultIcon
-			if (isChecked) {
-				useRoundIconCheckbox.isChecked = false
-				useRoundIcon = false
-				viewModel.useRoundIcon = useRoundIcon
-			}
-			resetToSampleIcon() // Resetear al ícono principal
-			updateLayerInfo()
-		}
-
-		useRoundIconCheckbox.setOnCheckedChangeListener { _, isChecked ->
-			useRoundIcon = isChecked
-			viewModel.useRoundIcon = useRoundIcon
-			if (isChecked) {
-				useDefaultIconCheckbox.isChecked = false
-				useDefaultIcon = false
-				viewModel.useDefaultIcon = useDefaultIcon
-			}
-			resetToSampleIcon() // Resetear al ícono principal
-			updateLayerInfo()
-		}
-		
-		foregroundLayerCheckbox.setOnCheckedChangeListener { _, isChecked ->
-			useForegroundLayer = isChecked
-			viewModel.useForegroundLayer = useForegroundLayer
-			resetToSampleIcon() // Resetear al ícono principal
-			updateLayerInfo()
-		}
-
-		backgroundLayerCheckbox.setOnCheckedChangeListener { _, isChecked ->
-			useBackgroundLayer = isChecked
-			viewModel.useBackgroundLayer = useBackgroundLayer
-			resetToSampleIcon() // Resetear al ícono principal
-			updateLayerInfo()
-		}
     }
 
-    // NUEVO: Método para previsualizar después del procesamiento
     private fun previewAllIconsAfterProcessing() {
         try {
-            // Guarda la lista de íconos procesados en memoria compartida
             IconCache.iconsProcessed = previewIconsList
-
-            // Lanza la previsualización sin pasar extras pesados
             val intent = Intent(this, IconPreviewActivity::class.java)
             startActivity(intent)
-
         } catch (e: Exception) {
             e.printStackTrace()
             Toast.makeText(this, "Error al abrir la previsualización: ${e.message}", Toast.LENGTH_LONG).show()
@@ -489,7 +502,6 @@ class ThemeCustomizationActivity : AppCompatActivity() {
     }
 
     private fun updateButtonStyles() {
-        // Botón Previsualizar Todos
         if (previewAllButton.isEnabled) {
             previewAllButton.setBackgroundResource(R.drawable.button_primary)
             previewAllButton.setTextColor(ContextCompat.getColor(this, R.color.white))
@@ -498,7 +510,6 @@ class ThemeCustomizationActivity : AppCompatActivity() {
             previewAllButton.setTextColor(ContextCompat.getColor(this, R.color.text_secondary))
         }
 
-        // Botón Exportar
         if (exportButton.isEnabled) {
             exportButton.setBackgroundResource(R.drawable.button_primary)
             exportButton.setTextColor(ContextCompat.getColor(this, R.color.white))
@@ -508,7 +519,6 @@ class ThemeCustomizationActivity : AppCompatActivity() {
         }
     }
 
-    // Actualizar información de capas disponibles
     private fun updateLayerInfo() {
         if (sampleAppPackage.isEmpty()) return
 
@@ -530,81 +540,78 @@ class ThemeCustomizationActivity : AppCompatActivity() {
     }
 
     private fun setupPreviewCycle() {
-		iconPreview.setOnClickListener {
-			if (selectedApps.isNotEmpty() && selectedMask != null) {
-				// Avanzar al siguiente índice
-				currentPreviewIndex = (currentPreviewIndex + 1) % selectedApps.size
-				val nextApp = selectedApps[currentPreviewIndex]
-				
-				// Procesar el icono de nextApp con la configuración actual
-				Thread {
-					try {
-						val layers = IconScraper.getIconLayers(packageManager, nextApp.packageName)
-						val composedIcon = IconScraper.composeIconFromLayers(
-							layers = layers,
-							useDefault = useDefaultIcon,
-							useRound = useRoundIcon,
-							useForeground = useForegroundLayer,
-							useBackground = useBackgroundLayer
-						)
-						
-						val originalIcon = if (composedIcon != null) {
-							IconThemer.drawableToNormalizedBitmap(composedIcon)
-						} else {
-							val appInfo = packageManager.getApplicationInfo(nextApp.packageName, 0)
-							val defaultDrawable = appInfo.loadIcon(packageManager)
-							IconThemer.drawableToNormalizedBitmap(defaultDrawable)
-						}
-						
-						// Guardar el ícono original para usarlo en el preview
-						currentPreviewBitmap = originalIcon
-						
-						val config = IconThemer.ThemeConfig(
-							mask = selectedMask!!,
-							color = selectedColor,
-							offsetX = offsetX,
-							offsetY = offsetY,
-							scalePercentage = scalePercentage,
-							alphaPercentage = alphaPercentage,
-							colorIntensity = colorIntensity,
-							hue = hue,
-							saturation = saturation,
-							brightness = brightness,
-							contrast = contrast,
-							useDefaultIcon = useDefaultIcon,
-							useRoundIcon = useRoundIcon,
-							useForegroundLayer = useForegroundLayer,
-							useBackgroundLayer = useBackgroundLayer
-						)
-						
-						val themedIcon = IconThemer.applyTheme(originalIcon, config)
-						
-						runOnUiThread {
-							iconPreview.setImageBitmap(themedIcon)
-							Toast.makeText(this, "Icono ${currentPreviewIndex + 1} de ${selectedApps.size}: ${nextApp.name}", 
-								Toast.LENGTH_SHORT).show()
-						}
-					} catch (e: Exception) {
-						e.printStackTrace()
-						runOnUiThread {
-							Toast.makeText(this, "Error al cargar el icono de ${nextApp.name}", Toast.LENGTH_SHORT).show()
-						}
-					}
-				}.start()
-			} else {
-				if (selectedMask == null) {
-					Toast.makeText(this, "Primero selecciona una máscara", Toast.LENGTH_SHORT).show()
-				}
-			}
-		}
-	}
-	
-	// Método para resetear al ícono principal cuando sea necesario
-	private fun resetToSampleIcon() {
-		currentPreviewBitmap = null
-		currentPreviewIndex = 0
-		updatePreview()
-	}
+        iconPreview.setOnClickListener {
+            if (selectedApps.isNotEmpty() && selectedMask != null) {
+                currentPreviewIndex = (currentPreviewIndex + 1) % selectedApps.size
+                val nextApp = selectedApps[currentPreviewIndex]
+                currentPreviewApp = nextApp
+                
+                Thread {
+                    try {
+                        val iconToProcess = if (shouldUsePreprocessedForegroundForApp(nextApp.packageName)) {
+                            ForegroundCache.getForegroundIcon(nextApp.packageName)
+                        } else {
+                            val layers = IconScraper.getIconLayers(packageManager, nextApp.packageName)
+                            val composedIcon = IconScraper.composeIconFromLayers(
+                                layers = layers,
+                                useDefault = useDefaultIcon,
+                                useRound = useRoundIcon,
+                                useForeground = useForegroundLayer,
+                                useBackground = useBackgroundLayer
+                            )
+                            
+                            if (composedIcon != null) {
+                                IconThemer.drawableToNormalizedBitmap(composedIcon)
+                            } else {
+                                val appInfo = packageManager.getApplicationInfo(nextApp.packageName, 0)
+                                val defaultDrawable = appInfo.loadIcon(packageManager)
+                                IconThemer.drawableToNormalizedBitmap(defaultDrawable)
+                            }
+                        }
+                        
+                        if (iconToProcess != null) {
+                            currentPreviewBitmap = iconToProcess
+                            
+                            val config = IconThemer.ThemeConfig(
+                                mask = selectedMask!!,
+                                color = selectedColor,
+                                offsetX = offsetX,
+                                offsetY = offsetY,
+                                scalePercentage = if (shouldUsePreprocessedForegroundForApp(nextApp.packageName)) foregroundScalePercentage else scalePercentage,
+                                alphaPercentage = alphaPercentage,
+                                colorIntensity = colorIntensity,
+                                hue = hue,
+                                saturation = saturation,
+                                brightness = brightness,
+                                contrast = contrast,
+                                useDefaultIcon = useDefaultIcon,
+                                useRoundIcon = useRoundIcon,
+                                useForegroundLayer = useForegroundLayer,
+                                useBackgroundLayer = useBackgroundLayer
+                            )
+                            
+                            val themedIcon = IconThemer.applyTheme(iconToProcess, config)
+                            
+                            runOnUiThread {
+                                iconPreview.setImageBitmap(themedIcon)
+                                Toast.makeText(this, "Icono ${currentPreviewIndex + 1} de ${selectedApps.size}: ${nextApp.name}", 
+                                    Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        runOnUiThread {
+                            Toast.makeText(this, "Error al cargar el icono de ${nextApp.name}", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }.start()
+            } else {
+                if (selectedMask == null) {
+                    Toast.makeText(this, "Primero selecciona una máscara", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
 
     private fun processAllIcons(onComplete: (() -> Unit)? = null) {
         if (selectedMask == null) {
@@ -622,7 +629,6 @@ class ThemeCustomizationActivity : AppCompatActivity() {
                 applyButton.isEnabled = false
             }
 
-            // Limpiar íconos anteriores antes de procesar nuevos
             cleanUpCurrentIcons()
 
             val config = IconThemer.ThemeConfig(
@@ -645,10 +651,8 @@ class ThemeCustomizationActivity : AppCompatActivity() {
 
             selectedApps.forEach { app ->
                 try {
-                    // Obtener las capas del icono
                     val layers = IconScraper.getIconLayers(packageManager, app.packageName)
                     
-                    // Componer el icono según la configuración
                     val composedIcon = IconScraper.composeIconFromLayers(
                         layers = layers,
                         useDefault = useDefaultIcon,
@@ -660,7 +664,6 @@ class ThemeCustomizationActivity : AppCompatActivity() {
                     val originalIcon = if (composedIcon != null) {
                         IconThemer.drawableToNormalizedBitmap(composedIcon)
                     } else {
-                        // Fallback: obtener el icono por defecto directamente
                         val appInfo = packageManager.getApplicationInfo(app.packageName, 0)
                         val defaultDrawable = appInfo.loadIcon(packageManager)
                         IconThemer.drawableToNormalizedBitmap(defaultDrawable)
@@ -686,26 +689,18 @@ class ThemeCustomizationActivity : AppCompatActivity() {
                 exportButton.isEnabled = true
                 previewAllButton.isEnabled = true
                 viewModel.isProcessingComplete = true
-                viewModel.updateConfigHash() // Actualizar hash después del procesamiento
+                viewModel.updateConfigHash()
                 
-                // Guardar estado en ViewModel
                 saveStateToViewModel()
                 
                 updateButtonStyles()
                 Toast.makeText(this, "$processedCount de ${selectedApps.size} iconos procesados exitosamente", Toast.LENGTH_SHORT).show()
                 
-                currentPreviewIndex = 0
-                if (previewIconsList.isNotEmpty()) {
-                    iconPreview.setImageBitmap(previewIconsList[0])
-                }
-                
-                // Ejecutar callback si existe
                 onComplete?.invoke()
             }
         }.start()
     }
 
-    // NUEVO: Método para limpiar íconos actuales de forma segura
     private fun cleanUpCurrentIcons() {
         try {
             themedIcons.values.forEach { bitmap ->
@@ -764,7 +759,7 @@ class ThemeCustomizationActivity : AppCompatActivity() {
             val contentValues = ContentValues().apply {
                 put(MediaStore.Downloads.DISPLAY_NAME, fileName)
                 put(MediaStore.Downloads.MIME_TYPE, "application/zip")
-                put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
+                put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS) // CORREGIDO: era RELICAL_PATH
             }
             
             val resolver = contentResolver
@@ -820,7 +815,6 @@ class ThemeCustomizationActivity : AppCompatActivity() {
         }
     }
 
-    // FUNCIONES QUE FALTABAN - MOVÍ ESTAS AL FINAL
     private fun selectMaskImage() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
@@ -868,62 +862,76 @@ class ThemeCustomizationActivity : AppCompatActivity() {
     }
 
     private fun updatePreview() {
-		if (selectedMask != null) {
-			val iconToUse = if (currentPreviewBitmap != null && currentPreviewBitmap != sampleIcon) {
-				// Usar el ícono actualmente seleccionado en el preview cíclico
-				currentPreviewBitmap
-			} else {
-				// Usar el ícono de muestra por defecto
-				sampleIcon
-			}
-        
-			if (iconToUse != null) {
-				val config = IconThemer.ThemeConfig(
-					mask = selectedMask!!,
-					color = selectedColor,
-					offsetX = offsetX,
-					offsetY = offsetY,
-					scalePercentage = scalePercentage,
-					alphaPercentage = alphaPercentage,
-					colorIntensity = colorIntensity,
-					hue = hue,
-					saturation = saturation,
-					brightness = brightness,
-					contrast = contrast,
-					useDefaultIcon = useDefaultIcon,
-					useRoundIcon = useRoundIcon,
-					useForegroundLayer = useForegroundLayer,
-					useBackgroundLayer = useBackgroundLayer
-				)
+        if (selectedMask != null) {
+            val currentApp = currentPreviewApp ?: selectedApps.getOrNull(0)
+            val appPackage = currentApp?.packageName ?: sampleAppPackage
             
-				val processedIcon = IconThemer.applyTheme(iconToUse, config)
-				iconPreview.setImageBitmap(processedIcon)
-			}
-		}
-	}
+            val iconToUse = if (shouldUsePreprocessedForegroundForApp(appPackage)) {
+                ForegroundCache.getForegroundIcon(appPackage) ?: sampleIcon
+            } else {
+                currentPreviewBitmap ?: sampleIcon
+            }
+            
+            if (iconToUse != null) {
+                val config = IconThemer.ThemeConfig(
+                    mask = selectedMask!!,
+                    color = selectedColor,
+                    offsetX = offsetX,
+                    offsetY = offsetY,
+                    scalePercentage = if (shouldUsePreprocessedForegroundForApp(appPackage)) foregroundScalePercentage else scalePercentage,
+                    alphaPercentage = alphaPercentage,
+                    colorIntensity = colorIntensity,
+                    hue = hue,
+                    saturation = saturation,
+                    brightness = brightness,
+                    contrast = contrast,
+                    useDefaultIcon = useDefaultIcon,
+                    useRoundIcon = useRoundIcon,
+                    useForegroundLayer = useForegroundLayer,
+                    useBackgroundLayer = useBackgroundLayer
+                )
+                
+                val processedIcon = IconThemer.applyTheme(iconToUse, config)
+                iconPreview.setImageBitmap(processedIcon)
+            }
+        }
+    }
+    
+    private fun shouldUsePreprocessedForegroundForApp(packageName: String): Boolean {
+        return isForegroundPreprocessed && 
+               useForegroundLayer && 
+               !useBackgroundLayer && 
+               !useDefaultIcon && 
+               !useRoundIcon &&
+               ForegroundCache.containsForegroundIcon(packageName)
+    }
 
     private fun loadSampleIcon() {
         if (selectedApps.isNotEmpty()) {
             try {
                 sampleAppPackage = selectedApps[0].packageName
-                val layers = IconScraper.getIconLayers(packageManager, sampleAppPackage)
+                currentPreviewApp = selectedApps[0]
                 
-                // Obtener el icono compuesto según la configuración actual
-                val composedIcon = IconScraper.composeIconFromLayers(
-                    layers = layers,
-                    useDefault = useDefaultIcon,
-                    useRound = useRoundIcon,
-                    useForeground = useForegroundLayer,
-                    useBackground = useBackgroundLayer
-                )
-                
-                sampleIcon = if (composedIcon != null) {
-                    IconThemer.drawableToNormalizedBitmap(composedIcon)
+                if (isForegroundPreprocessed && ForegroundCache.containsForegroundIcon(sampleAppPackage)) {
+                    sampleIcon = ForegroundCache.getForegroundIcon(sampleAppPackage)
                 } else {
-                    // Fallback al icono por defecto
-                    val defaultDrawable = IconScraper.getSimpleIcon(packageManager, sampleAppPackage)
-                    defaultDrawable?.let { IconThemer.drawableToNormalizedBitmap(it) } 
-                        ?: IconThemer.normalizeIconSize(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher))
+                    val layers = IconScraper.getIconLayers(packageManager, sampleAppPackage)
+                    
+                    val composedIcon = IconScraper.composeIconFromLayers(
+                        layers = layers,
+                        useDefault = useDefaultIcon,
+                        useRound = useRoundIcon,
+                        useForeground = useForegroundLayer,
+                        useBackground = useBackgroundLayer
+                    )
+                    
+                    sampleIcon = if (composedIcon != null) {
+                        IconThemer.drawableToNormalizedBitmap(composedIcon)
+                    } else {
+                        val defaultDrawable = IconScraper.getSimpleIcon(packageManager, sampleAppPackage)
+                        defaultDrawable?.let { IconThemer.drawableToNormalizedBitmap(it) } 
+                            ?: IconThemer.normalizeIconSize(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher))
+                    }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -938,7 +946,6 @@ class ThemeCustomizationActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        // Guardar estado cuando la actividad se pausa
         saveStateToViewModel()
     }
 }

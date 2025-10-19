@@ -51,6 +51,12 @@
             android:label="Vista Previa de Iconos"
             android:parentActivityName=".ThemeCustomizationActivity"
             android:theme="@style/Theme.AppIconScraper" />
+            
+        <activity
+            android:name=".ForegroundProcessingActivity"
+            android:label="Pre-procesamiento Foreground"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.AppIconScraper" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
