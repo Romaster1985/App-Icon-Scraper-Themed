@@ -89,15 +89,6 @@ class ThemeCustomizationActivity : AppCompatActivity() {
     private var currentPreviewIndex = 0
 
     private lateinit var viewModel: ThemeCustomizationViewModel
-    
-    // Recibir el flag de procesamiento de capas frontales
-    private var useForegroundProcessing = false
-    
-    // Nueva variable para escala de capa frontal
-    private var foregroundScalePercentage: Int = 100
-    private lateinit var seekBarForegroundScale: SeekBar
-    private lateinit var foregroundScaleValueText: TextView
-    private lateinit var foregroundScaleContainer: LinearLayout
 
     companion object {
         private const val PICK_MASK_REQUEST = 1001
@@ -169,45 +160,6 @@ class ThemeCustomizationActivity : AppCompatActivity() {
         themedIcons.putAll(viewModel.themedIcons)
         previewIconsList.clear()
         previewIconsList.addAll(viewModel.previewIconsList)
-    }
-
-    private fun getProcessedIcon(app: AppInfo): Bitmap {
-        return if (useForegroundProcessing && useForegroundLayer && !useBackgroundLayer) {
-            // Usar capa frontal preprocesada con escala adicional
-            ForegroundCacheManager.getCachedForeground(app.packageName)?.let { cachedBitmap ->
-                // Aplicar escala adicional específica para capas frontales
-                val scaledForeground = scaleBitmap(cachedBitmap, foregroundScalePercentage)
-                scaledForeground
-            } ?: getNormalIcon(app) // Fallback si no hay capa frontal disponible
-        } else {
-            getNormalIcon(app)
-        }
-    }
-    
-    private fun getNormalIcon(app: AppInfo): Bitmap {
-        val layers = IconScraper.getIconLayers(packageManager, app.packageName)
-        val composedIcon = IconScraper.composeIconFromLayers(
-            layers = layers,
-            useDefault = useDefaultIcon,
-            useRound = useRoundIcon,
-            useForeground = useForegroundLayer,
-            useBackground = useBackgroundLayer
-        )
-        
-        return if (composedIcon != null) {
-            IconThemer.drawableToNormalizedBitmap(composedIcon)
-        } else {
-            val appInfo = packageManager.getApplicationInfo(app.packageName, 0)
-            val defaultDrawable = appInfo.loadIcon(packageManager)
-            IconThemer.drawableToNormalizedBitmap(defaultDrawable)
-        }
-    }
-    
-    private fun scaleBitmap(bitmap: Bitmap, scalePercentage: Int): Bitmap {
-        val scale = scalePercentage / 100.0f
-        val newWidth = (bitmap.width * scale).toInt().coerceAtLeast(1)
-        val newHeight = (bitmap.height * scale).toInt().coerceAtLeast(1)
-        return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true)
     }
 
     private fun saveStateToViewModel() {
@@ -705,7 +657,7 @@ class ThemeCustomizationActivity : AppCompatActivity() {
                         useBackground = useBackgroundLayer
                     )
                     
-                    val originalIcon = getProcessedIcon(currentApp){
+                    val originalIcon = if (composedIcon != null) {
                         IconThemer.drawableToNormalizedBitmap(composedIcon)
                     } else {
                         // Fallback: obtener el icono por defecto directamente
@@ -989,13 +941,4 @@ class ThemeCustomizationActivity : AppCompatActivity() {
         // Guardar estado cuando la actividad se pausa
         saveStateToViewModel()
     }
-    
-    override fun onDestroy() {
-        super.onDestroy()
-        // Limpiar cache si no estamos en medio de un procesamiento
-        if (!viewModel.isProcessingComplete) {
-            ForegroundCacheManager.clearCache()
-        }
-    }
-    
 }

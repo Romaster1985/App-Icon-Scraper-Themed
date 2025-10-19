@@ -51,12 +51,7 @@
             android:label="Vista Previa de Iconos"
             android:parentActivityName=".ThemeCustomizationActivity"
             android:theme="@style/Theme.AppIconScraper" />
-            
-        <activity
-            android:name=".ForegroundPreprocessorActivity"
-            android:label="Preprocesar Capas Frontales"
-            android:theme="@style/Theme.AppIconScraper" />
-        
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
