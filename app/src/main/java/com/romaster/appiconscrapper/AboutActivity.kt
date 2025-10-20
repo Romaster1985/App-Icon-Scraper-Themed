@@ -22,12 +22,14 @@ class AboutActivity : AppCompatActivity() {
         val githubButton = findViewById<Button>(R.id.githubButton)
         val emailButton = findViewById<Button>(R.id.emailButton)
         val logoImage = findViewById<ImageView>(R.id.logoImage)
+        val logoDHImage = findViewById<ImageView>(R.id.logoDHImage)
         
         aboutText.text = getString(R.string.about_content)
         logoImage.setImageResource(R.drawable.logo_romaster)
+        logoDHImage.setImageResource(R.drawable.logo_deephub)
 
         githubButton.setOnClickListener {
-            openUrl("https://github.com/Romaster1985")
+            openUrl("https://github.com/Romaster1985/App-Icon-Scraper-Themed")
         }
         
         emailButton.setOnClickListener {

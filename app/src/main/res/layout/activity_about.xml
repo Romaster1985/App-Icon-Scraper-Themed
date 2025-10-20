@@ -28,6 +28,16 @@
             android:textStyle="bold"
             android:lineSpacingExtra="6dp"
             android:padding="12dp" />
+            
+        <!-- Logo deephub -->
+        <ImageView
+            android:id="@+id/logoDHImage"
+            android:layout_width="300dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="30dp"
+            android:contentDescription="Logo de DeepHub"
+            android:scaleType="fitCenter" />
 
         <Button
             android:id="@+id/githubButton"

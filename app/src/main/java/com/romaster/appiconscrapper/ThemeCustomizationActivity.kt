@@ -166,10 +166,10 @@ class ThemeCustomizationActivity : AppCompatActivity() {
             seekBarForegroundScale.alpha = 1.0f
             foregroundScaleValueText.alpha = 1.0f
             
-            // Deshabilitar controles de escala normal
-            seekBarScale.isEnabled = false
-            seekBarScale.alpha = 0.5f
-            scaleValueText.alpha = 0.5f
+            // Habilitar controles de escala normal
+            seekBarScale.isEnabled = true
+            seekBarScale.alpha = 1.0f
+            scaleValueText.alpha = 1.0f
         } else {
             // Deshabilitar controles de foreground
             seekBarForegroundScale.isEnabled = false
