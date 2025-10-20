@@ -8,16 +8,17 @@ An Android application to extract, customize, and export icons from installed ap
 ## Features
 
 * 📱 Simple and professional user interface.
-* 🔍 Scans and 📋 lists all installed applications.
+* 🔍📋 Scans and lists all installed applications.
 * 🎯 Smart filtering (System, User, Google Apps).
 * ✅ Multiple app selection.
-* 🎨 Unique icon theming system (v1.2⬆️ added multilayer icons).
-* 📍 Adjust position, scale, transparency, tint, saturation, brightness, and contrast.
+* 🎨 Unique icon theming system with multi-layer icon selection.
+* 📐✂️ Independent rescaling and centering of front layers with intelligent transparent area detection and cropping.
+* 📍 Position, scale, transparency, tint, saturation, brightness, and contrast adjustment (independent scaling for front layers).
 * 🎛️ Color intensity control (fade to preset color).
-* 👁️ Real-time preview + full icon set preview (v1.2⬆️).
-* 📦 Generate fully customized icon packs.
-* 🗜️ Export to ZIP file ready to upload to Icon Packer.
-* 🤖📝 Built-in Crash Guard Logger for automatic error diagnostics ⛓️‍💥💥 (v1.2⬆️).
+* 👁️ Real-time preview + preview of all icons.
+* 📦 Custom icon pack generation.
+* 🗜️ Export to ZIP file ready for loading in Icon Packer.
+* 🤖📝 Built-in Crash Guard Logger for automatic error diagnosis ⛓️‍💥💥.
 
 ## Technologies
 
@@ -25,9 +26,9 @@ An Android application to extract, customize, and export icons from installed ap
 * Android SDK
 * Material Design 3
 * RecyclerView
-* ViewModel (v1.2 ⬆️)
+* ViewModel
 * Gradle
-* Active Internal Cache (v1.2 ⬆️)
+* Active Internal Cache
 
 ## Build Instructions
 
@@ -38,7 +39,8 @@ An Android application to extract, customize, and export icons from installed ap
 
 ### Build with Gradle (Wrapper Included)
 
-```bash
+```
+bash
 git clone https://github.com/Romaster1985/App-Icon-Scraper-Themed.git
 cd App-Icon-Scraper-Themed
 # Grant execution permissions
@@ -196,8 +198,8 @@ App-Icon-Scraper-Themed
 
 **Romaster** 🇦🇷
 
-· Email: roman.ignacio.romero@gmail.com  
-· GitHub: [Romaster1985](https://github.com/Romaster1985)
+* Email: roman.ignacio.romero@gmail.com
+* GitHub: [Romaster1985](https://github.com/Romaster1985)
 
 ## Acknowledgements
 
@@ -222,4 +224,3 @@ MIT License – see the LICENSE file for details.
 ---
 
 ⭐ **Did you like this project? Give it a star on GitHub!**
-!**

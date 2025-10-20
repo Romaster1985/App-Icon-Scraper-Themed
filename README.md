@@ -8,16 +8,17 @@ Una aplicación Android para extraer, personalizar y exportar iconos de aplicaci
 ## Características
 
 * 📱 Interfaz de usuario simple y profesional.
-* 🔍Escanea y 📋 lista todas las aplicaciones instaladas.
+* 🔍📋 Escanea y lista todas las aplicaciones instaladas.
 * 🎯 Filtrado inteligente (Sistema, Usuario, Google Apps).
 * ✅ Selección múltiple de aplicaciones.
-* 🎨 Sistema único de tematización de iconos (v1.2⬆️ agregados iconos multicapa).
-* 📍 Ajuste de posición, escala, transparencia, tinte, saturación, brillo y contraste.
+* 🎨 Sistema único de tematización de iconos con selección de iconos multicapa.
+* 📐✂️ Reescalado y centrado independiente de capas frontales con detección y  recorte inteligente de áreas transparentes.
+* 📍 Ajuste de posición, escala, transparencia, tinte, saturación, brillo y contraste (escala independiente para capas frontales).
 * 🎛️ Control de intensidad de color (fundido a color preseteado).
-* 👁️ Vista previa en tiempo real + vista previa de todos los íconos (v1.2⬆️).
+* 👁️ Vista previa en tiempo real + vista previa de todos los íconos.
 * 📦 Generación de packs de iconos personalizados.
 * 🗜️Exportación a archivo ZIP listo para cargar en Icon Packer.
-* 🤖📝 Crash Guard Loger incorporado para autodiagnóstico de errores ⛓️‍💥💥 (v1.2⬆️).
+* 🤖📝 Crash Guard Loger incorporado para autodiagnóstico de errores ⛓️‍💥💥.
 
 ## Tecnologías:
 
@@ -25,9 +26,9 @@ Una aplicación Android para extraer, personalizar y exportar iconos de aplicaci
 * Android SDK
 * Material Design 3
 * RecyclerView
-* ViewModel (v1.2 ⬆️)
+* ViewModel
 * Gradle
-* Active Internal Cache (v1.2 ⬆️)
+* Active Internal Cache
 
 ## Compilación
 
@@ -199,8 +200,8 @@ App-Icon-Scraper-Themed
 
 **Romaster** 🇦🇷
 
-· Email: roman.ignacio.romero@gmail.com
-· GitHub: [Romaster1985](https://github.com/Romaster1985)
+* Email: roman.ignacio.romero@gmail.com
+* GitHub: [Romaster1985](https://github.com/Romaster1985)
 
 ## Agradecimientos
 
