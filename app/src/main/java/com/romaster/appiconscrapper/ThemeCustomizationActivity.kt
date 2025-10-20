@@ -154,24 +154,32 @@ class ThemeCustomizationActivity : AppCompatActivity() {
     }
     
     private fun updateForegroundScaleVisibility() {
-        val shouldShow = isForegroundPreprocessed && 
+        val shouldEnable = isForegroundPreprocessed && 
                         useForegroundLayer && 
                         !useBackgroundLayer && 
                         !useDefaultIcon && 
                         !useRoundIcon
         
-        if (shouldShow) {
-            seekBarForegroundScale.visibility = View.VISIBLE
-            foregroundScaleValueText.visibility = View.VISIBLE
-            // Ocultar la escala normal cuando usamos foreground pre-procesado
-            seekBarScale.visibility = View.GONE
-            scaleValueText.visibility = View.GONE
+        if (shouldEnable) {
+            // Habilitar controles de foreground
+            seekBarForegroundScale.isEnabled = true
+            seekBarForegroundScale.alpha = 1.0f
+            foregroundScaleValueText.alpha = 1.0f
+            
+            // Deshabilitar controles de escala normal
+            seekBarScale.isEnabled = false
+            seekBarScale.alpha = 0.5f
+            scaleValueText.alpha = 0.5f
         } else {
-            seekBarForegroundScale.visibility = View.GONE
-            foregroundScaleValueText.visibility = View.GONE
-            // Mostrar la escala normal
-            seekBarScale.visibility = View.VISIBLE
-            scaleValueText.visibility = View.VISIBLE
+            // Deshabilitar controles de foreground
+            seekBarForegroundScale.isEnabled = false
+            seekBarForegroundScale.alpha = 0.5f
+            foregroundScaleValueText.alpha = 0.5f
+            
+            // Habilitar controles de escala normal
+            seekBarScale.isEnabled = true
+            seekBarScale.alpha = 1.0f
+            scaleValueText.alpha = 1.0f
         }
     }
 
@@ -619,70 +627,77 @@ class ThemeCustomizationActivity : AppCompatActivity() {
             onComplete?.invoke()
             return
         }
-
+    
         Thread {
             val totalIcons = selectedApps.size
             var processedCount = 0
-
+    
             runOnUiThread {
                 progressText.text = "Procesando: 0/$totalIcons"
                 applyButton.isEnabled = false
             }
-
+    
             cleanUpCurrentIcons()
-
-            val config = IconThemer.ThemeConfig(
-                mask = selectedMask!!,
-                color = selectedColor,
-                offsetX = offsetX,
-                offsetY = offsetY,
-                scalePercentage = scalePercentage,
-                alphaPercentage = alphaPercentage,
-                colorIntensity = colorIntensity,
-                hue = hue,
-                saturation = saturation,
-                brightness = brightness,
-                contrast = contrast,
-                useDefaultIcon = useDefaultIcon,
-                useRoundIcon = useRoundIcon,
-                useForegroundLayer = useForegroundLayer,
-                useBackgroundLayer = useBackgroundLayer
-            )
-
+    
             selectedApps.forEach { app ->
                 try {
-                    val layers = IconScraper.getIconLayers(packageManager, app.packageName)
-                    
-                    val composedIcon = IconScraper.composeIconFromLayers(
-                        layers = layers,
-                        useDefault = useDefaultIcon,
-                        useRound = useRoundIcon,
-                        useForeground = useForegroundLayer,
-                        useBackground = useBackgroundLayer
-                    )
-                    
-                    val originalIcon = if (composedIcon != null) {
-                        IconThemer.drawableToNormalizedBitmap(composedIcon)
+                    val iconToProcess = if (shouldUsePreprocessedForegroundForApp(app.packageName)) {
+                        // Usar foreground pre-procesado con su escala específica
+                        ForegroundCache.getForegroundIcon(app.packageName)
                     } else {
-                        val appInfo = packageManager.getApplicationInfo(app.packageName, 0)
-                        val defaultDrawable = appInfo.loadIcon(packageManager)
-                        IconThemer.drawableToNormalizedBitmap(defaultDrawable)
+                        // Flujo normal
+                        val layers = IconScraper.getIconLayers(packageManager, app.packageName)
+                        val composedIcon = IconScraper.composeIconFromLayers(
+                            layers = layers,
+                            useDefault = useDefaultIcon,
+                            useRound = useRoundIcon,
+                            useForeground = useForegroundLayer,
+                            useBackground = useBackgroundLayer
+                        )
+                        
+                        if (composedIcon != null) {
+                            IconThemer.drawableToNormalizedBitmap(composedIcon)
+                        } else {
+                            val appInfo = packageManager.getApplicationInfo(app.packageName, 0)
+                            val defaultDrawable = appInfo.loadIcon(packageManager)
+                            IconThemer.drawableToNormalizedBitmap(defaultDrawable)
+                        }
                     }
                     
-                    val themedIcon = IconThemer.applyTheme(originalIcon, config)
-                    
-                    themedIcons[app.packageName] = themedIcon
-                    previewIconsList.add(themedIcon)
-                    processedCount++
-                    
-                    runOnUiThread {
-                        progressText.text = "Procesando: $processedCount/$totalIcons"
+                    if (iconToProcess != null) {
+                        val config = IconThemer.ThemeConfig(
+                            mask = selectedMask!!,
+                            color = selectedColor,
+                            offsetX = offsetX,
+                            offsetY = offsetY,
+                            scalePercentage = if (shouldUsePreprocessedForegroundForApp(app.packageName)) foregroundScalePercentage else scalePercentage,
+                            alphaPercentage = alphaPercentage,
+                            colorIntensity = colorIntensity,
+                            hue = hue,
+                            saturation = saturation,
+                            brightness = brightness,
+                            contrast = contrast,
+                            useDefaultIcon = useDefaultIcon,
+                            useRoundIcon = useRoundIcon,
+                            useForegroundLayer = useForegroundLayer,
+                            useBackgroundLayer = useBackgroundLayer
+                        )
+                        
+                        val themedIcon = IconThemer.applyTheme(iconToProcess, config)
+                        
+                        themedIcons[app.packageName] = themedIcon
+                        previewIconsList.add(themedIcon)
+                        processedCount++
+                        
+                        runOnUiThread {
+                            progressText.text = "Procesando: $processedCount/$totalIcons"
+                        }
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
             }
-
+    
             runOnUiThread {
                 progressText.text = "¡Procesamiento completado!"
                 applyButton.isEnabled = true

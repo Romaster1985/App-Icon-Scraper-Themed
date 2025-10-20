@@ -4,7 +4,6 @@ import android.content.Intent
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -21,7 +20,6 @@ class ForegroundProcessingActivity : AppCompatActivity() {
     private var selectedApps: List<AppInfo> = emptyList()
     private var processedCount = 0
     private var totalApps = 0
-    private val targetSize = 128
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,7 +79,6 @@ class ForegroundProcessingActivity : AppCompatActivity() {
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    Log.e("ForegroundProcessing", "Error procesando ${app.name}: ${e.message}")
                 }
             }
             
@@ -98,53 +95,57 @@ class ForegroundProcessingActivity : AppCompatActivity() {
             val foregroundDrawable = layers.foregroundIcon
             
             if (foregroundDrawable != null) {
-                Log.d("ForegroundProcessing", "Procesando foreground de: ${app.name}")
                 // Procesar el foreground: normalizar, centrar y escalar
                 val processedBitmap = processForegroundDrawable(foregroundDrawable)
                 ForegroundCache.putForegroundIcon(app.packageName, processedBitmap)
-            } else {
-                Log.d("ForegroundProcessing", "No hay foreground para: ${app.name}")
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.e("ForegroundProcessing", "Error procesando ${app.name}: ${e.message}")
         }
     }
 
     private fun processForegroundDrawable(drawable: Drawable): Bitmap {
-        // Crear bitmap con transparencia
-        val bitmap = Bitmap.createBitmap(targetSize, targetSize, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
+        // Tamaño estándar para normalización
+        val targetSize = 128
+        
+        // Crear bitmap temporal para analizar el contenido
+        val tempBitmap = Bitmap.createBitmap(targetSize * 2, targetSize * 2, Bitmap.Config.ARGB_8888)
+        val tempCanvas = Canvas(tempBitmap)
         
         // Obtener dimensiones intrínsecas
         val intrinsicWidth = drawable.intrinsicWidth
         val intrinsicHeight = drawable.intrinsicHeight
         
         if (intrinsicWidth > 0 && intrinsicHeight > 0) {
-            // Calcular escala para mantener aspecto
+            // Calcular escala para mantener aspecto (usando espacio extra)
             val scale = Math.min(
-                targetSize.toFloat() / intrinsicWidth,
-                targetSize.toFloat() / intrinsicHeight
+                (targetSize * 1.5f) / intrinsicWidth,
+                (targetSize * 1.5f) / intrinsicHeight
             ).coerceAtMost(1.0f)
             
             val scaledWidth = (intrinsicWidth * scale).toInt()
             val scaledHeight = (intrinsicHeight * scale).toInt()
             
-            // Calcular posición para centrar
-            val left = (targetSize - scaledWidth) / 2
-            val top = (targetSize - scaledHeight) / 2
+            // Posicionar en el centro del bitmap temporal
+            val left = (tempBitmap.width - scaledWidth) / 2
+            val top = (tempBitmap.height - scaledHeight) / 2
             
             drawable.setBounds(left, top, left + scaledWidth, top + scaledHeight)
         } else {
             // Si no tiene dimensiones intrínsecas, usar todo el espacio
-            drawable.setBounds(0, 0, targetSize, targetSize)
+            drawable.setBounds(0, 0, tempBitmap.width, tempBitmap.height)
         }
         
-        // Dibujar en el canvas
-        drawable.draw(canvas)
+        // Dibujar en el canvas temporal
+        drawable.draw(tempCanvas)
         
-        // OPTIMIZACIÓN: Recortar espacios transparentes
-        return cropTransparentAreas(bitmap)
+        // Recortar espacios transparentes y redimensionar al tamaño final
+        val croppedBitmap = cropTransparentAreas(tempBitmap)
+        
+        // Reciclar el bitmap temporal
+        tempBitmap.recycle()
+        
+        return croppedBitmap
     }
 
     private fun cropTransparentAreas(bitmap: Bitmap): Bitmap {
@@ -156,10 +157,15 @@ class ForegroundProcessingActivity : AppCompatActivity() {
         var right = 0
         var bottom = 0
         
+        var foundContent = false
+        
         // Encontrar los límites del contenido no transparente
         for (x in 0 until width) {
             for (y in 0 until height) {
-                if (bitmap.getPixel(x, y) != Color.TRANSPARENT) {
+                val pixel = bitmap.getPixel(x, y)
+                // Considerar cualquier pixel no completamente transparente como contenido
+                if ((pixel ushr 24) != 0x00) { // Alpha channel
+                    foundContent = true
                     left = Math.min(left, x)
                     top = Math.min(top, y)
                     right = Math.max(right, x)
@@ -168,40 +174,52 @@ class ForegroundProcessingActivity : AppCompatActivity() {
             }
         }
         
-        // Si no se encontró contenido, devolver el bitmap original
-        if (left >= right || top >= bottom) {
-            return bitmap
+        // Si no se encontró contenido, crear un bitmap vacío del tamaño estándar
+        if (!foundContent || left >= right || top >= bottom) {
+            return Bitmap.createBitmap(128, 128, Bitmap.Config.ARGB_8888)
         }
         
-        // Agregar un pequeño margen
-        val margin = 4
-        left = Math.max(0, left - margin)
-        top = Math.max(0, top - margin)
-        right = Math.min(width, right + margin + 1)
-        bottom = Math.min(height, bottom + margin + 1)
+        // Agregar un margen proporcional
+        val contentWidth = right - left
+        val contentHeight = bottom - top
+        val margin = Math.max(contentWidth, contentHeight) * 0.1f // 10% de margen
+        
+        left = Math.max(0, (left - margin).toInt())
+        top = Math.max(0, (top - margin).toInt())
+        right = Math.min(width, (right + margin + 1).toInt())
+        bottom = Math.min(height, (bottom + margin + 1).toInt())
         
         val croppedWidth = right - left
         val croppedHeight = bottom - top
         
-        // Crear un nuevo bitmap centrado
-        val result = Bitmap.createBitmap(targetSize, targetSize, Bitmap.Config.ARGB_8888)
+        // Crear el bitmap final del tamaño estándar
+        val result = Bitmap.createBitmap(128, 128, Bitmap.Config.ARGB_8888)
         val resultCanvas = Canvas(result)
         
-        // Calcular posición para centrar el contenido recortado
-        val resultLeft = (targetSize - croppedWidth) / 2
-        val resultTop = (targetSize - croppedHeight) / 2
+        // Calcular escala para ajustar al tamaño final manteniendo aspecto
+        val finalScale = Math.min(
+            128f / croppedWidth,
+            128f / croppedHeight
+        ).coerceAtMost(1.0f)
         
-        resultCanvas.drawBitmap(
-            bitmap, 
-            Rect(left, top, right, bottom),
-            Rect(resultLeft, resultTop, resultLeft + croppedWidth, resultTop + croppedHeight),
-            null
-        )
+        val finalWidth = (croppedWidth * finalScale).toInt()
+        val finalHeight = (croppedHeight * finalScale).toInt()
         
-        // Reciclar el bitmap original si es diferente al resultado
-        if (bitmap != result) {
-            bitmap.recycle()
-        }
+        // Calcular posición para centrar
+        val resultLeft = (128 - finalWidth) / 2
+        val resultTop = (128 - finalHeight) / 2
+        
+        // Crear el bitmap recortado
+        val cropped = Bitmap.createBitmap(bitmap, left, top, croppedWidth, croppedHeight)
+        
+        // Dibujar escalado y centrado en el resultado final
+        val srcRect = Rect(0, 0, croppedWidth, croppedHeight)
+        val dstRect = Rect(resultLeft, resultTop, resultLeft + finalWidth, resultTop + finalHeight)
+        
+        resultCanvas.drawBitmap(cropped, srcRect, dstRect, null)
+        
+        // Reciclar el bitmap recortado temporal
+        cropped.recycle()
         
         return result
     }
