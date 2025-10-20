@@ -15,6 +15,7 @@ import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import java.io.File
@@ -25,6 +26,7 @@ import java.io.InputStream
 class ThemeCustomizationActivity : AppCompatActivity() {
 
     private var currentPreviewBitmap: Bitmap? = null
+    private var isColorApplied = false
     private lateinit var maskPreview: ImageView
     private lateinit var iconPreview: ImageView
     private lateinit var selectMaskButton: Button
@@ -62,7 +64,7 @@ class ThemeCustomizationActivity : AppCompatActivity() {
     private lateinit var layerInfoText: TextView
 
     private var selectedMask: Bitmap? = null
-    private var selectedColor: Int = Color.CYAN
+    private var selectedColor: Int = android.graphics.Color.CYAN
     private var offsetX: Int = 0
     private var offsetY: Int = 0
     private var scalePercentage: Int = 100
@@ -104,6 +106,10 @@ class ThemeCustomizationActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Verificar si el idioma ha cambiado
+        if (App.currentLanguage != LocaleHelper.getPersistedLanguage(this)) {
+            recreate()
+        }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_theme_customization)
 
@@ -292,7 +298,7 @@ class ThemeCustomizationActivity : AppCompatActivity() {
         seekBarForegroundScale.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 foregroundScalePercentage = progress
-                foregroundScaleValueText.text = "Escala Foreground: $foregroundScalePercentage%"
+                foregroundScaleValueText.text = getString(R.string.foreground_scale, foregroundScalePercentage)
                 updatePreview()
             }
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -412,7 +418,7 @@ class ThemeCustomizationActivity : AppCompatActivity() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 offsetX = progress - 100
                 viewModel.offsetX = offsetX
-                xValueText.text = "X: $offsetX"
+                xValueText.text = getString(R.string.position_x, offsetX)
                 updatePreview()
             }
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -423,7 +429,7 @@ class ThemeCustomizationActivity : AppCompatActivity() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 offsetY = progress - 100
                 viewModel.offsetY = offsetY
-                yValueText.text = "Y: $offsetY"
+                yValueText.text = getString(R.string.position_y, offsetY)
                 updatePreview()
             }
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -434,7 +440,7 @@ class ThemeCustomizationActivity : AppCompatActivity() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 scalePercentage = progress
                 viewModel.scalePercentage = scalePercentage
-                scaleValueText.text = "Escala: $scalePercentage%"
+                scaleValueText.text = getString(R.string.scale, scalePercentage)
                 updatePreview()
             }
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -445,7 +451,7 @@ class ThemeCustomizationActivity : AppCompatActivity() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 alphaPercentage = progress
                 viewModel.alphaPercentage = alphaPercentage
-                alphaValueText.text = "Transparencia: $alphaPercentage%"
+                alphaValueText.text = getString(R.string.transparency, alphaPercentage)
                 updatePreview()
             }
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -456,7 +462,7 @@ class ThemeCustomizationActivity : AppCompatActivity() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 colorIntensity = progress
                 viewModel.colorIntensity = colorIntensity
-                colorIntensityValueText.text = "Intensidad de Color: $colorIntensity%"
+                colorIntensityValueText.text = getString(R.string.color_intensity, colorIntensity)
                 updatePreview()
             }
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -468,7 +474,7 @@ class ThemeCustomizationActivity : AppCompatActivity() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 hue = (progress - 180).toFloat()
                 viewModel.hue = hue
-                hueValueText.text = "Tinte: ${hue}°"
+                hueValueText.text = getString(R.string.hue, hue)
                 updatePreview()
             }
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -479,7 +485,7 @@ class ThemeCustomizationActivity : AppCompatActivity() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 saturation = progress / 100.0f
                 viewModel.saturation = saturation
-                saturationValueText.text = "Saturación: ${progress}%"
+                saturationValueText.text = getString(R.string.saturation, (saturation * 100).toInt())
                 updatePreview()
             }
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -490,7 +496,7 @@ class ThemeCustomizationActivity : AppCompatActivity() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 brightness = (progress - 100).toFloat()
                 viewModel.brightness = brightness
-                brightnessValueText.text = "Brillo: ${brightness}%"
+                brightnessValueText.text = getString(R.string.brightness, brightness)
                 updatePreview()
             }
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -501,7 +507,7 @@ class ThemeCustomizationActivity : AppCompatActivity() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 contrast = progress / 100.0f
                 viewModel.contrast = contrast
-                contrastValueText.text = "Contraste: ${progress}%"
+                contrastValueText.text = getString(R.string.contrast, (contrast * 100).toInt())
                 updatePreview()
             }
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -841,25 +847,49 @@ class ThemeCustomizationActivity : AppCompatActivity() {
 
     private fun showColorPickerDialog() {
         val colors = intArrayOf(
-            Color.RED, Color.GREEN, Color.BLUE, Color.CYAN, Color.MAGENTA, Color.YELLOW,
-            Color.WHITE, Color.BLACK, Color.GRAY, Color.parseColor("#FF5722"),
-            Color.parseColor("#9C27B0"), Color.parseColor("#2196F3"), Color.parseColor("#4CAF50")
+            android.graphics.Color.RED, 
+            android.graphics.Color.GREEN, 
+            android.graphics.Color.BLUE, 
+            android.graphics.Color.CYAN, 
+            android.graphics.Color.MAGENTA, 
+            android.graphics.Color.YELLOW,
+            android.graphics.Color.WHITE, 
+            android.graphics.Color.BLACK, 
+            android.graphics.Color.GRAY, 
+            android.graphics.Color.parseColor("#FF5722"),
+            android.graphics.Color.parseColor("#9C27B0"), 
+            android.graphics.Color.parseColor("#2196F3"), 
+            android.graphics.Color.parseColor("#4CAF50")
         )
-
-        val builder = android.app.AlertDialog.Builder(this)
-        builder.setTitle("Seleccionar Color")
-        
-        val colorNames = arrayOf("Rojo", "Verde", "Azul", "Cian", "Magenta", "Amarillo", 
-                               "Blanco", "Negro", "Gris", "Naranja", "Púrpura", "Azul Claro", "Verde Claro")
-        
-        builder.setItems(colorNames) { _, which ->
-            selectedColor = colors[which]
-            viewModel.selectedColor = selectedColor
-            colorPickerButton.setBackgroundColor(selectedColor)
-            updatePreview()
-        }
-        
-        builder.show()
+    
+        val colorNames = arrayOf(
+            getString(R.string.color_red),
+            getString(R.string.color_green),
+            getString(R.string.color_blue),
+            getString(R.string.color_cyan),
+            getString(R.string.color_magenta),
+            getString(R.string.color_yellow),
+            getString(R.string.color_white),
+            getString(R.string.color_black),
+            getString(R.string.color_gray),
+            getString(R.string.color_orange),
+            getString(R.string.color_purple),
+            getString(R.string.color_light_blue),
+            getString(R.string.color_light_green)
+        )
+    
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle(getString(R.string.select_color))
+            .setItems(colorNames) { dialog, which ->
+                selectedColor = colors[which]
+                viewModel.selectedColor = selectedColor
+                colorPickerButton.setBackgroundColor(selectedColor)
+                isColorApplied = true
+                updatePreview() // Este método SÍ existe en tu código
+                dialog.dismiss()
+            }
+            .setNegativeButton(android.R.string.cancel, null)
+            .show()
     }
 
     private fun loadMaskFromUri(uri: Uri) {
@@ -957,6 +987,10 @@ class ThemeCustomizationActivity : AppCompatActivity() {
         }
         updatePreview()
         updateLayerInfo()
+    }
+    
+    override fun attachBaseContext(newBase: android.content.Context) {
+        super.attachBaseContext(LocaleHelper.setLocale(newBase, LocaleHelper.getPersistedLanguage(newBase)))
     }
 
     override fun onPause() {

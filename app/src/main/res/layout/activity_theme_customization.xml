@@ -17,7 +17,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Personalizar Iconos"
+            android:text="@string/personalize_icons"
             android:textSize="20sp"
             android:textStyle="bold"
             android:gravity="center"
@@ -41,7 +41,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Máscara"
+                    android:text="@string/mask"
                     android:textSize="14sp"
                     android:layout_marginBottom="4dp" />
 
@@ -64,7 +64,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Resultado"
+                    android:text="@string/result"
                     android:textSize="14sp"
                     android:layout_marginBottom="4dp" />
 
@@ -94,7 +94,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginEnd="4dp"
-                android:text="Seleccionar Máscara"
+                android:text="@string/select_mask"
                 android:background="@drawable/button_primary"
                 android:textColor="@color/white"
                 android:textSize="12sp" />
@@ -105,7 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="4dp"
-                android:text="Seleccionar Color"
+                android:text="@string/select_color"
                 android:background="@drawable/button_primary"
                 android:textColor="@color/white"
                 android:textSize="12sp" />
@@ -131,7 +131,7 @@
                 android:id="@+id/xValueText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Posición X: 0"
+                android:text="@string/position_x"
                 android:textSize="14sp"
                 android:layout_marginBottom="4dp" />
 
@@ -146,7 +146,7 @@
                 android:id="@+id/yValueText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Posición Y: 0"
+                android:text="@string/position_y"
                 android:textSize="14sp"
                 android:layout_marginBottom="4dp" />
 
@@ -161,7 +161,7 @@
                 android:id="@+id/scaleValueText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Escala: 100%"
+                android:text="@string/scale"
                 android:textSize="14sp"
                 android:layout_marginBottom="4dp" />
             
@@ -176,7 +176,7 @@
                 android:id="@+id/foregroundScaleValueText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Escala Foreground: 100%"
+                android:text="@string/foreground_scale"
                 android:textSize="14sp"
                 android:layout_marginBottom="4dp"
                 android:alpha="0.5" />
@@ -194,7 +194,7 @@
                 android:id="@+id/alphaValueText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Transparencia: 100%"
+                android:text="@string/transparency"
                 android:textSize="14sp"
                 android:layout_marginBottom="4dp" />
 
@@ -209,7 +209,7 @@
                 android:id="@+id/colorIntensityValueText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Intensidad de Color: 100%"
+                android:text="@string/color_intensity"
                 android:textSize="14sp"
                 android:layout_marginBottom="4dp" />
 
@@ -223,7 +223,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Ajustes de Imagen"
+                android:text="@string/image_adjustments"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:gravity="center"
@@ -234,7 +234,7 @@
                 android:id="@+id/hueValueText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Tinte: 0°"
+                android:text="@string/hue"
                 android:textSize="14sp"
                 android:layout_marginBottom="4dp" />
 
@@ -249,7 +249,7 @@
                 android:id="@+id/saturationValueText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Saturación: 100%"
+                android:text="@string/saturation"
                 android:textSize="14sp"
                 android:layout_marginBottom="4dp" />
 
@@ -264,7 +264,7 @@
                 android:id="@+id/brightnessValueText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Brillo: 0%"
+                android:text="@string/brightness"
                 android:textSize="14sp"
                 android:layout_marginBottom="4dp" />
 
@@ -279,7 +279,7 @@
                 android:id="@+id/contrastValueText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Contraste: 100%"
+                android:text="@string/contrast"
                 android:textSize="14sp"
                 android:layout_marginBottom="4dp" />
 
@@ -293,7 +293,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Configuración de Capas de Icono"
+                android:text="@string/icon_layers_config"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:gravity="center"
@@ -303,7 +303,7 @@
                 android:id="@+id/useDefaultIconCheckbox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Usar icono por defecto (recomendado)"
+                android:text="@string/use_default_icon"
                 android:checked="true"
                 android:layout_marginBottom="8dp" />
 
@@ -311,7 +311,7 @@
                 android:id="@+id/useRoundIconCheckbox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Usar icono redondo (ic_launcher_round)"
+                android:text="@string/use_round_icon"
                 android:checked="false"
                 android:layout_marginBottom="8dp" />
 
@@ -327,7 +327,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Capa frontal"
+                    android:text="@string/foreground_layer"
                     android:checked="true" />
 
                 <CheckBox
@@ -335,7 +335,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Capa de fondo"
+                    android:text="@string/background_layer"
                     android:checked="true" />
 
             </LinearLayout>
@@ -344,7 +344,7 @@
                 android:id="@+id/layerInfoText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Cargando información de capas..."
+                android:text="@string/loading_layer_info"
                 android:textSize="12sp"
                 android:background="@color/card_background"
                 android:padding="8dp"
@@ -355,7 +355,7 @@
                 android:id="@+id/progressText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Listo para procesar"
+                android:text="@string/ready_to_process"
                 android:textSize="14sp"
                 android:gravity="center"
                 android:layout_marginBottom="16dp" />
@@ -365,7 +365,7 @@
                 android:id="@+id/applyButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Aplicar a Todos los Iconos"
+                android:text="@string/apply_to_all_icons"
                 android:background="@drawable/button_primary"
                 android:textColor="@color/white"
                 android:layout_marginBottom="8dp" />
@@ -375,7 +375,7 @@
                 android:id="@+id/previewAllButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Previsualizar Todos"
+                android:text="@string/preview_all"
                 android:background="@drawable/bg_card"
                 android:textColor="@color/text_secondary"
                 android:layout_marginBottom="8dp"
@@ -385,7 +385,7 @@
                 android:id="@+id/exportButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Exportar Pack de Iconos"
+                android:text="@string/export_icon_pack"
                 android:background="@drawable/button_primary"
                 android:textColor="@color/white"
                 android:enabled="false" />

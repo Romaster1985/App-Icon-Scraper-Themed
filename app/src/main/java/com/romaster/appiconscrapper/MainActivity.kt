@@ -7,7 +7,9 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,6 +30,10 @@ class MainActivity : AppCompatActivity() {
     private var filteredApps = listOf<AppInfo>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Verificar si el idioma ha cambiado
+        if (App.currentLanguage != LocaleHelper.getPersistedLanguage(this)) {
+            recreate()
+        }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         
@@ -58,11 +64,11 @@ class MainActivity : AppCompatActivity() {
         deselectAllButton = findViewById(R.id.deselectAllButton)
         scrapeButton = findViewById(R.id.scrapeButton)
         
-        exportButton.text = "Tematizar"
+        exportButton.text = getString(R.string.thematize)
         
         // Crear y configurar el checkbox de pre-procesamiento
         preprocessForegroundCheckbox = CheckBox(this).apply {
-            text = "Pre-procesar capas foreground para estilo minimalista"
+            text = getString(R.string.preprocess_foreground)
             setTextColor(ContextCompat.getColor(this@MainActivity, R.color.text_primary))
             setOnCheckedChangeListener { _, isChecked ->
                 ForegroundCache.isPreprocessingEnabled = isChecked
@@ -94,8 +100,8 @@ class MainActivity : AppCompatActivity() {
         setFiltersEnabled(true)
         applyFilter(viewModel.currentFilter)
         
-        val message = "${viewModel.allApps.size} aplicaciones encontradas"
-        Toast.makeText(this, "Estado restaurado - $message", Toast.LENGTH_SHORT).show()
+        val message = getString(R.string.restored_state, viewModel.allApps.size)
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         updateButtonStyles()
     }
 
@@ -223,24 +229,24 @@ class MainActivity : AppCompatActivity() {
         val totalCount = filteredApps.size
         
         // Mostrar contador del filtro actual
-        appsCountText.text = "$totalCount aplicaciones"
+        appsCountText.text = getString(R.string.apps_count, totalCount)
         
         // CORREGIDO: El botón de tematizar muestra el TOTAL de seleccionadas
         exportButton.isEnabled = selectedCount > 0
         
         exportButton.text = if (selectedCount > 0) {
-            "Tematizar ($selectedCount)"
+            getString(R.string.thematize_count, selectedCount)
         } else {
-            "Tematizar"
+            getString(R.string.thematize)
         }
         
         updateButtonStyles()
     }
 
     private fun scrapeApps() {
-        Toast.makeText(this, "Escrapeando aplicaciones...", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.scraping_apps), Toast.LENGTH_SHORT).show()
         scrapeButton.isEnabled = false
-        scrapeButton.text = "Escaneando..."
+        scrapeButton.text = getString(R.string.scanning)
         
         Thread {
             try {
@@ -255,9 +261,9 @@ class MainActivity : AppCompatActivity() {
                     applyFilter(FilterType.ALL)
                     setFiltersEnabled(true)
                     scrapeButton.isEnabled = true
-                    scrapeButton.text = "Escrapear Apps"
+                    scrapeButton.text = getString(R.string.scrape_apps)
                     
-                    val message = "${apps.size} aplicaciones encontradas"
+                    val message = getString(R.string.applications_found, apps.size)
                     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
                     Log.d("MainActivity", "UI actualizada - Filtradas: ${filteredApps.size}")
                     
@@ -266,9 +272,9 @@ class MainActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 e.printStackTrace()
                 runOnUiThread {
-                    Toast.makeText(this, "Error al escrapear apps: ${e.message}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, getString(R.string.error_scraping, e.message), Toast.LENGTH_LONG).show()
                     scrapeButton.isEnabled = true
-                    scrapeButton.text = "Escrapear Apps"
+                    scrapeButton.text = getString(R.string.scrape_apps)
                 }
             }
         }.start()
@@ -277,7 +283,7 @@ class MainActivity : AppCompatActivity() {
     private fun thematizeSelectedApps() {
         val selectedApps = viewModel.getSelectedApps()
         if (selectedApps.isEmpty()) {
-            Toast.makeText(this, "No hay aplicaciones seleccionadas", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.no_apps_selected), Toast.LENGTH_SHORT).show()
             return
         }
     
@@ -300,12 +306,60 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.menu_about -> {
-                startActivity(Intent(this, AboutActivity::class.java))
+            R.id.menu_main -> {
+                showDropdownMenu(item)
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun showDropdownMenu(anchor: MenuItem) {
+        val popup = PopupMenu(this, findViewById(R.id.menu_main))
+        popup.menuInflater.inflate(R.menu.main_dropdown_menu, popup.menu)
+        
+        popup.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.menu_language -> {
+                    showLanguageDialog()
+                    true
+                }
+                R.id.menu_about -> {
+                    startActivity(Intent(this, AboutActivity::class.java))
+                    true
+                }
+                else -> false
+            }
+        }
+        popup.show()
+    }
+
+    private fun showLanguageDialog() {
+        val languages = arrayOf(getString(R.string.language_spanish), getString(R.string.language_english))
+        val currentLanguage = LocaleHelper.getPersistedLanguage(this)
+        val currentIndex = if (currentLanguage == "es") 0 else 1
+
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.menu_language))
+            .setSingleChoiceItems(languages, currentIndex) { dialog, which ->
+                val language = if (which == 0) "es" else "en"
+                setAppLanguage(language)
+                dialog.dismiss()
+            }
+            .setNegativeButton(android.R.string.cancel, null)
+            .show()
+    }
+
+    private fun setAppLanguage(language: String) {
+        LocaleHelper.setLocale(this, language)
+        App.currentLanguage = language
+        
+        // Reiniciar la aplicación de forma suave
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
 
     enum class FilterType {

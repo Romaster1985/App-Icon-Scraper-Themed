@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="Escrapear Apps"
+        android:text="@string/scrape_apps"
         android:textSize="18sp"
         android:background="@drawable/button_primary"
         android:textColor="@color/white" />
@@ -27,27 +27,29 @@
         android:orientation="horizontal"
         android:padding="8dp"
         android:weightSum="2">
-
+    
         <Button
             android:id="@+id/selectAllButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginEnd="4dp"
-            android:text="Seleccionar Todo"
+            android:text="@string/select_all"
             android:textSize="14sp"
-            style="@style/Widget.AppCompat.Button.Borderless" />
-
+            android:background="@drawable/button_primary"
+            android:textColor="@color/white" />
+    
         <Button
             android:id="@+id/deselectAllButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="4dp"
-            android:text="Limpiar Selección"
+            android:text="@string/deselect_all"
             android:textSize="14sp"
-            style="@style/Widget.AppCompat.Button.Borderless" />
-
+            android:background="@drawable/button_primary"
+            android:textColor="@color/white" />
+    
     </LinearLayout>
 
     <!-- Contenedor para el checkbox de pre-procesamiento -->
@@ -63,7 +65,7 @@
         android:id="@+id/appsCountText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="0 aplicaciones"
+        android:text="@string/apps_count"
         android:textSize="16sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -85,7 +87,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:background="@drawable/button_primary"
-        android:text="Exportar Seleccionados"
+        android:text="@string/thematize"
         android:textColor="@color/white"
         android:textSize="18sp"
         android:enabled="false" />

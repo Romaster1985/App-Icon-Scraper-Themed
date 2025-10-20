@@ -1,6 +1,7 @@
 package com.romaster.appiconscrapper
 
 import android.app.Application
+import android.content.Context
 import android.os.Environment
 import java.io.File
 import java.io.FileWriter
@@ -9,16 +10,30 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class App : Application() {
+    
+    companion object {
+        var currentLanguage: String = "es"
+    }
+    
     override fun onCreate() {
         super.onCreate()
+        
+        // Establecer el idioma persistido al iniciar la aplicación
+        currentLanguage = LocaleHelper.getPersistedLanguage(this)
+        LocaleHelper.setLocale(this, currentLanguage)
 
         // Establece un manejador global para cualquier excepción no atrapada
         Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
             saveCrashLog(throwable)
-            // Opcional: relanzar excepción si querés que la app se cierre igual
             android.os.Process.killProcess(android.os.Process.myPid())
             System.exit(1)
         }
+    }
+
+    override fun attachBaseContext(base: Context) {
+        val language = LocaleHelper.getPersistedLanguage(base)
+        currentLanguage = language
+        super.attachBaseContext(LocaleHelper.setLocale(base, language))
     }
 
     private fun saveCrashLog(throwable: Throwable) {

@@ -17,7 +17,7 @@
             android:layout_height="150dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="30dp"
-            android:contentDescription="Logo de Romaster"
+            android:contentDescription="@string/app_name"
             android:scaleType="fitCenter" />
 
         <TextView

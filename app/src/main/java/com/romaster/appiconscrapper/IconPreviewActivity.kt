@@ -16,6 +16,10 @@ class IconPreviewActivity : AppCompatActivity() {
     private var icons: List<Bitmap> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Verificar si el idioma ha cambiado
+        if (App.currentLanguage != LocaleHelper.getPersistedLanguage(this)) {
+            recreate()
+        }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_icon_preview)
 
@@ -32,6 +36,10 @@ class IconPreviewActivity : AppCompatActivity() {
         // Configurar GridLayoutManager para el RecyclerView
         recyclerView.layoutManager = GridLayoutManager(this, 4) // 4 columnas
         recyclerView.adapter = IconAdapter(icons)
+    }
+
+    override fun attachBaseContext(newBase: android.content.Context) {
+        super.attachBaseContext(LocaleHelper.setLocale(newBase, LocaleHelper.getPersistedLanguage(newBase)))
     }
 
     override fun onBackPressed() {
@@ -70,6 +78,7 @@ class IconPreviewActivity : AppCompatActivity() {
         override fun getItemCount() = icons.size
 
         class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+            // CORREGIDO: Usar el ID correcto del ImageView
             val imageView: ImageView = view.findViewById(R.id.iconPreviewImage)
         }
     }

@@ -22,6 +22,10 @@ class ForegroundProcessingActivity : AppCompatActivity() {
     private var totalApps = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Verificar si el idioma ha cambiado
+        if (App.currentLanguage != LocaleHelper.getPersistedLanguage(this)) {
+            recreate()
+        }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_foreground_processing)
 
@@ -222,6 +226,10 @@ class ForegroundProcessingActivity : AppCompatActivity() {
         cropped.recycle()
         
         return result
+    }
+    
+    override fun attachBaseContext(newBase: android.content.Context) {
+        super.attachBaseContext(LocaleHelper.setLocale(newBase, LocaleHelper.getPersistedLanguage(newBase)))
     }
 
     override fun onDestroy() {
