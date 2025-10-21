@@ -13,6 +13,7 @@ class App : Application() {
     
     companion object {
         var currentLanguage: String = "es"
+        var languageChanged: Boolean = false
     }
     
     override fun onCreate() {
@@ -21,6 +22,7 @@ class App : Application() {
         // Establecer el idioma persistido al iniciar la aplicación
         currentLanguage = LocaleHelper.getPersistedLanguage(this)
         LocaleHelper.setLocale(this, currentLanguage)
+        languageChanged = false
 
         // Establece un manejador global para cualquier excepción no atrapada
         Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->

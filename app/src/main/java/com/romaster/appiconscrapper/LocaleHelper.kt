@@ -17,7 +17,8 @@ object LocaleHelper {
         return updateResources(context, language)
     }
 
-    private fun persistLanguage(context: Context, language: String) {
+    // CAMBIO: Hacer este método internal para que pueda ser accedido desde MainActivity
+    internal fun persistLanguage(context: Context, language: String) {
         val preferences: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         preferences.edit().putString(LANGUAGE_KEY, language).apply()
     }
@@ -50,9 +51,9 @@ object LocaleHelper {
         return context
     }
 
-    // Método para aplicar el locale sin recrear la actividad
-    fun applyLanguage(context: Context) {
-        val language = getPersistedLanguage(context)
-        updateResources(context, language)
+    // Método para forzar la recreación de todas las actividades
+    fun recreateAllActivities(context: Context, language: String) {
+        persistLanguage(context, language)
+        // Esta función se llamará desde MainActivity para manejar el cambio
     }
 }

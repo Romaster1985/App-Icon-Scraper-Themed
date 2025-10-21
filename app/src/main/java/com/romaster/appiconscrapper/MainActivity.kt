@@ -30,11 +30,15 @@ class MainActivity : AppCompatActivity() {
     private var filteredApps = listOf<AppInfo>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Verificar si el idioma ha cambiado
-        if (App.currentLanguage != LocaleHelper.getPersistedLanguage(this)) {
-            recreate()
-        }
         super.onCreate(savedInstanceState)
+        
+        // Verificar si el idioma ha cambiado y necesitamos recrear
+        if (App.languageChanged) {
+            App.languageChanged = false
+            recreate()
+            return
+        }
+        
         setContentView(R.layout.activity_main)
         
         // Inicializar ViewModel
@@ -65,6 +69,9 @@ class MainActivity : AppCompatActivity() {
         scrapeButton = findViewById(R.id.scrapeButton)
         
         exportButton.text = getString(R.string.thematize)
+        
+        // CORREGIDO: Sin paréntesis extra
+        appsCountText.text = getString(R.string.apps_count, 0)
         
         // Crear y configurar el checkbox de pre-procesamiento
         preprocessForegroundCheckbox = CheckBox(this).apply {
@@ -351,15 +358,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setAppLanguage(language: String) {
+        if (LocaleHelper.getPersistedLanguage(this) == language) {
+            return // No hacer nada si el idioma es el mismo
+        }
+        
+        // CORREGIDO: Usar setLocale en lugar de persistLanguage directamente
         LocaleHelper.setLocale(this, language)
         App.currentLanguage = language
+        App.languageChanged = true
         
-        // Reiniciar la aplicación de forma suave
+        // Reiniciar la aplicación completamente
         val intent = Intent(this, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         startActivity(intent)
-        finish()
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        finishAffinity()
     }
 
     enum class FilterType {

@@ -11,6 +11,16 @@ import androidx.appcompat.app.AppCompatActivity
 class AboutActivity : AppCompatActivity() {
     
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Verificar y aplicar idioma antes de setContentView
+        val currentLanguage = LocaleHelper.getPersistedLanguage(this)
+        if (App.currentLanguage != currentLanguage) {
+            App.currentLanguage = currentLanguage
+            recreate()
+            return
+        }
+        
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_about)
         // Verificar si el idioma ha cambiado
         if (App.currentLanguage != LocaleHelper.getPersistedLanguage(this)) {
             recreate()
