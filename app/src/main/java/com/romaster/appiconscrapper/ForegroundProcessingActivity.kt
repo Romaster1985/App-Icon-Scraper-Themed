@@ -22,20 +22,6 @@ class ForegroundProcessingActivity : AppCompatActivity() {
     private var totalApps = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Verificar y aplicar idioma antes de setContentView
-        val currentLanguage = LocaleHelper.getPersistedLanguage(this)
-        if (App.currentLanguage != currentLanguage) {
-            App.currentLanguage = currentLanguage
-            recreate()
-            return
-        }
-        
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_foreground_processing)
-        // Verificar si el idioma ha cambiado
-        if (App.currentLanguage != LocaleHelper.getPersistedLanguage(this)) {
-            recreate()
-        }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_foreground_processing)
 
@@ -49,7 +35,7 @@ class ForegroundProcessingActivity : AppCompatActivity() {
         if (selectedApps.isNotEmpty()) {
             startForegroundProcessing()
         } else {
-            statusText.text = "No hay aplicaciones seleccionadas"
+            statusText.text = getString(R.string.no_apps_selected)
             continueButton.isEnabled = true
         }
     }
@@ -64,7 +50,9 @@ class ForegroundProcessingActivity : AppCompatActivity() {
         progressBar.progress = 0
         progressText.text = "0/$totalApps"
         continueButton.isEnabled = false
-        statusText.text = "Preparando procesamiento..."
+        
+        // Usar string traducida
+        statusText.text = getString(R.string.starting_processing)
     }
 
     private fun setupListeners() {
@@ -79,7 +67,7 @@ class ForegroundProcessingActivity : AppCompatActivity() {
     }
 
     private fun startForegroundProcessing() {
-        statusText.text = "Procesando capas foreground..."
+        statusText.text = getString(R.string.preprocess_foreground)
         
         CoroutineScope(Dispatchers.IO).launch {
             selectedApps.forEachIndexed { index, app ->
@@ -89,7 +77,9 @@ class ForegroundProcessingActivity : AppCompatActivity() {
                         processedCount++
                         progressBar.progress = processedCount
                         progressText.text = "$processedCount/$totalApps"
-                        statusText.text = "Procesando: ${app.name}"
+                        
+                        // Usar string con formato para el estado
+                        statusText.text = getString(R.string.processing_app, app.name)
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -97,7 +87,8 @@ class ForegroundProcessingActivity : AppCompatActivity() {
             }
             
             withContext(Dispatchers.Main) {
-                statusText.text = "¡Procesamiento completado! ${ForegroundCache.getCacheSize()} íconos listos."
+                val cacheSize = ForegroundCache.getCacheSize()
+                statusText.text = getString(R.string.processing_completed, cacheSize)
                 continueButton.isEnabled = true
             }
         }
@@ -119,19 +110,16 @@ class ForegroundProcessingActivity : AppCompatActivity() {
     }
 
     private fun processForegroundDrawable(drawable: Drawable): Bitmap {
-        // Tamaño estándar para normalización
+        // ... (mantén el código existente de este método)
         val targetSize = 128
         
-        // Crear bitmap temporal para analizar el contenido
         val tempBitmap = Bitmap.createBitmap(targetSize * 2, targetSize * 2, Bitmap.Config.ARGB_8888)
         val tempCanvas = Canvas(tempBitmap)
         
-        // Obtener dimensiones intrínsecas
         val intrinsicWidth = drawable.intrinsicWidth
         val intrinsicHeight = drawable.intrinsicHeight
         
         if (intrinsicWidth > 0 && intrinsicHeight > 0) {
-            // Calcular escala para mantener aspecto (usando espacio extra)
             val scale = Math.min(
                 (targetSize * 1.5f) / intrinsicWidth,
                 (targetSize * 1.5f) / intrinsicHeight
@@ -140,29 +128,24 @@ class ForegroundProcessingActivity : AppCompatActivity() {
             val scaledWidth = (intrinsicWidth * scale).toInt()
             val scaledHeight = (intrinsicHeight * scale).toInt()
             
-            // Posicionar en el centro del bitmap temporal
             val left = (tempBitmap.width - scaledWidth) / 2
             val top = (tempBitmap.height - scaledHeight) / 2
             
             drawable.setBounds(left, top, left + scaledWidth, top + scaledHeight)
         } else {
-            // Si no tiene dimensiones intrínsecas, usar todo el espacio
             drawable.setBounds(0, 0, tempBitmap.width, tempBitmap.height)
         }
         
-        // Dibujar en el canvas temporal
         drawable.draw(tempCanvas)
         
-        // Recortar espacios transparentes y redimensionar al tamaño final
         val croppedBitmap = cropTransparentAreas(tempBitmap)
-        
-        // Reciclar el bitmap temporal
         tempBitmap.recycle()
         
         return croppedBitmap
     }
 
     private fun cropTransparentAreas(bitmap: Bitmap): Bitmap {
+        // ... (mantén el código existente de este método)
         val width = bitmap.width
         val height = bitmap.height
         
@@ -173,12 +156,10 @@ class ForegroundProcessingActivity : AppCompatActivity() {
         
         var foundContent = false
         
-        // Encontrar los límites del contenido no transparente
         for (x in 0 until width) {
             for (y in 0 until height) {
                 val pixel = bitmap.getPixel(x, y)
-                // Considerar cualquier pixel no completamente transparente como contenido
-                if ((pixel ushr 24) != 0x00) { // Alpha channel
+                if ((pixel ushr 24) != 0x00) {
                     foundContent = true
                     left = Math.min(left, x)
                     top = Math.min(top, y)
@@ -188,15 +169,13 @@ class ForegroundProcessingActivity : AppCompatActivity() {
             }
         }
         
-        // Si no se encontró contenido, crear un bitmap vacío del tamaño estándar
         if (!foundContent || left >= right || top >= bottom) {
             return Bitmap.createBitmap(128, 128, Bitmap.Config.ARGB_8888)
         }
         
-        // Agregar un margen proporcional
         val contentWidth = right - left
         val contentHeight = bottom - top
-        val margin = Math.max(contentWidth, contentHeight) * 0.1f // 10% de margen
+        val margin = Math.max(contentWidth, contentHeight) * 0.1f
         
         left = Math.max(0, (left - margin).toInt())
         top = Math.max(0, (top - margin).toInt())
@@ -206,11 +185,9 @@ class ForegroundProcessingActivity : AppCompatActivity() {
         val croppedWidth = right - left
         val croppedHeight = bottom - top
         
-        // Crear el bitmap final del tamaño estándar
         val result = Bitmap.createBitmap(128, 128, Bitmap.Config.ARGB_8888)
         val resultCanvas = Canvas(result)
         
-        // Calcular escala para ajustar al tamaño final manteniendo aspecto
         val finalScale = Math.min(
             128f / croppedWidth,
             128f / croppedHeight
@@ -219,27 +196,18 @@ class ForegroundProcessingActivity : AppCompatActivity() {
         val finalWidth = (croppedWidth * finalScale).toInt()
         val finalHeight = (croppedHeight * finalScale).toInt()
         
-        // Calcular posición para centrar
         val resultLeft = (128 - finalWidth) / 2
         val resultTop = (128 - finalHeight) / 2
         
-        // Crear el bitmap recortado
         val cropped = Bitmap.createBitmap(bitmap, left, top, croppedWidth, croppedHeight)
         
-        // Dibujar escalado y centrado en el resultado final
         val srcRect = Rect(0, 0, croppedWidth, croppedHeight)
         val dstRect = Rect(resultLeft, resultTop, resultLeft + finalWidth, resultTop + finalHeight)
         
         resultCanvas.drawBitmap(cropped, srcRect, dstRect, null)
-        
-        // Reciclar el bitmap recortado temporal
         cropped.recycle()
         
         return result
-    }
-    
-    override fun attachBaseContext(newBase: android.content.Context) {
-        super.attachBaseContext(LocaleHelper.setLocale(newBase, LocaleHelper.getPersistedLanguage(newBase)))
     }
 
     override fun onDestroy() {

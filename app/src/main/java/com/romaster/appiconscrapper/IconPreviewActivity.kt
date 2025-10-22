@@ -16,20 +16,6 @@ class IconPreviewActivity : AppCompatActivity() {
     private var icons: List<Bitmap> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Verificar y aplicar idioma antes de setContentView
-        val currentLanguage = LocaleHelper.getPersistedLanguage(this)
-        if (App.currentLanguage != currentLanguage) {
-            App.currentLanguage = currentLanguage
-            recreate()
-            return
-        }
-        
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_icon_preview)
-        // Verificar si el idioma ha cambiado
-        if (App.currentLanguage != LocaleHelper.getPersistedLanguage(this)) {
-            recreate()
-        }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_icon_preview)
 
@@ -44,23 +30,16 @@ class IconPreviewActivity : AppCompatActivity() {
         }
 
         // Configurar GridLayoutManager para el RecyclerView
-        recyclerView.layoutManager = GridLayoutManager(this, 4) // 4 columnas
+        recyclerView.layoutManager = GridLayoutManager(this, 4)
         recyclerView.adapter = IconAdapter(icons)
-    }
-
-    override fun attachBaseContext(newBase: android.content.Context) {
-        super.attachBaseContext(LocaleHelper.setLocale(newBase, LocaleHelper.getPersistedLanguage(newBase)))
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
-        // No limpiar aquí para permitir volver a ThemeCustomizationActivity
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        // NO reciclamos los bitmaps aquí - el ViewModel de ThemeCustomizationActivity es el dueño
-        // Solo limpiamos el cache si la actividad se está finalizando completamente
         if (isFinishing) {
             IconCache.clear()
         }
@@ -75,12 +54,10 @@ class IconPreviewActivity : AppCompatActivity() {
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            // CORREGIDO: Verificar que el bitmap no esté reciclado antes de mostrarlo
             val bitmap = icons[position]
             if (!bitmap.isRecycled) {
                 holder.imageView.setImageBitmap(bitmap)
             } else {
-                // Si está reciclado, mostrar un placeholder o manejar el error
                 holder.imageView.setImageResource(R.mipmap.ic_launcher)
             }
         }
@@ -88,7 +65,6 @@ class IconPreviewActivity : AppCompatActivity() {
         override fun getItemCount() = icons.size
 
         class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-            // CORREGIDO: Usar el ID correcto del ImageView
             val imageView: ImageView = view.findViewById(R.id.iconPreviewImage)
         }
     }

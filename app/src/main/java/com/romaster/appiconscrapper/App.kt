@@ -11,18 +11,14 @@ import java.util.*
 
 class App : Application() {
     
-    companion object {
-        var currentLanguage: String = "es"
-        var languageChanged: Boolean = false
-    }
-    
     override fun onCreate() {
         super.onCreate()
         
-        // Establecer el idioma persistido al iniciar la aplicación
-        currentLanguage = LocaleHelper.getPersistedLanguage(this)
-        LocaleHelper.setLocale(this, currentLanguage)
-        languageChanged = false
+        // Crear configuración por defecto si no existe
+        ConfigManager.createDefaultConfig(this)
+        
+        // Aplicar el idioma guardado
+        LocaleHelper.applyLanguage(this)
 
         // Establece un manejador global para cualquier excepción no atrapada
         Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
@@ -33,9 +29,7 @@ class App : Application() {
     }
 
     override fun attachBaseContext(base: Context) {
-        val language = LocaleHelper.getPersistedLanguage(base)
-        currentLanguage = language
-        super.attachBaseContext(LocaleHelper.setLocale(base, language))
+        super.attachBaseContext(LocaleHelper.applyLanguage(base))
     }
 
     private fun saveCrashLog(throwable: Throwable) {

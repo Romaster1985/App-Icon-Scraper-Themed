@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.romaster.appiconscrapper.ConfigManager
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,14 +32,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
-        // Verificar si el idioma ha cambiado y necesitamos recrear
-        if (App.languageChanged) {
-            App.languageChanged = false
-            recreate()
-            return
-        }
-        
         setContentView(R.layout.activity_main)
         
         // Inicializar ViewModel
@@ -70,15 +63,17 @@ class MainActivity : AppCompatActivity() {
         
         exportButton.text = getString(R.string.thematize)
         
-        // CORREGIDO: Sin paréntesis extra
+        // Inicializar con 0 aplicaciones
         appsCountText.text = getString(R.string.apps_count, 0)
         
         // Crear y configurar el checkbox de pre-procesamiento
         preprocessForegroundCheckbox = CheckBox(this).apply {
             text = getString(R.string.preprocess_foreground)
             setTextColor(ContextCompat.getColor(this@MainActivity, R.color.text_primary))
+            isChecked = ConfigManager.getPreprocessEnabled(this@MainActivity)
             setOnCheckedChangeListener { _, isChecked ->
                 ForegroundCache.isPreprocessingEnabled = isChecked
+                ConfigManager.setPreprocessEnabled(this@MainActivity, isChecked)
             }
         }
 
@@ -343,9 +338,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun showLanguageDialog() {
         val languages = arrayOf(getString(R.string.language_spanish), getString(R.string.language_english))
-        val currentLanguage = LocaleHelper.getPersistedLanguage(this)
+        val currentLanguage = ConfigManager.getLanguage(this) // ← USAR ConfigManager
         val currentIndex = if (currentLanguage == "es") 0 else 1
-
+    
         AlertDialog.Builder(this)
             .setTitle(getString(R.string.menu_language))
             .setSingleChoiceItems(languages, currentIndex) { dialog, which ->
@@ -358,22 +353,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setAppLanguage(language: String) {
-        if (LocaleHelper.getPersistedLanguage(this) == language) {
-            return // No hacer nada si el idioma es el mismo
+        val currentLanguage = ConfigManager.getLanguage(this) // ← USAR ConfigManager
+        if (currentLanguage == language) {
+            return
         }
         
-        // CORREGIDO: Usar setLocale en lugar de persistLanguage directamente
-        LocaleHelper.setLocale(this, language)
-        App.currentLanguage = language
-        App.languageChanged = true
+        // Cambiar el idioma en la configuración
+        ConfigManager.setLanguage(this, language)
         
-        // Reiniciar la aplicación completamente
+        // Reiniciar la aplicación
         val intent = Intent(this, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
-        finishAffinity()
+        finish()
     }
-
     enum class FilterType {
         ALL, SYSTEM, USER, GAPPS
     }

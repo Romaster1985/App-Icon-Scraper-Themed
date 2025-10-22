@@ -69,6 +69,8 @@
     <string name="color_purple">Purple</string>
     <string name="color_light_blue">Light Blue</string>
     <string name="color_light_green">Light Green</string>
+    <string name="processing_app">Processing: %s</string>
+    <string name="processing_completed">Processing completed! %d icons ready.</string>
     
     <!-- About section -->
     <string name="about_content"><big><b>App Icon Scraper &amp; Themer V1.3</b></big>\n\n<b>Developed by Romaster</b>\n\n<b>Contact:</b> roman.ignacio.romero@gmail.com\n\n<b>GitHub:</b> https://github.com/Romaster1985\n\nA complete application to extract, customize and export Android application icons.\n\n<b>Main features:</b>\n• 📱 Simple and professional user interface\n• 🔍📋 Scans and lists all installed applications\n• 🎯 Smart filtering (System, User, Google Apps)\n• ✅ Multiple application selection\n• 🎨 Unique icon theming system with multi-layer icon selection\n• 📐✂️ Independent rescaling and centering of front layers with intelligent transparent area detection and cropping\n• 📍 Position, scale, transparency, tint, saturation, brightness and contrast adjustment (independent scale for front layers)\n• 🎛️ Color intensity control (fade to preset color)\n• 👁️ Real-time preview + all icons preview\n• 📦 Custom icon packs generation\n• 🗜️ Export to ZIP file ready to load in Icon Packer\n• 🤖📝 Built-in Crash Guard Logger for error self-diagnosis ⛓️‍💥💥\n\n<b>Technologies:</b>\n• Kotlin\n• Android SDK\n• Material Design 3\n• RecyclerView\n• ViewModel\n• Gradle\n• Active Internal Cache\n\nThis application was developed with the assistance of 🐬DeepSeek.</string>
