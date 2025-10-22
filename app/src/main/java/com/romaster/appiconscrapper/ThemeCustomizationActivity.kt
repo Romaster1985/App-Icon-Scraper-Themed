@@ -23,7 +23,7 @@ import java.io.FileInputStream
 import java.io.IOException
 import java.io.InputStream
 
-class ThemeCustomizationActivity : AppCompatActivity() {
+class ThemeCustomizationActivity : BaseActivity() {
 
     private var currentPreviewBitmap: Bitmap? = null
     private var isColorApplied = false
@@ -107,8 +107,6 @@ class ThemeCustomizationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_theme_customization)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_theme_customization)
 

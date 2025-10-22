@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.romaster.appiconscrapper.ConfigManager
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var appsCountText: TextView
@@ -353,20 +353,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setAppLanguage(language: String) {
-        val currentLanguage = ConfigManager.getLanguage(this) // ← USAR ConfigManager
+        val currentLanguage = ConfigManager.getLanguage(this)
         if (currentLanguage == language) {
             return
         }
         
-        // Cambiar el idioma en la configuración
+        // Guardar el nuevo idioma
         ConfigManager.setLanguage(this, language)
         
-        // Reiniciar la aplicación
-        val intent = Intent(this, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
-        finish()
+        // Reinicio limpio
+        val launchIntent = packageManager.getLaunchIntentForPackage(packageName)
+        launchIntent?.let {
+            it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            startActivity(it)
+        }
+        finishAffinity()
     }
+    
     enum class FilterType {
         ALL, SYSTEM, USER, GAPPS
     }

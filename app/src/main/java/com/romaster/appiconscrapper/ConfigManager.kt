@@ -2,11 +2,11 @@ package com.romaster.appiconscrapper
 
 import android.content.Context
 import android.os.Environment
+import android.util.Log
 import org.w3c.dom.Document
 import org.w3c.dom.Element
-import java.io.*
+import java.io.File
 import javax.xml.parsers.DocumentBuilderFactory
-import javax.xml.parsers.ParserConfigurationException
 import javax.xml.transform.TransformerFactory
 import javax.xml.transform.dom.DOMSource
 import javax.xml.transform.stream.StreamResult
@@ -102,10 +102,13 @@ object ConfigManager {
 
     // Métodos específicos para el idioma
     fun getLanguage(context: Context): String {
-        return getSetting(context, KEY_LANGUAGE, DEFAULT_LANGUAGE)
+        val language = getSetting(context, KEY_LANGUAGE, DEFAULT_LANGUAGE)
+        Log.d("ConfigManager", "Idioma cargado: $language")
+        return language
     }
 
     fun setLanguage(context: Context, language: String) {
+        Log.d("ConfigManager", "Guardando idioma: $language")
         setSetting(context, KEY_LANGUAGE, language)
     }
 
@@ -129,5 +132,25 @@ object ConfigManager {
             setLanguage(context, DEFAULT_LANGUAGE)
             setPreprocessEnabled(context, DEFAULT_PREPROCESS_ENABLED.toBoolean())
         }
+    }
+
+    // Método para aplicar el idioma al contexto
+    fun applyLanguageToContext(context: Context): Context {
+        val language = getLanguage(context)
+        val locale = java.util.Locale(language)
+        java.util.Locale.setDefault(locale)
+        
+        val resources = context.resources
+        val configuration = resources.configuration
+        
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            configuration.setLocale(locale)
+            return context.createConfigurationContext(configuration)
+        } else {
+            configuration.locale = locale
+            resources.updateConfiguration(configuration, resources.displayMetrics)
+        }
+        
+        return context
     }
 }

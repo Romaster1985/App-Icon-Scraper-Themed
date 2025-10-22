@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.*
 
-class ForegroundProcessingActivity : AppCompatActivity() {
+class ForegroundProcessingActivity : BaseActivity() {
 
     private lateinit var progressBar: ProgressBar
     private lateinit var progressText: TextView

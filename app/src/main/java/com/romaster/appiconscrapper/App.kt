@@ -1,7 +1,6 @@
 package com.romaster.appiconscrapper
 
 import android.app.Application
-import android.content.Context
 import android.os.Environment
 import java.io.File
 import java.io.FileWriter
@@ -16,9 +15,6 @@ class App : Application() {
         
         // Crear configuración por defecto si no existe
         ConfigManager.createDefaultConfig(this)
-        
-        // Aplicar el idioma guardado
-        LocaleHelper.applyLanguage(this)
 
         // Establece un manejador global para cualquier excepción no atrapada
         Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
@@ -26,10 +22,6 @@ class App : Application() {
             android.os.Process.killProcess(android.os.Process.myPid())
             System.exit(1)
         }
-    }
-
-    override fun attachBaseContext(base: Context) {
-        super.attachBaseContext(LocaleHelper.applyLanguage(base))
     }
 
     private fun saveCrashLog(throwable: Throwable) {
