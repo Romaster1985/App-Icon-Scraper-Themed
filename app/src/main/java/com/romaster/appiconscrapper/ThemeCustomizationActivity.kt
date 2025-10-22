@@ -13,6 +13,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.*
+import android.text.TextWatcher
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AlertDialog
@@ -872,21 +873,119 @@ class ThemeCustomizationActivity : BaseActivity() {
             getString(R.string.color_orange),
             getString(R.string.color_purple),
             getString(R.string.color_light_blue),
-            getString(R.string.color_light_green)
+            getString(R.string.color_light_green),
+            getString(R.string.color_hexadecimal) // ← NUEVA OPCIÓN
         )
     
         androidx.appcompat.app.AlertDialog.Builder(this)
             .setTitle(getString(R.string.select_color))
             .setItems(colorNames) { dialog, which ->
-                selectedColor = colors[which]
-                viewModel.selectedColor = selectedColor
-                colorPickerButton.setBackgroundColor(selectedColor)
-                isColorApplied = true
-                updatePreview() // Este método SÍ existe en tu código
+                if (which == colorNames.size - 1) {
+                    // Última opción - Hexadecimal
+                    showHexColorPicker()
+                } else {
+                    // Colores predefinidos
+                    selectedColor = colors[which]
+                    viewModel.selectedColor = selectedColor
+                    colorPickerButton.setBackgroundColor(selectedColor)
+                    isColorApplied = true
+                    updatePreview()
+                }
                 dialog.dismiss()
             }
             .setNegativeButton(android.R.string.cancel, null)
             .show()
+    }
+    
+    private fun showHexColorPicker() {
+        // Crear un EditText para ingresar el código hexadecimal
+        val editText = EditText(this).apply {
+            hint = "#RRGGBB o #AARRGGBB"
+            setText("#")
+            setSelectAllOnFocus(true)
+        }
+    
+        // Crear un preview del color
+        val colorPreview = ImageView(this).apply {
+            setBackgroundColor(android.graphics.Color.WHITE)
+            setPadding(32, 32, 32, 32)
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                100
+            )
+        }
+    
+        // Función para actualizar el preview
+        fun updateColorPreview(hexColor: String) {
+            try {
+                val color = android.graphics.Color.parseColor(hexColor)
+                colorPreview.setBackgroundColor(color)
+            } catch (e: Exception) {
+                colorPreview.setBackgroundColor(android.graphics.Color.WHITE)
+            }
+        }
+    
+        // Actualizar preview cuando cambia el texto
+        editText.addTextChangedListener(object : android.text.TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: android.text.Editable?) {
+                updateColorPreview(s.toString())
+            }
+        })
+    
+        // Crear layout del diálogo
+        val layout = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(50, 30, 50, 10)
+            addView(editText)
+            addView(colorPreview)
+        }
+    
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("Color Hexadecimal")
+            .setView(layout)
+            .setPositiveButton("Aceptar") { dialog, _ ->
+                val hexColor = editText.text.toString().trim()
+                if (isValidHexColor(hexColor)) {
+                    try {
+                        selectedColor = android.graphics.Color.parseColor(hexColor)
+                        viewModel.selectedColor = selectedColor
+                        colorPickerButton.setBackgroundColor(selectedColor)
+                        isColorApplied = true
+                        updatePreview()
+                        Toast.makeText(this, "Color hexadecimal aplicado", Toast.LENGTH_SHORT).show()
+                    } catch (e: Exception) {
+                        Toast.makeText(this, "Color hexadecimal inválido", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(this, "Formato inválido. Use #RRGGBB o #AARRGGBB", Toast.LENGTH_LONG).show()
+                }
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancelar") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    
+        // Focus en el EditText y mostrar teclado
+        editText.requestFocus()
+        val imm = getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as android.view.inputmethod.InputMethodManager
+        imm.showSoftInput(editText, android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT)
+    }
+    
+    private fun isValidHexColor(hexColor: String): Boolean {
+        if (hexColor.isEmpty()) return false
+        
+        val hexPattern = if (hexColor.length == 7) {
+            "^#([A-Fa-f0-9]{6})$"
+        } else if (hexColor.length == 9) {
+            "^#([A-Fa-f0-9]{8})$"
+        } else {
+            return false
+        }
+        
+        return hexColor.matches(hexPattern.toRegex())
     }
 
     private fun loadMaskFromUri(uri: Uri) {

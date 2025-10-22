@@ -70,10 +70,10 @@ class MainActivity : BaseActivity() {
         preprocessForegroundCheckbox = CheckBox(this).apply {
             text = getString(R.string.preprocess_foreground)
             setTextColor(ContextCompat.getColor(this@MainActivity, R.color.text_primary))
-            isChecked = ConfigManager.getPreprocessEnabled(this@MainActivity)
+            isChecked = false //ConfigManager.getPreprocessEnabled(this@MainActivity)
             setOnCheckedChangeListener { _, isChecked ->
                 ForegroundCache.isPreprocessingEnabled = isChecked
-                ConfigManager.setPreprocessEnabled(this@MainActivity, isChecked)
+                //ConfigManager.setPreprocessEnabled(this@MainActivity, isChecked)
             }
         }
 

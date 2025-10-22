@@ -17,11 +17,11 @@ object ConfigManager {
     
     // Claves de configuración
     private const val KEY_LANGUAGE = "language"
-    private const val KEY_PREPROCESS_ENABLED = "preprocess_enabled"
+    //private const val KEY_PREPROCESS_ENABLED = "preprocess_enabled"
     
     // Valores por defecto
     private const val DEFAULT_LANGUAGE = "es"
-    private const val DEFAULT_PREPROCESS_ENABLED = "false"
+    //private const val DEFAULT_PREPROCESS_ENABLED = "false"
 
     fun getConfigFile(context: Context): File {
         val docsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
@@ -113,13 +113,13 @@ object ConfigManager {
     }
 
     // Métodos específicos para pre-procesamiento
-    fun getPreprocessEnabled(context: Context): Boolean {
-        return getSetting(context, KEY_PREPROCESS_ENABLED, DEFAULT_PREPROCESS_ENABLED).toBoolean()
-    }
+   // fun getPreprocessEnabled(context: Context): Boolean {
+    //    return getSetting(context, KEY_PREPROCESS_ENABLED, DEFAULT_PREPROCESS_ENABLED).toBoolean()
+    //}
 
-    fun setPreprocessEnabled(context: Context, enabled: Boolean) {
-        setSetting(context, KEY_PREPROCESS_ENABLED, enabled.toString())
-    }
+    //fun setPreprocessEnabled(context: Context, enabled: Boolean) {
+    //    setSetting(context, KEY_PREPROCESS_ENABLED, enabled.toString())
+    //}
 
     // Verificar si la configuración existe
     fun configExists(context: Context): Boolean {
@@ -130,7 +130,7 @@ object ConfigManager {
     fun createDefaultConfig(context: Context) {
         if (!configExists(context)) {
             setLanguage(context, DEFAULT_LANGUAGE)
-            setPreprocessEnabled(context, DEFAULT_PREPROCESS_ENABLED.toBoolean())
+           // setPreprocessEnabled(context, DEFAULT_PREPROCESS_ENABLED.toBoolean())
         }
     }
 
