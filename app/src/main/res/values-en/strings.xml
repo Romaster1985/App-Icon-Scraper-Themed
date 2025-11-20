@@ -3,9 +3,6 @@
     <string name="app_name">App Icon Scraper &amp; Themer</string>
     <string name="about_title">About</string>
     <string name="menu_about">About</string>
-    <string name="menu_language">Language</string>
-    <string name="language_spanish">Spanish</string>
-    <string name="language_english">English</string>
     <string name="export_selected">Export Selected</string>
     <string name="select_all">Select All</string>
     <string name="deselect_all">Clear Selection</string>
@@ -18,6 +15,9 @@
     <string name="export_error">Error exporting icons</string>
     <string name="no_apps_selected">No applications selected</string>
     <string name="scraping_icons">Extracting icons…</string>
+    <string name="menu_language">Language</string>
+    <string name="language_spanish">Spanish</string>
+    <string name="language_english">English</string>
     <string name="scrape_apps">Scrape Apps</string>
     <string name="thematize">Thematize</string>
     <string name="thematize_count">Thematize (%d)</string>
@@ -28,9 +28,7 @@
     <string name="scraping_apps">Scraping applications…</string>
     <string name="applications_found">%d applications found</string>
     <string name="personalize_icons">Personalize Icons</string>
-    <string name="mask">Mask</string>
     <string name="result">Result</string>
-    <string name="select_mask">Select Mask</string>
     <string name="select_color">Select Color</string>
     <string name="position_x">Position X: %d</string>
     <string name="position_y">Position Y: %d</string>
@@ -73,6 +71,55 @@
     <string name="processing_completed">Processing completed! %d icons ready.</string>
     <string name="color_hexadecimal">Hexadecimal…</string>
     
-    <!-- About section -->
-    <string name="about_content"><big><b>App Icon Scraper &amp; Themer V1.4</b></big>\n\n<b>Developed by Romaster</b>\n\n<b>Contact:</b> roman.ignacio.romero@gmail.com\n\n<b>GitHub:</b> https://github.com/Romaster1985\n\nA complete application to extract, customize and export Android application icons.\n\n<b>Main features:</b>\n• 📱 Simple and professional user interface\n• 🔍📋 Scans and lists all installed applications\n• 🎯 Smart filtering (System, User, Google Apps)\n• ✅ Multiple application selection\n• 🎨 Unique icon theming system with multi-layer icon selection\n• 📐✂️ Independent rescaling and centering of front layers with intelligent transparent area detection and cropping\n• 📍 Position, scale, transparency, tint, saturation, brightness and contrast adjustment (independent scale for front layers)\n• 🎛️ Color intensity control (fade to preset color)\n• 👁️ Real-time preview + all icons preview\n• 📦 Custom icon packs generation\n• 🗜️ Export to ZIP file ready to load in Icon Packer\n• 🤖📝 Built-in Crash Guard Logger for error self-diagnosis ⛓️‍💥💥\n\n<b>Technologies:</b>\n• Kotlin\n• Android SDK\n• Material Design 3\n• RecyclerView\n• ViewModel\n• Gradle\n• Active Internal Cache\n\nThis application was developed with the assistance of 🐬DeepSeek.</string>
+    <!-- NEW STRINGS FOR APK EXPORT -->
+    <string name="export_iconpack_apk">Export as APK</string>
+    <string name="exporting_apk">Exporting APK…</string>
+    <string name="apk_export_complete">Icon Pack APK generated successfully!</string>
+    <string name="apk_compatible_launchers">Compatible with: Nova, Lawnchair, Smart Launcher and more.</string>
+    <string name="apk_saved_location">Saved in: %s</string>
+    <string name="apk_experimental_warning">Note: Popular launchers supported - Niagara Launcher, Nova Launcher, Total Launcher, Smart Launcher, CMM Launcher, Lawnchair and more!! (FULL compatibility is still in development)</string>
+    <string name="install_now">Install now</string>
+    <string name="view_in_files">View in files</string>
+    <string name="share_file">Share file</string>
+    <string name="zip_error">Error creating ZIP file</string>
+    <string name="share_error">Error sharing file</string>
+    <string name="file_manager_error">Could not open file manager</string>
+    <string name="export_format">Export format</string>
+    <string name="export_as_zip_recommended">ZIP (Compatible with Icon Packer)</string>
+    <string name="export_as_apk_experimental">APK (Recommended - Own Pack)</string>
+    <string name="icon_pack_name_hint">Icon pack name</string>
+    <string name="apk_name">APK Name</string>
+    <string name="pack_name">Pack Name</string>
+    <string name="generate_apk">Generate APK</string>
+    <string name="generate_zip">Generate ZIP</string>
+    <string name="share_icon_pack">Share Icon Pack</string>
+    <string name="zip_export_complete">ZIP exported successfully</string>
+    <string name="zip_saved_location">Saved in: %s</string>
+    <string name="zip_working_note">This ZIP file can be directly imported into Icon Packer.</string>
+    <string name="preprocess_foreground_start">Starting foreground pre-processing…</string>
+    <string name="preprocess_foreground_progress">Pre-processing icons: %d/%d</string>
+    <string name="apk_error">Error creating icon pack APK</string>
+    
+    <!-- New strings for mask implementation -->
+    <string name="background">Background</string>
+    <string name="mask">Mask</string>
+    <string name="select_background">Select Background</string>
+    <string name="select_mask">Select Mask</string>
+    <string name="clear_masks">Clear Masks (Use Transparent)</string>
+    <string name="background_transparent">Transparent Background</string>
+    <string name="mask_transparent">Transparent Mask</string>
+    <string name="masks_cleared">Masks cleared - Transparent state</string>
+    
+    <!-- New strings for upper layer -->
+    <string name="upper_layer">Upper Layer</string>
+    <string name="select_upper_layer">Select Upper Layer</string>
+    <string name="upper_layer_transparent">Transparent Upper Layer</string>
+    
+    <!-- New strings for licenses -->
+    <string name="licenses_title">Open Source Licenses</string>
+    <string name="menu_licenses">Licenses</string>
+    <string name="open_source_licenses">Open Source Licenses</string>
+
+    <!-- Updated About section -->
+    <string name="about_content"><big><b>App Icon Scraper &amp; Themer V1.5</b></big>\n\n<b>Developed by Romaster</b>\n\n<b>Contact:</b> roman.ignacio.romero@gmail.com\n\n<b>GitHub:</b> https://github.com/Romaster1985\n\nA complete application to extract, customize, export Android application icons and create fully customized icon packs.\n\n<b>Main features:</b>\n• 📱 Simple and professional user interface\n• 🔍📋 Scans and lists all installed applications\n• 🎯 Smart filtering (System, User, Google Apps)\n• ✅ Multiple application selection\n• 🎨 Unique icon theming system with multi-layer icon selection\n• 📐✂️ Independent rescaling and centering of foreground layers with intelligent transparent area detection and cropping\n• 📍 Position, scale, transparency, tint, saturation, brightness and contrast adjustment (independent scale for foreground layers)\n• 🎭 Mask loading system for adaptive icons (iconback; iconmask; iconupon)\n• 🎛️ Color intensity control (fade to preset color)\n• 👁️ Real-time preview + all icons preview\n• 📦 Custom icon pack generation\n• 🗜️ Export to ZIP file ready to load in Icon Packer\n• 📦 Icon pack export in APK format compatible with a wide variety of popular Launchers\n• 🤖📝 Built-in Crash Guard Logger for error self-diagnosis ⛓️‍💥💥\n\n<b>Technologies:</b>\n• Kotlin\n• Android SDK\n• Material Design 3\n• RecyclerView\n• ViewModel\n• Gradle\n• Active Internal Cache\n• ZipAlign-Android 1.0 by Muntashir Al-Islam\n• Built In Android ApkSigner\n\nThis application was developed with the assistance of 🐬DeepSeek.</string>
 </resources>

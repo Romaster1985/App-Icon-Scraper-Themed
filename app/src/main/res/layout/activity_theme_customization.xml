@@ -4,33 +4,98 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!-- SECCIÓN FIJA - PREVIEW -->
+    <!-- SECCIÓN SUPERIOR - PREVIEW RESULTADO CENTRAL -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp"
         android:background="@color/white"
-        android:elevation="4dp">
+        android:elevation="4dp"
+        android:gravity="center">
 
-        <!-- Título -->
-        <TextView
-            android:layout_width="match_parent"
+        <!-- PREVIEW DEL RESULTADO (CENTRADO) -->
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/personalize_icons"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginBottom="16dp" />
+            android:orientation="vertical"
+            android:gravity="center">
 
-        <!-- Vista Previa -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/result"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <ImageView
+                android:id="@+id/iconPreview"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:background="@drawable/bg_card"
+                android:scaleType="fitCenter"
+                android:clickable="true"
+                android:focusable="true" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- SECCIÓN MEDIA - TRES PREVIEWS CON SUS BOTONES -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@color/card_background">
+
+        <!-- TRES VISTAS PREVIEW EN FILA -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="8dp"
+            android:weightSum="3">
 
+            <!-- Preview Fondo (iconback) -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/background"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="4dp" />
+
+                <ImageView
+                    android:id="@+id/iconbackPreview"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/bg_card"
+                    android:scaleType="fitCenter"
+                    android:layout_marginBottom="8dp" />
+
+                <Button
+                    android:id="@+id/selectIconbackButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/select_background"
+                    android:background="@drawable/button_primary"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp" />
+
+            </LinearLayout>
+
+            <!-- Preview Máscara (iconmask) -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -46,14 +111,27 @@
                     android:layout_marginBottom="4dp" />
 
                 <ImageView
-                    android:id="@+id/maskPreview"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:id="@+id/iconmaskPreview"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:background="@drawable/bg_card"
-                    android:scaleType="fitCenter" />
+                    android:scaleType="fitCenter"
+                    android:layout_marginBottom="8dp" />
+
+                <Button
+                    android:id="@+id/selectIconmaskButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/select_mask"
+                    android:background="@drawable/button_primary"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp" />
 
             </LinearLayout>
 
+            <!-- Preview Capa Superior (iconupon) -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -64,39 +142,51 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/result"
+                    android:text="@string/upper_layer"
                     android:textSize="14sp"
                     android:layout_marginBottom="4dp" />
 
                 <ImageView
-                    android:id="@+id/iconPreview"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:id="@+id/iconuponPreview"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:background="@drawable/bg_card"
                     android:scaleType="fitCenter"
-                    android:clickable="true"
-                    android:focusable="true" />
+                    android:layout_marginBottom="8dp" />
+
+                <Button
+                    android:id="@+id/selectIconuponButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/select_upper_layer"
+                    android:background="@drawable/button_primary"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp" />
 
             </LinearLayout>
 
         </LinearLayout>
 
-        <!-- Botones de selección -->
+        <!-- BOTONES LIMPIAR MÁSCARAS Y SELECCIONAR COLOR -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="2">
+            android:gravity="center"
+            android:weightSum="2"
+            android:layout_marginTop="8dp">
 
             <Button
-                android:id="@+id/selectMaskButton"
+                android:id="@+id/clearMasksButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginEnd="4dp"
-                android:text="@string/select_mask"
-                android:background="@drawable/button_primary"
-                android:textColor="@color/white"
+                android:text="@string/clear_masks"
+                android:background="@drawable/bg_card"
+                android:textColor="@color/text_secondary"
                 android:textSize="12sp" />
 
             <Button
@@ -114,7 +204,7 @@
 
     </LinearLayout>
 
-    <!-- SECCIÓN DESPLAZABLE - CONTROLES -->
+    <!-- SECCIÓN INFERIOR DESPLAZABLE - CONTROLES -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -125,7 +215,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
+            
             <!-- Posición X -->
             <TextView
                 android:id="@+id/xValueText"
@@ -134,13 +224,13 @@
                 android:text="@string/position_x"
                 android:textSize="14sp"
                 android:layout_marginBottom="4dp" />
-
+            
             <SeekBar
                 android:id="@+id/seekBarX"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp" />
-
+            
             <!-- Posición Y -->
             <TextView
                 android:id="@+id/yValueText"
@@ -149,13 +239,13 @@
                 android:text="@string/position_y"
                 android:textSize="14sp"
                 android:layout_marginBottom="4dp" />
-
+            
             <SeekBar
                 android:id="@+id/seekBarY"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp" />
-
+            
             <!-- Escala Normal -->
             <TextView
                 android:id="@+id/scaleValueText"
@@ -188,7 +278,7 @@
                 android:layout_marginBottom="16dp"
                 android:alpha="0.5"
                 android:enabled="false" />
-
+            
             <!-- Transparencia -->
             <TextView
                 android:id="@+id/alphaValueText"
@@ -197,13 +287,13 @@
                 android:text="@string/transparency"
                 android:textSize="14sp"
                 android:layout_marginBottom="4dp" />
-
+            
             <SeekBar
                 android:id="@+id/seekBarAlpha"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp" />
-
+            
             <!-- Intensidad de Color -->
             <TextView
                 android:id="@+id/colorIntensityValueText"
@@ -212,13 +302,13 @@
                 android:text="@string/color_intensity"
                 android:textSize="14sp"
                 android:layout_marginBottom="4dp" />
-
+            
             <SeekBar
                 android:id="@+id/seekBarColorIntensity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp" />
-
+            
             <!-- Ajustes de Imagen -->
             <TextView
                 android:layout_width="match_parent"
@@ -228,7 +318,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:layout_marginBottom="16dp" />
-
+            
             <!-- Tinte -->
             <TextView
                 android:id="@+id/hueValueText"
@@ -237,13 +327,13 @@
                 android:text="@string/hue"
                 android:textSize="14sp"
                 android:layout_marginBottom="4dp" />
-
+            
             <SeekBar
                 android:id="@+id/seekBarHue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp" />
-
+            
             <!-- Saturación -->
             <TextView
                 android:id="@+id/saturationValueText"
@@ -252,13 +342,13 @@
                 android:text="@string/saturation"
                 android:textSize="14sp"
                 android:layout_marginBottom="4dp" />
-
+            
             <SeekBar
                 android:id="@+id/seekBarSaturation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp" />
-
+            
             <!-- Brillo -->
             <TextView
                 android:id="@+id/brightnessValueText"
@@ -267,13 +357,13 @@
                 android:text="@string/brightness"
                 android:textSize="14sp"
                 android:layout_marginBottom="4dp" />
-
+            
             <SeekBar
                 android:id="@+id/seekBarBrightness"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp" />
-
+            
             <!-- Contraste -->
             <TextView
                 android:id="@+id/contrastValueText"
@@ -282,13 +372,13 @@
                 android:text="@string/contrast"
                 android:textSize="14sp"
                 android:layout_marginBottom="4dp" />
-
+            
             <SeekBar
                 android:id="@+id/seekBarContrast"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp" />
-
+                
             <!-- Configuración de Capas de Icono -->
             <TextView
                 android:layout_width="match_parent"
@@ -381,6 +471,7 @@
                 android:layout_marginBottom="8dp"
                 android:enabled="false" />
 
+            <!-- BOTÓN UNIFICADO DE EXPORTACIÓN -->
             <Button
                 android:id="@+id/exportButton"
                 android:layout_width="match_parent"

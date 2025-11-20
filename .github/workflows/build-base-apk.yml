@@ -1,0 +1,42 @@
+name: Build Base Icon Pack APK
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'IconPackBase/**'
+  workflow_dispatch:  # Permite ejecución manual
+
+jobs:
+  build-base:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Setup Android SDK
+      run: |
+        yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
+        $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platform-tools"
+        $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "build-tools;34.0.0"
+        $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-34"
+
+    - name: Build Base APK
+      run: |
+        cd IconPackBase
+        chmod +x ./gradlew
+        ./gradlew clean assembleDebug --stacktrace
+
+    - name: Upload Base APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: base-icon-pack-apk
+        path: IconPackBase/app/build/outputs/apk/debug/app-debug.apk
+        retention-days: 30

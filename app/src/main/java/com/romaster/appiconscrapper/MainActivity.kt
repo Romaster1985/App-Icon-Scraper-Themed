@@ -1,3 +1,18 @@
+/*
+ * Copyright 2025 Román Ignacio Romero (Romaster)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.romaster.appiconscrapper
 
 import android.content.Intent
@@ -51,6 +66,46 @@ class MainActivity : BaseActivity() {
         
         updateFilterSelection()
         updateButtonStyles()
+        testNativeLibrary()
+    }
+    
+    fun testNativeLibrary() {
+        val isAvailable = NativeZipAlign.isNativeLibraryAvailable()
+        if (isAvailable) {
+            Toast.makeText(this, "✅ zipalign-android disponible", Toast.LENGTH_LONG).show()
+            Log.d("MainActivity", "✅ Librería zipalign-android cargada correctamente")
+        } else {
+            Toast.makeText(this, "❌ zipalign-android NO disponible", Toast.LENGTH_LONG).show()
+            Log.e("MainActivity", "❌ Error: zipalign-android no se pudo cargar")
+        }
+    }
+    
+    private fun showDropdownMenu(anchor: MenuItem) {
+        val popup = PopupMenu(this, findViewById(R.id.menu_main))
+        popup.menuInflater.inflate(R.menu.main_dropdown_menu, popup.menu)
+        
+        popup.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.menu_language -> {
+                    showLanguageDialog()
+                    true
+                }
+                R.id.menu_licenses -> {
+                    startActivity(Intent(this, LicensesActivity::class.java))
+                    true
+                }
+                R.id.menu_about -> {
+                    startActivity(Intent(this, AboutActivity::class.java))
+                    true
+                }
+                R.id.menu_analyze -> {
+                    startActivity(Intent(this, APKAnalysisActivity::class.java))
+                    true
+                }
+                else -> false
+            }
+        }
+        popup.show()
     }
 
     private fun initViews() {
@@ -314,26 +369,6 @@ class MainActivity : BaseActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    private fun showDropdownMenu(anchor: MenuItem) {
-        val popup = PopupMenu(this, findViewById(R.id.menu_main))
-        popup.menuInflater.inflate(R.menu.main_dropdown_menu, popup.menu)
-        
-        popup.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.menu_language -> {
-                    showLanguageDialog()
-                    true
-                }
-                R.id.menu_about -> {
-                    startActivity(Intent(this, AboutActivity::class.java))
-                    true
-                }
-                else -> false
-            }
-        }
-        popup.show()
     }
 
     private fun showLanguageDialog() {

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="🔍 Analizador de APKs"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="16dp" />
+
+    <Button
+        android:id="@+id/analyzeInstalledButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Analizar APKs Instalados"
+        android:background="@drawable/button_primary"
+        android:textColor="@color/white"
+        android:layout_marginBottom="8dp" />
+
+    <Button
+        android:id="@+id/analyzeFileButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Seleccionar APK desde Archivo"
+        android:background="@drawable/button_primary"
+        android:textColor="@color/white"
+        android:layout_marginBottom="8dp" />
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Guardar Resultados"
+        android:background="@drawable/bg_card"
+        android:textColor="@color/text_secondary"
+        android:layout_marginBottom="16dp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/resultsText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Selecciona una opción para analizar APKs"
+            android:textSize="12sp"
+            android:background="@drawable/bg_card"
+            android:padding="12dp" />
+
+    </ScrollView>
+
+</LinearLayout>

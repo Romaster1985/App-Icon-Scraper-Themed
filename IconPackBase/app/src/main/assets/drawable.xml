@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Este archivo será reemplazado completamente por IconPackGenerator -->
+    <!-- Contendrá todos los nombres amigables de los iconos para el layout -->
+    <item name="ic_themedpack" type="string">Icon Pack</item>
+    <item name="iconback" type="string">Fondo</item>
+    <item name="iconmask" type="string">Máscara</item>
+    <item name="iconupon" type="string">Capa Superior</item>
+    <item name="ic_0001" type="string">App Demo 1</item>
+    <item name="ic_0002" type="string">App Demo 2</item>
+    <item name="ic_0003" type="string">App Demo 3</item>
+    <item name="ic_0004" type="string">App Demo 4</item>
+    <item name="ic_0005" type="string">App Demo 5</item>
+    <item name="ic_0006" type="string">App Demo 6</item>
+    <item name="ic_0007" type="string">App Demo 7</item>
+    <item name="ic_0008" type="string">App Demo 8</item>
+    <item name="ic_0009" type="string">App Demo 9</item>
+    <item name="ic_0010" type="string">App Demo 10</item> 
+    <!-- Resto de los íconos intermedios desde ic_0011 hasta ic_0068 -->
+    <item name="ic_0069" type="string">EasterEgg RR</item> 
+    <!-- Resto de los íconos intermedios desde ic_0069 hasta ic_1999 -->
+    <item name="ic_2000" type="string">App Demo 2000</item>
+</resources>

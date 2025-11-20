@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@drawable/bg_dialog"
+    android:gravity="center">
+
+    <!-- Título -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Información del Ícono"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Ícono Grande -->
+    <ImageView
+        android:id="@+id/iconPreview"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_gravity="center"
+        android:scaleType="centerInside"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Información de la app -->
+    <TextView
+        android:id="@+id/friendlyName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/packageName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:gravity="center"
+        android:textColor="#666666"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/activityName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:gravity="center"
+        android:textColor="#666666"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Información adicional -->
+    <TextView
+        android:id="@+id/additionalInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Para cambiar actividades, usa la aplicación principal"
+        android:textSize="11sp"
+        android:gravity="center"
+        android:textColor="#888888"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Solo un botón para cerrar -->
+    <Button
+        android:id="@+id/btnClose"
+        android:layout_width="120dp"
+        android:layout_height="48dp"
+        android:text="Cerrar"
+        android:background="@drawable/bg_button_primary"
+        android:textColor="@android:color/white" />
+
+</LinearLayout>

@@ -4,6 +4,12 @@
         android:id="@+id/menu_language"
         android:title="@string/menu_language" />
     <item
+        android:id="@+id/menu_licenses"
+        android:title="@string/menu_licenses" />
+    <item
         android:id="@+id/menu_about"
         android:title="@string/menu_about" />
+    <item
+        android:id="@+id/menu_analyze"
+        android:title="Analizar APKs" />
 </menu>

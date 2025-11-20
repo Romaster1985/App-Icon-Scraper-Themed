@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<resources>
+
+    <!-- Icon Pack Template -->
+    <item component="ComponentInfo{com.romaster.iconpacktemplate/.MainActivity}" drawable="ic_themedpack" />
+
+    <!-- Este archivo será reemplazado completamente por IconPackGenerator -->
+    <!-- Contendrá todas las referencias de iconos procesados -->
+
+    <scale factor="1.0" />
+    <iconback img="iconback" />
+    <iconmask img="iconmask" />
+    <iconupon img="iconupon" />
+</resources>

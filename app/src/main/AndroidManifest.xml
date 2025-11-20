@@ -5,6 +5,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
     <queries>
         <intent>
@@ -57,7 +59,25 @@
             android:label="Pre-procesamiento Foreground"
             android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.AppIconScraper" />
-
+            
+        <activity
+            android:name=".APKAnalysisActivity"
+            android:label="Analizador de APKs"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.AppIconScraper" />
+            
+        <activity
+            android:name=".DebugLogsActivity"
+            android:label="Debug en Tiempo Real"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+            android:exported="false" />
+            
+        <activity
+            android:name=".LicensesActivity"
+            android:label="@string/licenses_title"
+            android:parentActivityName=".AboutActivity"
+            android:theme="@style/Theme.AppIconScraper" />
+            
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
