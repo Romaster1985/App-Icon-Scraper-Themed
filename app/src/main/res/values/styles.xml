@@ -1,0 +1,618 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- ===== ANIMACIONES DE VENTANA ===== -->
+    <style name="WindowAnimation.Default" parent="@android:style/Animation">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    </style>
+
+    <!-- ===== TIPOGRAFÍA MATERIAL 3 CON EXO 2 ===== -->
+    
+    <!-- Títulos grandes -->
+    <style name="TextAppearance.Material3.TitleLarge.Exo2" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:fontFamily">@font/exo2_bold</item>
+        <item name="fontFamily">@font/exo2_bold</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    
+    <!-- Títulos medianos -->
+    <style name="TextAppearance.Material3.TitleMedium.Exo2" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:fontFamily">@font/exo2_medium</item>
+        <item name="fontFamily">@font/exo2_medium</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+    
+    <!-- Títulos pequeños -->
+    <style name="TextAppearance.Material3.TitleSmall.Exo2" parent="TextAppearance.Material3.TitleSmall">
+        <item name="android:fontFamily">@font/exo2_medium</item>
+        <item name="fontFamily">@font/exo2_medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+    
+    <!-- Texto cuerpo grande -->
+    <style name="TextAppearance.Material3.BodyLarge.Exo2" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:fontFamily">@font/exo2_regular</item>
+        <item name="fontFamily">@font/exo2_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+    
+    <!-- Texto cuerpo mediano -->
+    <style name="TextAppearance.Material3.BodyMedium.Exo2" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:fontFamily">@font/exo2_regular</item>
+        <item name="fontFamily">@font/exo2_regular</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+    
+    <!-- Texto cuerpo pequeño -->
+    <style name="TextAppearance.Material3.BodySmall.Exo2" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:fontFamily">@font/exo2_regular</item>
+        <item name="fontFamily">@font/exo2_regular</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+    
+    <!-- Labels grandes -->
+    <style name="TextAppearance.Material3.LabelLarge.Exo2" parent="TextAppearance.Material3.LabelLarge">
+        <item name="android:fontFamily">@font/exo2_medium</item>
+        <item name="fontFamily">@font/exo2_medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+    
+    <!-- Labels medianos -->
+    <style name="TextAppearance.Material3.LabelMedium.Exo2" parent="TextAppearance.Material3.LabelMedium">
+        <item name="android:fontFamily">@font/exo2_medium</item>
+        <item name="fontFamily">@font/exo2_medium</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+    
+    <!-- Labels pequeños -->
+    <style name="TextAppearance.Material3.LabelSmall.Exo2" parent="TextAppearance.Material3.LabelSmall">
+        <item name="android:fontFamily">@font/exo2_medium</item>
+        <item name="fontFamily">@font/exo2_medium</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <!-- ===== TIPOGRAFÍA NEON DARK ===== -->
+    
+    <!-- Títulos grandes Neon -->
+    <style name="TextAppearance.NeonDark.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:fontFamily">@font/exo2_bold</item>
+        <item name="fontFamily">@font/exo2_bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/neon_cyan</item>
+        <item name="android:letterSpacing">0.05</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:shadowColor">@color/neon_glow</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">0</item>
+        <item name="android:shadowRadius">10</item>
+    </style>
+    
+    <style name="TextAppearance.NeonDark.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:fontFamily">@font/exo2_medium</item>
+        <item name="fontFamily">@font/exo2_medium</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/neon_text_primary</item>
+    </style>
+    
+    <style name="TextAppearance.NeonDark.TitleSmall" parent="TextAppearance.Material3.TitleSmall">
+        <item name="android:fontFamily">@font/exo2_medium</item>
+        <item name="fontFamily">@font/exo2_medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/neon_text_secondary</item>
+    </style>
+    
+    <style name="TextAppearance.NeonDark.BodyLarge" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:fontFamily">@font/exo2_regular</item>
+        <item name="fontFamily">@font/exo2_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/neon_text_primary</item>
+    </style>
+    
+    <style name="TextAppearance.NeonDark.BodyMedium" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:fontFamily">@font/exo2_regular</item>
+        <item name="fontFamily">@font/exo2_regular</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/neon_text_secondary</item>
+    </style>
+    
+    <style name="TextAppearance.NeonDark.BodySmall" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:fontFamily">@font/exo2_regular</item>
+        <item name="fontFamily">@font/exo2_regular</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@color/neon_text_secondary</item>
+    </style>
+    
+    <style name="TextAppearance.NeonDark.LabelLarge" parent="TextAppearance.Material3.LabelLarge">
+        <item name="android:fontFamily">@font/exo2_medium</item>
+        <item name="fontFamily">@font/exo2_medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/neon_cyan</item>
+    </style>
+    
+    <style name="TextAppearance.NeonDark.LabelMedium" parent="TextAppearance.Material3.LabelMedium">
+        <item name="android:fontFamily">@font/exo2_medium</item>
+        <item name="fontFamily">@font/exo2_medium</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/neon_pink</item>
+    </style>
+    
+    <style name="TextAppearance.NeonDark.LabelSmall" parent="TextAppearance.Material3.LabelSmall">
+        <item name="android:fontFamily">@font/exo2_medium</item>
+        <item name="fontFamily">@font/exo2_medium</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">@color/neon_text_accent</item>
+    </style>
+
+    <!-- ===== TIPOGRAFÍA CYBERPUNK ===== -->
+    
+    <!-- Títulos grandes con efecto glitch -->
+    <style name="TextAppearance.Cyberpunk.TitleLarge.Glitch" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:fontFamily">@font/exo2_bold</item>
+        <item name="fontFamily">@font/exo2_bold</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/cyberpunk_neon_cyan</item>
+        <item name="android:shadowColor">@color/cyberpunk_neon_pink</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">8</item>
+        <item name="android:letterSpacing">0.03</item>
+    </style>
+    
+    <!-- Títulos medianos -->
+    <style name="TextAppearance.Cyberpunk.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:fontFamily">@font/exo2_medium</item>
+        <item name="fontFamily">@font/exo2_medium</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/cyberpunk_text_primary</item>
+        <item name="android:shadowColor">@color/cyberpunk_black</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">0</item>
+        <item name="android:shadowRadius">4</item>
+    </style>
+    
+    <!-- Títulos pequeños -->
+    <style name="TextAppearance.Cyberpunk.TitleSmall" parent="TextAppearance.Material3.TitleSmall">
+        <item name="android:fontFamily">@font/exo2_medium</item>
+        <item name="fontFamily">@font/exo2_medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/cyberpunk_text_secondary</item>
+    </style>
+    
+    <!-- Cuerpo grande -->
+    <style name="TextAppearance.Cyberpunk.BodyLarge" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:fontFamily">@font/exo2_regular</item>
+        <item name="fontFamily">@font/exo2_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/cyberpunk_text_secondary</item>
+    </style>
+    
+    <!-- Cuerpo medio -->
+    <style name="TextAppearance.Cyberpunk.BodyMedium" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:fontFamily">@font/exo2_regular</item>
+        <item name="fontFamily">@font/exo2_regular</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/cyberpunk_text_secondary</item>
+        <item name="android:letterSpacing">0.03</item>
+    </style>
+    
+    <!-- Cuerpo pequeño -->
+    <style name="TextAppearance.Cyberpunk.BodySmall" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:fontFamily">@font/exo2_regular</item>
+        <item name="fontFamily">@font/exo2_regular</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@color/cyberpunk_text_secondary</item>
+    </style>
+    
+    <!-- Labels -->
+    <style name="TextAppearance.Cyberpunk.LabelLarge" parent="TextAppearance.Material3.LabelLarge">
+        <item name="android:fontFamily">@font/cyberalert</item>
+        <item name="fontFamily">@font/cyberalert</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/cyberpunk_neon_cyan</item>
+    </style>
+
+    <style name="TextAppearance.Cyberpunk.LabelMedium" parent="TextAppearance.Material3.LabelMedium">
+        <item name="android:fontFamily">@font/cyberalert</item>
+        <item name="fontFamily">@font/cyberalert</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/cyberpunk_neon_yellow</item>
+    </style>
+    
+    <style name="TextAppearance.Cyberpunk.LabelSmall" parent="TextAppearance.Material3.LabelSmall">
+        <item name="android:fontFamily">@font/cyberalert</item>
+        <item name="fontFamily">@font/cyberalert</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">@color/cyberpunk_text_warning</item>
+    </style>
+
+    <!-- ===== ESTILOS DE COMPONENTES - CLÁSICO ===== -->
+    
+    <!-- Botones Clásico -->
+    <style name="Button.Classic.Filled" parent="Widget.Material3.Button">
+        <item name="android:fontFamily">@font/exo2_medium</item>
+        <item name="fontFamily">@font/exo2_medium</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="backgroundTint">@color/primary</item>
+        <item name="elevation">2dp</item>
+    </style>
+    
+    <style name="Button.Classic.Outlined" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:fontFamily">@font/exo2_medium</item>
+        <item name="fontFamily">@font/exo2_medium</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/primary</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="strokeColor">@color/primary</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="elevation">0dp</item>
+    </style>
+    
+    <!-- CheckBox Clásico -->
+    <style name="CheckBox.Classic" parent="Widget.Material3.CompoundButton.CheckBox">
+        <item name="android:fontFamily">@font/exo2_regular</item>
+        <item name="fontFamily">@font/exo2_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="buttonTint">@color/primary</item>
+    </style>
+    
+    <!-- ===== SWITCH CLÁSICO (SIMPLE Y FUNCIONAL) ===== -->
+    <style name="Switch.Classic" parent="Widget.Material3.CompoundButton.MaterialSwitch">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="trackTint">@color/card_stroke</item>
+        <item name="thumbTint">@color/primary</item>
+    </style>
+    
+    <!-- RadioButton Clásico -->
+    <style name="RadioButton.Classic" parent="Widget.Material3.CompoundButton.RadioButton">
+        <item name="android:fontFamily">@font/exo2_regular</item>
+        <item name="fontFamily">@font/exo2_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="buttonTint">@color/primary</item>
+    </style>
+    
+    <!-- Card Clásico - CORREGIDO -->
+    <style name="Card.Classic" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/white</item>
+        <item name="cardCornerRadius">12dp</item>
+        <item name="cardElevation">2dp</item>
+        <item name="strokeColor">@color/card_stroke</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+    
+    <!-- SeekBar Clásico - MEJORADO -->
+    <style name="SeekBar.Classic" parent="Widget.AppCompat.SeekBar">
+        <item name="android:progressTint">@color/primary</item>
+        <item name="android:thumbTint">@color/primary</item>
+        <item name="android:progressBackgroundTint">@color/card_stroke</item>
+        <item name="android:backgroundTint">@color/card_background</item>
+        <item name="android:splitTrack">true</item>
+    </style>
+
+    <!-- ===== ESTILOS DE COMPONENTES - NEON DARK ===== -->
+    
+    <!-- Botones Neon Dark -->
+    <style name="Button.NeonDark.Filled" parent="Widget.Material3.Button">
+        <item name="android:fontFamily">@font/exo2_medium</item>
+        <item name="fontFamily">@font/exo2_medium</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="backgroundTint">@color/neon_cyan</item>
+        <item name="strokeColor">@color/neon_cyan</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="elevation">4dp</item>
+    </style>
+    
+    <style name="Button.NeonDark.Outlined" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:fontFamily">@font/exo2_medium</item>
+        <item name="fontFamily">@font/exo2_medium</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/neon_text_primary</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="strokeColor">@color/neon_cyan</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="elevation">0dp</item>
+    </style>
+    
+    <!-- CheckBox Neon Dark -->
+    <style name="CheckBox.NeonDark" parent="Widget.Material3.CompoundButton.CheckBox">
+        <item name="android:fontFamily">@font/exo2_regular</item>
+        <item name="fontFamily">@font/exo2_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/neon_text_primary</item>
+        <item name="buttonTint">@color/neon_cyan</item>
+    </style>
+    
+    <!-- ===== SWITCH NEON DARK (SIMPLE Y FUNCIONAL) ===== -->
+    <style name="Switch.NeonDark" parent="Widget.Material3.CompoundButton.MaterialSwitch">
+        <item name="android:textColor">@color/neon_text_primary</item>
+        <item name="trackTint">@color/neon_dark_surface</item>
+        <item name="thumbTint">@color/neon_cyan</item>
+    </style>
+    
+    <!-- RadioButton Neon Dark -->
+    <style name="RadioButton.NeonDark" parent="Widget.Material3.CompoundButton.RadioButton">
+        <item name="android:fontFamily">@font/exo2_regular</item>
+        <item name="fontFamily">@font/exo2_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/neon_text_primary</item>
+        <item name="buttonTint">@color/neon_cyan</item>
+    </style>
+    
+    <!-- Card Neon Dark - CORREGIDO -->
+    <style name="Card.NeonDark" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/neon_dark_card</item>
+        <item name="cardCornerRadius">12dp</item>
+        <item name="cardElevation">4dp</item>
+        <item name="strokeColor">@color/neon_cyan</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="rippleColor">@color/neon_glow</item>
+    </style>
+    
+    <!-- SeekBar Neon Dark - MEJORADO -->
+    <style name="SeekBar.NeonDark" parent="Widget.AppCompat.SeekBar">
+        <item name="android:progressTint">@color/neon_cyan</item>
+        <item name="android:thumbTint">@color/neon_cyan</item>
+        <item name="android:progressBackgroundTint">@color/neon_dark_surface</item>
+        <item name="android:backgroundTint">@color/neon_dark_card</item>
+        <item name="android:splitTrack">true</item>
+        <item name="android:elevation">2dp</item>
+    </style>
+
+    <!-- ===== ESTILOS DE COMPONENTES - MATERIAL BLUE ===== -->
+    
+    <!-- Botones Material Blue -->
+    <style name="Button.MaterialBlue.Filled" parent="Widget.Material3.Button">
+        <item name="android:fontFamily">@font/exo2_medium</item>
+        <item name="fontFamily">@font/exo2_medium</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="backgroundTint">@color/material_blue_primary</item>
+        <item name="elevation">2dp</item>
+    </style>
+    
+    <style name="Button.MaterialBlue.Outlined" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:fontFamily">@font/exo2_medium</item>
+        <item name="fontFamily">@font/exo2_medium</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/material_blue_primary</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="strokeColor">@color/material_blue_primary</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="elevation">0dp</item>
+    </style>
+    
+    <!-- CheckBox Material Blue -->
+    <style name="CheckBox.MaterialBlue" parent="Widget.Material3.CompoundButton.CheckBox">
+        <item name="android:fontFamily">@font/exo2_regular</item>
+        <item name="fontFamily">@font/exo2_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="buttonTint">@color/material_blue_primary</item>
+    </style>
+    
+    <!-- ===== SWITCH MATERIAL BLUE (SIMPLE Y FUNCIONAL) ===== -->
+    <style name="Switch.MaterialBlue" parent="Widget.Material3.CompoundButton.MaterialSwitch">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="trackTint">#E0E0E0</item>
+        <item name="thumbTint">@color/material_blue_primary</item>
+    </style>
+    
+    <!-- RadioButton Material Blue -->
+    <style name="RadioButton.MaterialBlue" parent="Widget.Material3.CompoundButton.RadioButton">
+        <item name="android:fontFamily">@font/exo2_regular</item>
+        <item name="fontFamily">@font/exo2_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="buttonTint">@color/material_blue_primary</item>
+    </style>
+    
+    <!-- Card Material Blue - CORREGIDO -->
+    <style name="Card.MaterialBlue" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/white</item>
+        <item name="cardCornerRadius">12dp</item>
+        <item name="cardElevation">2dp</item>
+        <item name="strokeColor">@color/card_stroke</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+    
+    <!-- SeekBar Material Blue - MEJORADO -->
+    <style name="SeekBar.MaterialBlue" parent="Widget.AppCompat.SeekBar">
+        <item name="android:progressTint">@color/material_blue_primary</item>
+        <item name="android:thumbTint">@color/material_blue_primary</item>
+        <item name="android:progressBackgroundTint">#BBDEFB</item>
+        <item name="android:backgroundTint">#E3F2FD</item>
+        <item name="android:splitTrack">true</item>
+    </style>
+
+    <!-- ===== ESTILOS DE COMPONENTES - CYBERPUNK ===== -->
+    
+    <!-- Botones Cyberpunk Filled con esquinas rectas -->
+    <style name="Button.Cyberpunk.Filled" parent="Widget.Material3.Button">
+        <item name="android:fontFamily">@font/cyberalert</item>
+        <item name="fontFamily">@font/cyberalert</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">@color/cyberpunk_black</item>
+        <item name="cornerRadius">2dp</item>
+        <item name="backgroundTint">@color/cyberpunk_neon_yellow</item>
+        <item name="elevation">4dp</item>
+        <item name="android:stateListAnimator">@anim/button_elevation_cyberpunk</item>
+    </style>
+    
+    <!-- Botones Cyberpunk Outlined con esquinas rectas -->
+    <style name="Button.Cyberpunk.Outlined" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:fontFamily">@font/cyberalert</item>
+        <item name="fontFamily">@font/cyberalert</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@color/cyberpunk_neon_cyan</item>
+        <item name="cornerRadius">2dp</item>
+        <item name="strokeColor">@color/cyberpunk_neon_cyan</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="elevation">0dp</item>
+    </style>
+    
+    <!-- CheckBox Cyberpunk -->
+    <style name="CheckBox.Cyberpunk" parent="Widget.Material3.CompoundButton.CheckBox">
+        <item name="android:fontFamily">@font/exo2_regular</item>
+        <item name="fontFamily">@font/exo2_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/cyberpunk_text_primary</item>
+        <item name="buttonTint">@color/cyberpunk_neon_yellow</item>
+    </style>
+    
+    <!-- ===== SWITCH CYBERPUNK (SIMPLE Y FUNCIONAL) ===== -->
+    <style name="Switch.Cyberpunk" parent="Widget.Material3.CompoundButton.MaterialSwitch">
+        <item name="android:textColor">@color/cyberpunk_text_primary</item>
+        <item name="trackTint">@color/cyberpunk_surface_variant</item>
+        <item name="thumbTint">@color/cyberpunk_neon_cyan</item>
+    </style>
+    
+    <!-- RadioButton Cyberpunk -->
+    <style name="RadioButton.Cyberpunk" parent="Widget.Material3.CompoundButton.RadioButton">
+        <item name="android:fontFamily">@font/exo2_regular</item>
+        <item name="fontFamily">@font/exo2_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/cyberpunk_text_primary</item>
+        <item name="buttonTint">@color/cyberpunk_neon_cyan</item>
+    </style>
+    
+    <!-- Card Cyberpunk - CORREGIDO -->
+    <style name="Card.Cyberpunk" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/cyberpunk_surface</item>
+        <item name="cardCornerRadius">2dp</item>
+        <item name="cardElevation">4dp</item>
+        <item name="strokeColor">@color/cyberpunk_border_cyan</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="rippleColor">@color/cyberpunk_neon_pink</item>
+    </style>
+    
+    <!-- SeekBar Cyberpunk - MEJORADO CON MEJOR CONTRASTE -->
+    <style name="SeekBar.Cyberpunk" parent="Widget.AppCompat.SeekBar">
+        <item name="android:progressTint">@color/cyberpunk_neon_cyan</item>
+        <item name="android:thumbTint">@color/cyberpunk_neon_cyan</item>
+        <item name="android:progressBackgroundTint">@color/cyberpunk_surface_variant</item>
+        <item name="android:backgroundTint">@color/cyberpunk_dark_purple</item>
+        <item name="android:splitTrack">true</item>
+        
+        <!-- Añadir sombra para mejor visibilidad -->
+        <item name="android:elevation">2dp</item>
+        
+        <!-- Grosor del track para mejor visibilidad -->
+        <item name="android:minHeight">6dp</item>
+        <item name="android:maxHeight">6dp</item>
+    </style>
+
+    <!-- ===== ESTILOS PARA ACTIONBAR ===== -->
+    
+    <!-- ActionBar Clásico -->
+    <style name="ActionBar.Classic" parent="Widget.Material3.ActionBar.Solid">
+        <item name="background">@color/primary</item>
+        <item name="titleTextColor">@color/white</item>
+        <item name="subtitleTextColor">@color/white</item>
+        <item name="titleTextAppearance">@style/TextAppearance.Material3.TitleMedium.Exo2</item>
+    </style>
+    
+    <!-- ActionBar Neon Dark -->
+    <style name="ActionBar.NeonDark" parent="Widget.Material3.ActionBar.Solid">
+        <item name="background">@color/neon_dark_surface</item>
+        <item name="titleTextColor">@color/neon_cyan</item>
+        <item name="subtitleTextColor">@color/neon_text_secondary</item>
+        <item name="titleTextAppearance">@style/TextAppearance.NeonDark.TitleLarge</item>
+    </style>
+    
+    <!-- ActionBar Material Blue -->
+    <style name="ActionBar.MaterialBlue" parent="Widget.Material3.ActionBar.Solid">
+        <item name="background">@color/material_blue_primary</item>
+        <item name="titleTextColor">@color/white</item>
+        <item name="subtitleTextColor">@color/white</item>
+        <item name="titleTextAppearance">@style/TextAppearance.Material3.TitleMedium.Exo2</item>
+    </style>
+    
+    <!-- ActionBar Cyberpunk -->
+    <style name="ActionBar.Cyberpunk" parent="Widget.Material3.ActionBar.Solid">
+        <item name="background">@color/cyberpunk_black</item>
+        <item name="titleTextColor">@color/cyberpunk_neon_cyan</item>
+        <item name="subtitleTextColor">@color/cyberpunk_text_secondary</item>
+        <item name="titleTextAppearance">@style/TextAppearance.Cyberpunk.TitleMedium</item>
+        <item name="height">?attr/actionBarSize</item>
+    </style>
+    
+    <!-- ===== ESTILOS PARA CHIPS ===== -->
+    
+    <!-- Chip base -->
+    <style name="Widget.Material3.Chip.Custom" parent="Widget.Material3.Chip.Assist">
+        <item name="android:fontFamily">@font/exo2_medium</item>
+        <item name="fontFamily">@font/exo2_medium</item>
+        <item name="android:textSize">10sp</item>
+        <item name="chipCornerRadius">8dp</item>
+        <item name="chipMinTouchTargetSize">0dp</item>
+        <item name="android:minHeight">24dp</item>
+        <item name="android:minWidth">0dp</item>
+    </style>
+    
+    <!-- Chip Clásico -->
+    <style name="Chip.Classic.System" parent="Widget.Material3.Chip.Custom">
+        <item name="android:textColor">@color/white</item>
+        <item name="chipBackgroundColor">@color/accent</item>
+    </style>
+    
+    <style name="Chip.Classic.Google" parent="Widget.Material3.Chip.Custom">
+        <item name="android:textColor">@color/white</item>
+        <item name="chipBackgroundColor">@color/primary</item>
+    </style>
+    
+    <!-- Chip Neon Dark -->
+    <style name="Chip.NeonDark.System" parent="Widget.Material3.Chip.Custom">
+        <item name="android:textColor">@color/black</item>
+        <item name="chipBackgroundColor">@color/neon_pink</item>
+    </style>
+    
+    <style name="Chip.NeonDark.Google" parent="Widget.Material3.Chip.Custom">
+        <item name="android:textColor">@color/black</item>
+        <item name="chipBackgroundColor">@color/neon_cyan</item>
+    </style>
+    
+    <!-- Chip Material Blue -->
+    <style name="Chip.MaterialBlue.System" parent="Widget.Material3.Chip.Custom">
+        <item name="android:textColor">@color/white</item>
+        <item name="chipBackgroundColor">@color/accent</item>
+    </style>
+    
+    <style name="Chip.MaterialBlue.Google" parent="Widget.Material3.Chip.Custom">
+        <item name="android:textColor">@color/white</item>
+        <item name="chipBackgroundColor">@color/material_blue_primary</item>
+    </style>
+    
+    <!-- Chip Cyberpunk -->
+    <style name="Chip.Cyberpunk.System" parent="Widget.Material3.Chip.Custom">
+        <item name="android:textColor">@color/cyberpunk_black</item>
+        <item name="chipBackgroundColor">@color/cyberpunk_neon_pink</item>
+        <item name="chipCornerRadius">2dp</item>
+    </style>
+    
+    <style name="Chip.Cyberpunk.Google" parent="Widget.Material3.Chip.Custom">
+        <item name="android:textColor">@color/cyberpunk_black</item>
+        <item name="chipBackgroundColor">@color/cyberpunk_neon_yellow</item>
+        <item name="chipCornerRadius">2dp</item>
+    </style>
+
+</resources>

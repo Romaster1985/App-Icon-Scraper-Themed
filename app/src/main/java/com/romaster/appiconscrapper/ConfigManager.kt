@@ -16,156 +16,161 @@
 package com.romaster.appiconscrapper
 
 import android.content.Context
-import android.os.Environment
+import android.os.Build
 import android.util.Log
-import org.w3c.dom.Document
-import org.w3c.dom.Element
-import java.io.File
-import javax.xml.parsers.DocumentBuilderFactory
-import javax.xml.transform.TransformerFactory
-import javax.xml.transform.dom.DOMSource
-import javax.xml.transform.stream.StreamResult
+import android.util.Xml
+import org.xmlpull.v1.XmlPullParser
+import org.xmlpull.v1.XmlSerializer
+import java.io.*
+import java.util.*
 
 object ConfigManager {
-    private const val CONFIG_FILENAME = "app_icon_scraper_config.xml"
-    private const val CONFIG_DIR = "AppIconScraper"
-    
-    // Claves de configuración
-    private const val KEY_LANGUAGE = "language"
-    //private const val KEY_PREPROCESS_ENABLED = "preprocess_enabled"
-    
-    // Valores por defecto
-    private const val DEFAULT_LANGUAGE = "es"
-    //private const val DEFAULT_PREPROCESS_ENABLED = "false"
+    private const val CONFIG_FILENAME = "app_config.xml"
+    private const val TAG = "ConfigManager"
 
-    fun getConfigFile(context: Context): File {
-        val docsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
-        val appDir = File(docsDir, CONFIG_DIR)
-        if (!appDir.exists()) {
-            appDir.mkdirs()
-        }
-        return File(appDir, CONFIG_FILENAME)
+    // ✅ OBTENER ARCHIVO EN ALMACENAMIENTO INTERNO (NO externo)
+    private fun getConfigFile(context: Context): File {
+        return File(context.filesDir, CONFIG_FILENAME)
     }
 
-    fun getSetting(context: Context, key: String, defaultValue: String = ""): String {
-        return try {
-            val configFile = getConfigFile(context)
-            if (!configFile.exists()) {
-                return defaultValue
-            }
-            
-            val docFactory = DocumentBuilderFactory.newInstance()
-            val docBuilder = docFactory.newDocumentBuilder()
-            val doc: Document = docBuilder.parse(configFile)
-            doc.documentElement.normalize()
-            
-            val elements = doc.getElementsByTagName(key)
-            if (elements.length > 0) {
-                elements.item(0).textContent
-            } else {
-                defaultValue
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            defaultValue
-        }
-    }
-
-    fun setSetting(context: Context, key: String, value: String) {
+    // ✅ CREAR CONFIGURACIÓN POR DEFECTO SI NO EXISTE
+    fun createDefaultConfig(context: Context) {
         try {
             val configFile = getConfigFile(context)
-            val docFactory = DocumentBuilderFactory.newInstance()
-            val docBuilder = docFactory.newDocumentBuilder()
+            if (!configFile.exists()) {
+                Log.d(TAG, "📝 Creando configuración por defecto (español)")
+                setLanguage(context, "es") // Idioma por defecto
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "❌ Error creando configuración por defecto: ${e.message}")
+        }
+    }
+
+    // ✅ APLICAR IDIOMA AL CONTEXTO (PARA BaseActivity)
+    fun applyLanguageToContext(context: Context): Context {
+        return try {
+            val language = getLanguage(context)
+            Log.d(TAG, "🌍 Aplicando idioma: $language")
             
-            val doc: Document
-            val rootElement: Element
+            val locale = Locale(language)
+            Locale.setDefault(locale)
             
-            if (configFile.exists()) {
-                // Cargar archivo existente
-                doc = docBuilder.parse(configFile)
-                doc.documentElement.normalize()
-                rootElement = doc.documentElement
+            val configuration = context.resources.configuration
+            configuration.setLocale(locale)
+            
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                context.createConfigurationContext(configuration)
             } else {
-                // Crear nuevo documento
-                doc = docBuilder.newDocument()
-                rootElement = doc.createElement("config")
-                doc.appendChild(rootElement)
+                @Suppress("DEPRECATION")
+                context.resources.updateConfiguration(configuration, context.resources.displayMetrics)
+                context
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "❌ Error aplicando idioma al contexto: ${e.message}")
+            context
+        }
+    }
+
+    // ✅ GUARDAR CONFIGURACIÓN (VERSIÓN ROBUSTA)
+    fun setLanguage(context: Context, language: String) {
+        try {
+            val configFile = getConfigFile(context)
+            
+            FileOutputStream(configFile).use { outputStream ->
+                val serializer = Xml.newSerializer()
+                serializer.setOutput(outputStream, "UTF-8")
+                serializer.startDocument("UTF-8", true)
+                
+                serializer.startTag(null, "config")
+                serializer.startTag(null, "language")
+                serializer.text(language)
+                serializer.endTag(null, "language")
+                serializer.endTag(null, "config")
+                
+                serializer.endDocument()
             }
             
-            // Buscar si ya existe el elemento
-            val existingElements = doc.getElementsByTagName(key)
-            if (existingElements.length > 0) {
-                // Actualizar existente
-                existingElements.item(0).textContent = value
-            } else {
-                // Crear nuevo elemento
-                val settingElement = doc.createElement(key)
-                settingElement.appendChild(doc.createTextNode(value))
-                rootElement.appendChild(settingElement)
-            }
-            
-            // Guardar el documento
-            val transformer = TransformerFactory.newInstance().newTransformer()
-            val source = DOMSource(doc)
-            val result = StreamResult(configFile)
-            transformer.transform(source, result)
+            Log.d(TAG, "✅ Idioma guardado: $language en ${configFile.absolutePath}")
             
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e(TAG, "❌ Error guardando idioma: ${e.message}", e)
         }
     }
 
-    // Métodos específicos para el idioma
+    // ✅ LEER CONFIGURACIÓN (VERSIÓN ROBUSTA CON FALLBACK)
     fun getLanguage(context: Context): String {
-        val language = getSetting(context, KEY_LANGUAGE, DEFAULT_LANGUAGE)
-        Log.d("ConfigManager", "Idioma cargado: $language")
-        return language
-    }
-
-    fun setLanguage(context: Context, language: String) {
-        Log.d("ConfigManager", "Guardando idioma: $language")
-        setSetting(context, KEY_LANGUAGE, language)
-    }
-
-    // Métodos específicos para pre-procesamiento
-   // fun getPreprocessEnabled(context: Context): Boolean {
-    //    return getSetting(context, KEY_PREPROCESS_ENABLED, DEFAULT_PREPROCESS_ENABLED).toBoolean()
-    //}
-
-    //fun setPreprocessEnabled(context: Context, enabled: Boolean) {
-    //    setSetting(context, KEY_PREPROCESS_ENABLED, enabled.toString())
-    //}
-
-    // Verificar si la configuración existe
-    fun configExists(context: Context): Boolean {
-        return getConfigFile(context).exists()
-    }
-
-    // Crear configuración por defecto si no existe
-    fun createDefaultConfig(context: Context) {
-        if (!configExists(context)) {
-            setLanguage(context, DEFAULT_LANGUAGE)
-           // setPreprocessEnabled(context, DEFAULT_PREPROCESS_ENABLED.toBoolean())
+        return try {
+            val configFile = getConfigFile(context)
+            
+            if (!configFile.exists()) {
+                Log.d(TAG, "📝 Archivo de configuración no existe, usando español por defecto")
+                return "es" // Idioma por defecto
+            }
+            
+            FileInputStream(configFile).use { inputStream ->
+                val parser = Xml.newPullParser()
+                parser.setInput(inputStream, "UTF-8")
+                
+                var eventType = parser.eventType
+                var language = "es" // Valor por defecto
+                
+                while (eventType != XmlPullParser.END_DOCUMENT) {
+                    when (eventType) {
+                        XmlPullParser.START_TAG -> {
+                            if (parser.name == "language") {
+                                eventType = parser.next()
+                                if (eventType == XmlPullParser.TEXT) {
+                                    language = parser.text
+                                    Log.d(TAG, "🔍 Idioma leído del archivo: $language")
+                                }
+                            }
+                        }
+                    }
+                    eventType = parser.next()
+                }
+                
+                Log.d(TAG, "✅ Idioma retornado: $language")
+                language
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "❌ Error leyendo idioma, usando español por defecto: ${e.message}")
+            "es" // Fallback a español
         }
     }
 
-    // Método para aplicar el idioma al contexto
-    fun applyLanguageToContext(context: Context): Context {
-        val language = getLanguage(context)
-        val locale = java.util.Locale(language)
-        java.util.Locale.setDefault(locale)
-        
-        val resources = context.resources
-        val configuration = resources.configuration
-        
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            configuration.setLocale(locale)
-            return context.createConfigurationContext(configuration)
-        } else {
-            configuration.locale = locale
-            resources.updateConfiguration(configuration, resources.displayMetrics)
+    // ✅ VERIFICAR SI EL ARCHIVO EXISTE
+    fun configFileExists(context: Context): Boolean {
+        return try {
+            val configFile = getConfigFile(context)
+            val exists = configFile.exists()
+            Log.d(TAG, "📁 Archivo de configuración existe: $exists (${configFile.absolutePath})")
+            exists
+        } catch (e: Exception) {
+            Log.e(TAG, "❌ Error verificando archivo: ${e.message}")
+            false
         }
-        
-        return context
+    }
+
+    // ✅ OBTENER RUTA DEL ARCHIVO (PARA DEBUG)
+    fun getConfigFilePath(context: Context): String {
+        return try {
+            val configFile = getConfigFile(context)
+            configFile.absolutePath
+        } catch (e: Exception) {
+            "No disponible - Error: ${e.message}"
+        }
+    }
+
+    // ✅ ELIMINAR CONFIGURACIÓN (PARA PRUEBAS O RESET)
+    fun clearConfig(context: Context): Boolean {
+        return try {
+            val configFile = getConfigFile(context)
+            val deleted = configFile.delete()
+            Log.d(TAG, "🗑️ Configuración eliminada: $deleted")
+            deleted
+        } catch (e: Exception) {
+            Log.e(TAG, "❌ Error eliminando configuración: ${e.message}")
+            false
+        }
     }
 }

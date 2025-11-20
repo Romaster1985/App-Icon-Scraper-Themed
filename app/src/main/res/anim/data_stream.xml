@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@android:anim/linear_interpolator"
+    android:fillAfter="false">
+    
+    <!-- Código que baja (simulación de Matrix) -->
+    <translate
+        android:fromYDelta="-100%"
+        android:toYDelta="100%"
+        android:duration="2000"
+        android:repeatCount="infinite"
+        android:repeatMode="restart"/>
+    
+    <!-- Parpadeo de caracteres -->
+    <alpha
+        android:fromAlpha="0.2"
+        android:toAlpha="0.8"
+        android:duration="100"
+        android:repeatCount="infinite"
+        android:repeatMode="reverse"/>
+    
+    <!-- Cambio ligero de color verde -->
+    <objectAnimator
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:propertyName="textColor"
+        android:duration="500"
+        android:valueFrom="#FF00FF00"
+        android:valueTo="#FF00AA00"
+        android:repeatCount="infinite"
+        android:repeatMode="reverse"/>
+        
+</set>

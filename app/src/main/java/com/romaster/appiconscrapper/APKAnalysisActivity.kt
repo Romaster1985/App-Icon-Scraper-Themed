@@ -42,6 +42,8 @@ class APKAnalysisActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_apk_analysis)
         
+        supportActionBar?.title = getString(R.string.apk_analyzer_title)
+        
         resultsText = findViewById(R.id.resultsText)
         analyzeInstalledButton = findViewById(R.id.analyzeInstalledButton)
         analyzeFileButton = findViewById(R.id.analyzeFileButton)

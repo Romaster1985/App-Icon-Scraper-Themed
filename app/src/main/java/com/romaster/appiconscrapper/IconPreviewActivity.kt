@@ -20,10 +20,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.imageview.ShapeableImageView
+import com.google.android.material.textview.MaterialTextView
 
 class IconPreviewActivity : BaseActivity() {
 
@@ -33,6 +34,8 @@ class IconPreviewActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_icon_preview)
+        
+        supportActionBar?.title = getString(R.string.icon_preview_title)
 
         recyclerView = findViewById(R.id.iconGridRecyclerView)
 
@@ -80,7 +83,7 @@ class IconPreviewActivity : BaseActivity() {
         override fun getItemCount() = icons.size
 
         class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-            val imageView: ImageView = view.findViewById(R.id.iconPreviewImage)
+            val imageView: ShapeableImageView = view.findViewById(R.id.iconPreviewImage)
         }
     }
 }

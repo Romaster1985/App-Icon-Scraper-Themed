@@ -4,92 +4,223 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="12dp"
+    android:background="?attr/android:windowBackground">
 
-    <!-- Botón para iniciar escrapeo -->
-    <Button
+    <!-- Botón principal ESCANEAR -->
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/scrapeButton"
+        style="?attr/materialButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="@string/scrape_apps"
-        android:textSize="18sp"
-        android:background="@drawable/button_primary"
-        android:textColor="@color/white" />
+        android:layout_marginBottom="12dp"
+        android:textSize="14sp"
+        android:text="@string/scrape_apps" />
 
-    <!-- Filtros -->
-    <include layout="@layout/tab_layout" />
-
-    <!-- Contador y acciones -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="8dp"
-        android:weightSum="2">
-    
-        <Button
-            android:id="@+id/selectAllButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginEnd="4dp"
-            android:text="@string/select_all"
-            android:textSize="14sp"
-            android:background="@drawable/button_primary"
-            android:textColor="@color/white" />
-    
-        <Button
-            android:id="@+id/deselectAllButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="4dp"
-            android:text="@string/deselect_all"
-            android:textSize="14sp"
-            android:background="@drawable/button_primary"
-            android:textColor="@color/white" />
-    
-    </LinearLayout>
-
-    <!-- Contenedor para el checkbox de pre-procesamiento -->
-    <LinearLayout
-        android:id="@+id/checkboxContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="8dp" />
-
-    <!-- Contador de aplicaciones -->
-    <TextView
-        android:id="@+id/appsCountText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/apps_count"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:padding="4dp" />
-
-    <!-- Lista de aplicaciones - MÁS ESPACIO -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/appsRecyclerView"
+    <!-- ÚNICA CARD con todo el contenido -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mainCardView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="8dp"
-        android:scrollbars="vertical" />
+        android:layout_marginBottom="12dp"
+        app:cardBackgroundColor="?attr/colorSurface"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="2dp"
+        app:strokeColor="?attr/colorOutline"
+        app:strokeWidth="1dp">
+        
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="6dp">
 
-    <!-- Botón de exportar -->
-    <Button
+                <!-- Fila 1: Filtros compactos -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="6dp">
+                
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/filterAll"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="2dp"
+                        android:text="@string/filter_all"
+                        android:textSize="12sp"
+                        android:paddingVertical="0dp"
+                        android:paddingHorizontal="0dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        app:cornerRadius="4dp"
+                        app:strokeWidth="1dp" />
+                
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/filterSystem"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:layout_marginHorizontal="4dp"
+                        android:text="@string/filter_system"
+                        android:textSize="12sp"
+                        android:paddingVertical="0dp"
+                        android:paddingHorizontal="0dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        app:cornerRadius="4dp"
+                        app:strokeWidth="1dp" />
+                
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/filterUser"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:layout_marginHorizontal="4dp"
+                        android:text="@string/filter_user"
+                        android:textSize="12sp"
+                        android:paddingVertical="0dp"
+                        android:paddingHorizontal="0dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        app:cornerRadius="4dp"
+                        app:strokeWidth="1dp" />
+                
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/filterGapps"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="4dp"
+                        android:text="@string/filter_gapps"
+                        android:textSize="12sp"
+                        android:paddingVertical="0dp"
+                        android:paddingHorizontal="0dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        app:cornerRadius="4dp"
+                        app:strokeWidth="1dp" />
+                
+                </LinearLayout>
+
+                <!-- Fila 2: Filtro Launcher Apps -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp"
+                    android:paddingHorizontal="4dp">
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/filterLauncherAppsToggle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/filter_launcher_apps"
+                        android:textSize="12sp"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:enabled="false" />
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="4dp"
+                        android:src="@drawable/ic_info_outline"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="@string/info"
+                        android:onClick="onLauncherFilterInfoClick" />
+
+                </LinearLayout>
+
+                <!-- Fila 3: Contador y acciones -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="4dp"
+                    android:paddingHorizontal="4dp">
+
+                    <!-- Checkbox (si existe) -->
+                    <LinearLayout
+                        android:id="@+id/checkboxContainer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" />
+
+                    <!-- Contador de apps -->
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/appsCountText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/apps_count"
+                        android:textAppearance="?attr/textAppearanceLabelLarge"
+                        android:textColor="?attr/colorPrimary"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <!-- Fila 4: Botones Select/Deselect -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="16dp"
+                    android:weightSum="2">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/selectAllButton"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/select_all"
+                        android:textSize="12sp"
+                        app:strokeColor="?attr/colorOutline"
+                        app:strokeWidth="1dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/deselectAllButton"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="@string/deselect_all"
+                        android:textSize="12sp"
+                        app:strokeColor="?attr/colorOutline"
+                        app:strokeWidth="1dp" />
+
+                </LinearLayout>
+
+                <!-- Fila 5: LISTA DE APPS (MÁXIMO ESPACIO) -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/appsRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:scrollbars="vertical" />
+
+            </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Botón TEMATIZAR -->
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/exportButton"
+        style="?attr/materialButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/button_primary"
         android:text="@string/thematize"
-        android:textColor="@color/white"
-        android:textSize="18sp"
+        android:textSize="14sp"
         android:enabled="false" />
-
+            
 </LinearLayout>

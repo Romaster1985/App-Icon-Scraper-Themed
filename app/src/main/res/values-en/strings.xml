@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">App Icon Scraper &amp; Themer</string>
+    <string name="theme_customization_title">Customize Icons</string>
+    <string name="icon_preview_title">Icon Preview</string>
+    <string name="pre_process_title">Foreground Pre-processing</string>
+    <string name="apk_analyzer_title">APK Analyzer</string>
     <string name="about_title">About</string>
     <string name="menu_about">About</string>
     <string name="export_selected">Export Selected</string>
@@ -9,7 +13,9 @@
     <string name="filter_all">All</string>
     <string name="filter_system">System</string>
     <string name="filter_user">User</string>
-    <string name="filter_gapps">Google Apps</string>
+    <string name="filter_gapps">GApps</string>
+    <string name="system_badge">System</string>
+    <string name="google_badge">Google</string>
     <string name="apps_count">%d applications</string>
     <string name="export_success">Icons exported successfully</string>
     <string name="export_error">Error exporting icons</string>
@@ -70,6 +76,14 @@
     <string name="processing_app">Processing: %s</string>
     <string name="processing_completed">Processing completed! %d icons ready.</string>
     <string name="color_hexadecimal">Hexadecimal…</string>
+    <!-- Strings for hexadecimal color selector -->
+    <string name="select_border_color">Select border color</string>
+    <string name="hex_color_picker_title">Hexadecimal Color</string>
+    <string name="hex_color_hint">#RRGGBB or #AARRGGBB</string>
+    <string name="hex_color_applied">Hexadecimal color applied</string>
+    <string name="invalid_hex_color">Invalid hexadecimal color</string>
+    <string name="invalid_hex_format">Invalid format. Use #RRGGBB or #AARRGGBB</string>
+    <string name="border_color_button">Border Color</string>
     
     <!-- NEW STRINGS FOR APK EXPORT -->
     <string name="export_iconpack_apk">Export as APK</string>
@@ -97,7 +111,7 @@
     <string name="zip_saved_location">Saved in: %s</string>
     <string name="zip_working_note">This ZIP file can be directly imported into Icon Packer.</string>
     <string name="preprocess_foreground_start">Starting foreground pre-processing…</string>
-    <string name="preprocess_foreground_progress">Pre-processing icons: %d/%d</string>
+    <string name="preprocess_foreground_progress">Pre-processing icons: %1$d/%2$d</string>
     <string name="apk_error">Error creating icon pack APK</string>
     
     <!-- New strings for mask implementation -->
@@ -105,7 +119,7 @@
     <string name="mask">Mask</string>
     <string name="select_background">Select Background</string>
     <string name="select_mask">Select Mask</string>
-    <string name="clear_masks">Clear Masks (Use Transparent)</string>
+    <string name="clear_masks">Clear Layers</string>
     <string name="background_transparent">Transparent Background</string>
     <string name="mask_transparent">Transparent Mask</string>
     <string name="masks_cleared">Masks cleared - Transparent state</string>
@@ -115,11 +129,135 @@
     <string name="select_upper_layer">Select Upper Layer</string>
     <string name="upper_layer_transparent">Transparent Upper Layer</string>
     
+    <!-- ✅ NEW STRINGS FOR ADVANCED FILTERS -->
+    <string name="advanced_filters">Advanced Filters</string>
+    <string name="reset_filters">Reset All</string>
+    <string name="intensity_percent">%d%%</string>
+    <string name="strength_percent">%d%%</string>
+    <string name="edge_enhance">Edge Enhancement</string>
+    <string name="chromatic_aberration">Chromatic Aberration</string>
+    <string name="chromatic_offsets">Color Offsets</string>
+    <string name="red_offset">Red</string>
+    <string name="green_offset">Green</string>
+    <string name="blue_offset">Blue</string>
+    <string name="sphere_effect">Sphere Effect</string>
+    <string name="emboss_effect">Emboss Effect</string>
+    <string name="emboss_azimuth">Angle (0-360°)</string>
+    <string name="glow_effect">Glow Effect</string>
+    <string name="glow_radius">Glow Radius</string>
+    <string name="soft_mask">Soft Mask</string>
+    <string name="rotation">Rotation</string>
+    <string name="rotation_degrees">%.0f°</string>
+    <string name="shadow_effect">Shadow Effect</string>
+    <string name="shadow_radius">Shadow Radius</string>
+    <string name="offset_x">Offset X</string>
+    <string name="offset_y">Offset Y</string>
+    <string name="border_effect">Border</string>
+    <string name="border_width_px">%d px</string>
+    <string name="pixelate_effect">Pixelate Effect</string>
+    <string name="pixel_size">Pixel Size</string>
+    <string name="cartoon_effect">Cartoon Effect</string>
+    <string name="noise_effect">Noise Effect</string>
+    <string name="fisheye_effect">Fisheye Effect</string>
+    <string name="border_inner_px">%d px inner</string>
+    <string name="border_outer_px">%d px outer</string>
+    <string name="load_mask">Load Mask</string>
+    <string name="personalized_mask">Personalized Cutter Mask</string>
+    <string name="mask_scale">Mask Scale</string>
+    <string name="mask_scale_percent">%d%%</string>
+    <string name="image_scale_ic">Image Scale IC</string>
+    <string name="image_scale_percent">%d%%</string>
+    <string name="icon_colorization">Icon Corization</string>
+    <string name="colorization_intensity">Colorization Intensity</string>
+    <string name="select_colorization_color">Select Colorization Color</string>
+    <!-- Shape Mask with iconmask -->
+    <string name="shape_mask_toggle">Shape Mask (iconmask)</string>
+    <string name="shape_mask_status_loaded">Loaded</string>
+    <string name="shape_mask_status_not_loaded">Not loaded</string>
+    <string name="shape_mask_status_active">Active</string>
+    <string name="shape_mask_status_ready">Ready</string>
+    <string name="shape_mask_description">Defines the final shape of the icon - Always centered</string>
+    <string name="background_updated">Background updated</string>
+    <string name="upper_layer_updated">Upper layer updated</string>
+    <string name="mask_updated">Mask updated</string>
+    <!-- Export Theming -->
+    <string name="import_theming">Import Theming</string>
+    <string name="export_theming">Export Theming</string>
+    <string name="export_theming_success">Export Theming Success</string>
+    <string name="import_theming_success">Import Theming Success</string>
+    <string name="theming_file_corrupted">Theming File Corrupted</string>
+    <string name="theming_export_error">Theming Export Error</string>
+    <string name="theming_import_error">Theming Export Error</string>
+    
+    <!-- ✅ NUEVOS STRINGS PARA FILTRO DE LAUNCHER -->
+    <string name="filter_launcher_apps">Only apps visible in the launcher</string>
+    <string name="launcher_filter_info">Shows only apps that have MAIN/LAUNCHER activity and are visible to the user. Excludes system services, content providers, and hidden apps.</string>
+    <string name="info">Info</string>
+    
+    <!-- ✅ NEW SCAN INFORMATION STRINGS -->
+    <string name="scanning_apps">Scanning applications</string>
+    <string name="step_step">Step</string>
+    <string name="start_scan">Starting scan</string>
+    <string name="search_installed_apps">Searching installed applications</string>
+    <string name="preparing_basic_data">Preparing basic data</string>
+    <string name="starting_advanced_analysis">Starting advanced analysis</string>
+    <string name="updating_interface">Updating interface</string>
+    <string name="scan_completed">Scan completed</string>
+    <string name="results">Results</string>
+    <string name="total_apps">Total apps</string>
+    <string name="visible_apps">Visible apps</string>
+    <string name="hidden_apps">Hidden apps</string>
+    <string name="scan_error">Scan error</string>
+    <string name="details">Details</string>
+    <string name="try_again">Try again or check permissions</string>
+    
+    <string name="actual_stats">Current statistics</string>
+    <string name="detected_hidden_apps">Detected hidden apps</string>    
+    <string name="apps_visible_in_the_launcher">Apps visible in the launcher</string>    
+    <string name="precalculated_for_speed">All lists are pre-calculated for maximum speed</string>    
+    <string name="first_five">First 5</string>    
+    <string name="no_hidden_apps">No hidden apps</string>    
+    <string name="no_visible_apps">No visible apps</string>    
+    <string name="more_hidden_apps">more hidden apps</string>    
+    <string name="more_visible_apps">more visible apps</string>    
+    <string name="filter_of_launcher_apps">Launcher Apps Filter</string>
+    <string name="understood">Understood</string>
+    
+    <!-- Application scanning progress -->
+    <string name="optimized_with_cache">Optimized with visibility caching</string>
+    <string name="progress_scanning_launcher_apps">Scanning launcher apps...</string>
+    <string name="progress_calculating_visible_apps">Calculating visible apps in launcher…</string>
+    <string name="progress_sorting_complete_list">Sorting complete list alphabetically…</string>
+    <string name="progress_preparing_all_filter">Preparing ALL apps filter…</string>
+    <string name="progress_preparing_system_filter">Preparing SYSTEM filter…</string>
+    <string name="progress_preparing_user_filter">Preparing USER filter…</string>
+    <string name="progress_preparing_gapps_filter">Preparing GOOGLE APPS filter…</string>
+    <string name="progress_calculating_stats">Calculating statistics for quick information…</string>
+    <string name="progress_lists_ready">Lists prepared! Everything ready to use.</string>
+    
+    <!-- Themes selector -->
+    <string name="menu_theme">App Theme</string>
+    <string name="theme_classic">Classic (Actual)</string>
+    <string name="theme_neon_dark">Neon Dark Futuristic</string>
+    <string name="theme_material_blue">Material Blue</string>
+    <string name="theme_changed">Thene changed to: %s</string>
+    <string name="select_theme">Select visual theme</string>
+    <!-- Cyberpunk Edge Runners Theme -->
+    <string name="theme_cyberpunk_edge_runners">⚡ Cyberpunk Edge Runners</string>
+    
+    <!-- Strings for thematization progress -->
+    <string name="exporting_theming">Exporting thematization</string>
+    <string name="importing_theming">Importing thematization</string>
+    <string name="creating_zip_file">Creating a ZIP file</string>
+    <string name="reading_zip_file">Reading ZIP file</string>
+    <string name="please_wait">Please wait</string>
+    <string name="applying_theming">Applying thematization</string>
+    
     <!-- New strings for licenses -->
     <string name="licenses_title">Open Source Licenses</string>
     <string name="menu_licenses">Licenses</string>
     <string name="open_source_licenses">Open Source Licenses</string>
 
     <!-- Updated About section -->
-    <string name="about_content"><big><b>App Icon Scraper &amp; Themer V1.5</b></big>\n\n<b>Developed by Romaster</b>\n\n<b>Contact:</b> roman.ignacio.romero@gmail.com\n\n<b>GitHub:</b> https://github.com/Romaster1985\n\nA complete application to extract, customize, export Android application icons and create fully customized icon packs.\n\n<b>Main features:</b>\n• 📱 Simple and professional user interface\n• 🔍📋 Scans and lists all installed applications\n• 🎯 Smart filtering (System, User, Google Apps)\n• ✅ Multiple application selection\n• 🎨 Unique icon theming system with multi-layer icon selection\n• 📐✂️ Independent rescaling and centering of foreground layers with intelligent transparent area detection and cropping\n• 📍 Position, scale, transparency, tint, saturation, brightness and contrast adjustment (independent scale for foreground layers)\n• 🎭 Mask loading system for adaptive icons (iconback; iconmask; iconupon)\n• 🎛️ Color intensity control (fade to preset color)\n• 👁️ Real-time preview + all icons preview\n• 📦 Custom icon pack generation\n• 🗜️ Export to ZIP file ready to load in Icon Packer\n• 📦 Icon pack export in APK format compatible with a wide variety of popular Launchers\n• 🤖📝 Built-in Crash Guard Logger for error self-diagnosis ⛓️‍💥💥\n\n<b>Technologies:</b>\n• Kotlin\n• Android SDK\n• Material Design 3\n• RecyclerView\n• ViewModel\n• Gradle\n• Active Internal Cache\n• ZipAlign-Android 1.0 by Muntashir Al-Islam\n• Built In Android ApkSigner\n\nThis application was developed with the assistance of 🐬DeepSeek.</string>
+    <string name="about_content"><big><b>App Icon Scraper &amp; Themer V1.6</b></big>\n\n<b>Developed by Romaster</b>\n\n<b>Contact:</b> roman.ignacio.romero@gmail.com\n\n<b>GitHub:</b> https://github.com/Romaster1985\n\nA complete application to extract, customize, export Android application icons and create fully customized icon packs.\n\n<b>Main features:</b>\n• 📱 Simple and professional user interface\n• 🔍📋 Scans and lists all installed applications\n• 🎯 Smart filtering (System, User, Google Apps)\n• ✅ Multiple application selection\n• 🎨 Unique icon theming system with multi-layer icon selection\n• 📐✂️ Independent rescaling and centering of foreground layers with intelligent transparent area detection and cropping\n• 📍 Position, scale, transparency, tint, saturation, brightness and contrast adjustment (independent scale for foreground layers)\n• 🎭 Mask loading system for adaptive icons (iconback; iconmask; iconupon)\n• 🎛️ Color intensity control (fade to preset color)\n• 🛸 NEW HYPERCHARGED ADVANCED SETTINGS\n🆕​🎉​🐟​🔮​🎨​🫟🖌️​🎭🪛​🔩​⚙️​🛠️​📐​​​👾​🤯​\n• 👁️ Real-time preview + all icons preview\n• 📦 Custom icon pack generation\n• 🗜️ Export to ZIP file ready to load in Icon Packer\n• 📦 Icon pack export in APK format compatible with a wide variety of popular Launchers\n• 🤖📝 Built-in Crash Guard Logger for error self-diagnosis ⛓️‍💥💥\n\n<b>Technologies:</b>\n• Kotlin\n• Android SDK\n• Material Design 3\n• RecyclerView\n• ViewModel\n• Gradle\n• Active Internal Cache\n• ZipAlign-Android 1.0 by Muntashir Al-Islam\n• Built In Android ApkSigner\n\nThis application was developed with the assistance of 🐬DeepSeek.</string>
 </resources>

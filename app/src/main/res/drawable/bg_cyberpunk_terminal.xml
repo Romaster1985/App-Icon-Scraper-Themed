@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#0A0A12"
+                android:centerColor="#151530"
+                android:endColor="#0A0A12"
+                android:angle="90"/>
+        </shape>
+    </item>
+    
+    <item>
+        <vector android:width="300dp" android:height="300dp"
+                android:viewportWidth="300" android:viewportHeight="300">
+            
+            <!-- Circuitos principales cyan -->
+            <path
+                android:strokeColor="#80FF00F5"
+                android:strokeWidth="0.8"
+                android:pathData="M30,50 L120,50 L120,100 L200,100 L200,180 L270,180"/>
+            
+            <path
+                android:strokeColor="#80FF00F5"
+                android:strokeWidth="0.8"
+                android:pathData="M250,30 L250,120 L180,120 L180,200 L100,200 L100,250"/>
+            
+            <!-- Circuitos diagonales rosa -->
+            <path
+                android:strokeColor="#60FF0080"
+                android:strokeWidth="0.6"
+                android:pathData="M50,50 L100,100 L150,50 L200,100"/>
+            
+            <path
+                android:strokeColor="#60FF0080"
+                android:strokeWidth="0.6"
+                android:pathData="M200,50 L150,100 L100,50 L50,100"/>
+            
+            <!-- Circuitos curvos amarillos -->
+            <path
+                android:strokeColor="#60FFFF00"
+                android:strokeWidth="0.7"
+                android:strokeLineCap="round"
+                android:pathData="M80,150 Q150,80 220,150 T300,220"/>
+            
+            <!-- Nodos de conexión -->
+            <path
+                android:fillColor="#FF00F5FF"
+                android:pathData="M30,50 h3 v3 h-3z M120,50 h3 v3 h-3z M120,100 h3 v3 h-3z M200,100 h3 v3 h-3z M200,180 h3 v3 h-3z M270,180 h3 v3 h-3z"/>
+            
+            <path
+                android:fillColor="#FFFF0080"
+                android:pathData="M50,50 h2 v2 h-2z M100,100 h2 v2 h-2z M150,50 h2 v2 h-2z M200,100 h2 v2 h-2z"/>
+            
+            <path
+                android:fillColor="#FFFFFF00"
+                android:pathData="M80,150 h2 v2 h-2z M150,80 h2 v2 h-2z M220,150 h2 v2 h-2z M300,220 h2 v2 h-2z"/>
+        </vector>
+    </item>
+    
+    <item>
+        <vector android:width="300dp" android:height="300dp"
+                android:viewportWidth="300" android:viewportHeight="300"
+                android:alpha="0.4">
+            
+            <!-- Patrón de líneas diagonales sutiles -->
+            <path
+                android:strokeColor="#20FFFFFF"
+                android:strokeWidth="0.3"
+                android:pathData="M0,0 L300,300 M30,0 L300,270 M60,0 L300,240 M90,0 L300,210 M120,0 L300,180"/>
+            
+            <path
+                android:strokeColor="#20FFFFFF"
+                android:strokeWidth="0.3"
+                android:pathData="M0,30 L270,300 M0,60 L240,300 M0,90 L210,300 M0,120 L180,300"/>
+        </vector>
+    </item>
+    
+    <item>
+        <shape android:shape="rectangle">
+            <stroke
+                android:width="3dp"
+                android:color="#4000F5FF"/>
+        </shape>
+    </item>
+    
+    <item android:top="3dp" android:bottom="3dp" android:left="3dp" android:right="3dp">
+        <shape android:shape="rectangle">
+            <stroke
+                android:width="1.5dp"
+                android:color="#FF00F5FF"/>
+        </shape>
+    </item>
+    
+    <item android:gravity="bottom|end" android:bottom="12dp" android:right="12dp">
+        <vector android:width="100dp" android:height="40dp"
+                android:viewportWidth="100" android:viewportHeight="40"
+                android:alpha="0.6">
+            
+            <path
+                android:strokeColor="#80FFFFFF"
+                android:strokeWidth="0.5"
+                android:pathData="M10,10 L40,10 M10,15 L35,15 M10,20 L45,20"/>
+            
+            <path
+                android:fillColor="#80FF00F5"
+                android:pathData="M50,10 h2 v2 h-2z M55,20 h2 v2 h-2z M60,15 h2 v2 h-2z"/>
+        </vector>
+    </item>
+
+</layer-list>

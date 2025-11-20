@@ -39,6 +39,8 @@ class ForegroundProcessingActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_foreground_processing)
+        
+        supportActionBar?.title = getString(R.string.pre_process_title)
 
         // Obtener apps seleccionadas desde MainActivity
         selectedApps = intent.getParcelableArrayListExtra("selected_apps") ?: emptyList()

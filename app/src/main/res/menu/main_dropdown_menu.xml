@@ -4,6 +4,9 @@
         android:id="@+id/menu_language"
         android:title="@string/menu_language" />
     <item
+        android:id="@+id/menu_theme"
+        android:title="@string/menu_theme" />
+    <item
         android:id="@+id/menu_licenses"
         android:title="@string/menu_licenses" />
     <item

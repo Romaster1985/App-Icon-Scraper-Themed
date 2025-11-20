@@ -1,488 +1,1766 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="?attr/android:windowBackground">
 
     <!-- SECCIÓN SUPERIOR - PREVIEW RESULTADO CENTRAL -->
-    <LinearLayout
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:background="@color/white"
-        android:elevation="4dp"
-        android:gravity="center">
+        android:layout_margin="2dp"
+        app:cardBackgroundColor="?attr/colorSurface"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
+        app:cardUseCompatPadding="true">
 
-        <!-- PREVIEW DEL RESULTADO (CENTRADO) -->
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center">
+            android:padding="1dp"
+            android:gravity="center"
+            android:paddingVertical="16dp">
 
-            <TextView
+            <!-- PREVIEW DEL RESULTADO (CENTRADO) -->
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/result"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="8dp" />
+                android:orientation="vertical"
+                android:gravity="center">
 
-            <ImageView
-                android:id="@+id/iconPreview"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:background="@drawable/bg_card"
-                android:scaleType="fitCenter"
-                android:clickable="true"
-                android:focusable="true" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/result"
+                    android:textAppearance="?attr/textAppearanceTitleMedium"
+                    android:layout_marginBottom="1dp" />
+
+                <ImageView
+                    android:id="@+id/iconPreview"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:background="?attr/colorSurfaceVariant"
+                    android:scaleType="fitCenter"
+                    android:clickable="true"
+                    android:layout_marginBottom="8dp"
+                    android:focusable="true" />
+
+            </LinearLayout>
 
         </LinearLayout>
-
-    </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <!-- SECCIÓN MEDIA - TRES PREVIEWS CON SUS BOTONES -->
-    <LinearLayout
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:background="@color/card_background">
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginVertical="2dp"
+        app:cardBackgroundColor="?attr/colorSurfaceVariant"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="2dp">
 
-        <!-- TRES VISTAS PREVIEW EN FILA -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginBottom="8dp"
-            android:weightSum="3">
+            android:orientation="vertical"
+            android:padding="16dp">
 
-            <!-- Preview Fondo (iconback) -->
+            <!-- TRES VISTAS PREVIEW EN FILA -->
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center">
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginBottom="8dp"
+                android:weightSum="3">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <!-- Preview Fondo (iconback) -->
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/background"
-                    android:textSize="14sp"
-                    android:layout_marginBottom="4dp" />
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
 
-                <ImageView
-                    android:id="@+id/iconbackPreview"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:background="@drawable/bg_card"
-                    android:scaleType="fitCenter"
-                    android:layout_marginBottom="8dp" />
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/background"
+                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                        android:layout_marginBottom="4dp" />
 
-                <Button
-                    android:id="@+id/selectIconbackButton"
-                    android:layout_width="wrap_content"
+                    <ImageView
+                        android:id="@+id/iconbackPreview"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:background="?attr/colorSurface"
+                        android:scaleType="fitCenter"
+                        android:layout_marginBottom="8dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/selectIconbackButton"
+                        style="?attr/materialButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/select_background"
+                        android:fontFamily="@font/exo2_bold"
+                        app:fontFamily="@font/exo2_bold"
+                        android:textSize="11sp"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="1dp" />
+
+                </LinearLayout>
+
+                <!-- Preview Máscara (iconmask) -->
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/select_background"
-                    android:background="@drawable/button_primary"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp" />
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/mask"
+                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                        android:layout_marginBottom="4dp" />
+
+                    <ImageView
+                        android:id="@+id/iconmaskPreview"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:background="?attr/colorSurface"
+                        android:scaleType="fitCenter"
+                        android:layout_marginBottom="8dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/selectIconmaskButton"
+                        style="?attr/materialButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/select_mask"
+                        android:fontFamily="@font/exo2_bold"
+                        app:fontFamily="@font/exo2_bold"
+                        android:textSize="11sp"
+                        android:paddingStart="1dp"
+                        android:paddingEnd="1dp" />
+
+                </LinearLayout>
+
+                <!-- Preview Capa Superior (iconupon) -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/upper_layer"
+                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                        android:layout_marginBottom="4dp" />
+
+                    <ImageView
+                        android:id="@+id/iconuponPreview"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:background="?attr/colorSurface"
+                        android:scaleType="fitCenter"
+                        android:layout_marginBottom="8dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/selectIconuponButton"
+                        style="?attr/materialButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/select_upper_layer"
+                        android:fontFamily="@font/exo2_bold"
+                        app:fontFamily="@font/exo2_bold"
+                        android:textSize="11sp"
+                        android:paddingStart="1dp"
+                        android:paddingEnd="0dp" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
-            <!-- Preview Máscara (iconmask) -->
+            <!-- BOTONES LIMPIAR MÁSCARAS Y SELECCIONAR COLOR -->
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center">
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:weightSum="2"
+                android:layout_marginTop="2dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/clearMasksButton"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/mask"
-                    android:textSize="14sp"
-                    android:layout_marginBottom="4dp" />
+                    android:layout_weight="1"
+                    android:layout_marginEnd="4dp"
+                    android:text="@string/clear_masks"
+                    android:textSize="12sp" />
 
-                <ImageView
-                    android:id="@+id/iconmaskPreview"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:background="@drawable/bg_card"
-                    android:scaleType="fitCenter"
-                    android:layout_marginBottom="8dp" />
-
-                <Button
-                    android:id="@+id/selectIconmaskButton"
-                    android:layout_width="wrap_content"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/colorPickerButton"
+                    style="?attr/materialButtonStyle"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/select_mask"
-                    android:background="@drawable/button_primary"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp" />
-
-            </LinearLayout>
-
-            <!-- Preview Capa Superior (iconupon) -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/upper_layer"
-                    android:textSize="14sp"
-                    android:layout_marginBottom="4dp" />
-
-                <ImageView
-                    android:id="@+id/iconuponPreview"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:background="@drawable/bg_card"
-                    android:scaleType="fitCenter"
-                    android:layout_marginBottom="8dp" />
-
-                <Button
-                    android:id="@+id/selectIconuponButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/select_upper_layer"
-                    android:background="@drawable/button_primary"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp" />
+                    android:layout_weight="1"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/select_color" />
 
             </LinearLayout>
 
         </LinearLayout>
-
-        <!-- BOTONES LIMPIAR MÁSCARAS Y SELECCIONAR COLOR -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:weightSum="2"
-            android:layout_marginTop="8dp">
-
-            <Button
-                android:id="@+id/clearMasksButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginEnd="4dp"
-                android:text="@string/clear_masks"
-                android:background="@drawable/bg_card"
-                android:textColor="@color/text_secondary"
-                android:textSize="12sp" />
-
-            <Button
-                android:id="@+id/colorPickerButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="4dp"
-                android:text="@string/select_color"
-                android:background="@drawable/button_primary"
-                android:textColor="@color/white"
-                android:textSize="12sp" />
-
-        </LinearLayout>
-
-    </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <!-- SECCIÓN INFERIOR DESPLAZABLE - CONTROLES -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="16dp">
+        android:padding="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            
-            <!-- Posición X -->
-            <TextView
-                android:id="@+id/xValueText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/position_x"
-                android:textSize="14sp"
-                android:layout_marginBottom="4dp" />
-            
-            <SeekBar
-                android:id="@+id/seekBarX"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp" />
-            
-            <!-- Posición Y -->
-            <TextView
-                android:id="@+id/yValueText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/position_y"
-                android:textSize="14sp"
-                android:layout_marginBottom="4dp" />
-            
-            <SeekBar
-                android:id="@+id/seekBarY"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp" />
-            
-            <!-- Escala Normal -->
-            <TextView
-                android:id="@+id/scaleValueText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/scale"
-                android:textSize="14sp"
-                android:layout_marginBottom="4dp" />
-            
-            <SeekBar
-                android:id="@+id/seekBarScale"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp" />
-                
-            <!-- Escala Exclusiva para Foreground Pre-procesado -->
-            <TextView
-                android:id="@+id/foregroundScaleValueText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/foreground_scale"
-                android:textSize="14sp"
-                android:layout_marginBottom="4dp"
-                android:alpha="0.5" />
-                        
-            <SeekBar
-                android:id="@+id/seekBarForegroundScale"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:alpha="0.5"
-                android:enabled="false" />
-            
-            <!-- Transparencia -->
-            <TextView
-                android:id="@+id/alphaValueText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/transparency"
-                android:textSize="14sp"
-                android:layout_marginBottom="4dp" />
-            
-            <SeekBar
-                android:id="@+id/seekBarAlpha"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp" />
-            
-            <!-- Intensidad de Color -->
-            <TextView
-                android:id="@+id/colorIntensityValueText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/color_intensity"
-                android:textSize="14sp"
-                android:layout_marginBottom="4dp" />
-            
-            <SeekBar
-                android:id="@+id/seekBarColorIntensity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp" />
-            
-            <!-- Ajustes de Imagen -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/image_adjustments"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:layout_marginBottom="16dp" />
-            
-            <!-- Tinte -->
-            <TextView
-                android:id="@+id/hueValueText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/hue"
-                android:textSize="14sp"
-                android:layout_marginBottom="4dp" />
-            
-            <SeekBar
-                android:id="@+id/seekBarHue"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp" />
-            
-            <!-- Saturación -->
-            <TextView
-                android:id="@+id/saturationValueText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/saturation"
-                android:textSize="14sp"
-                android:layout_marginBottom="4dp" />
-            
-            <SeekBar
-                android:id="@+id/seekBarSaturation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp" />
-            
-            <!-- Brillo -->
-            <TextView
-                android:id="@+id/brightnessValueText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/brightness"
-                android:textSize="14sp"
-                android:layout_marginBottom="4dp" />
-            
-            <SeekBar
-                android:id="@+id/seekBarBrightness"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp" />
-            
-            <!-- Contraste -->
-            <TextView
-                android:id="@+id/contrastValueText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/contrast"
-                android:textSize="14sp"
-                android:layout_marginBottom="4dp" />
-            
-            <SeekBar
-                android:id="@+id/seekBarContrast"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp" />
-                
-            <!-- Configuración de Capas de Icono -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/icon_layers_config"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:layout_marginBottom="8dp" />
 
-            <CheckBox
-                android:id="@+id/useDefaultIconCheckbox"
+            <!-- Contenedor de controles básicos -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/use_default_icon"
-                android:checked="true"
-                android:layout_marginBottom="8dp" />
-
-            <CheckBox
-                android:id="@+id/useRoundIconCheckbox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/use_round_icon"
-                android:checked="false"
-                android:layout_marginBottom="8dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2"
-                android:layout_marginBottom="8dp">
-
-                <CheckBox
-                    android:id="@+id/foregroundLayerCheckbox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/foreground_layer"
-                    android:checked="true" />
-
-                <CheckBox
-                    android:id="@+id/backgroundLayerCheckbox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/background_layer"
-                    android:checked="true" />
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/layerInfoText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/loading_layer_info"
-                android:textSize="12sp"
-                android:background="@color/card_background"
-                android:padding="8dp"
-                android:layout_marginBottom="16dp" />
-
-            <!-- Progreso -->
-            <TextView
-                android:id="@+id/progressText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/ready_to_process"
-                android:textSize="14sp"
-                android:gravity="center"
-                android:layout_marginBottom="16dp" />
-
-            <!-- Botones de Acción -->
-            <Button
-                android:id="@+id/applyButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/apply_to_all_icons"
-                android:background="@drawable/button_primary"
-                android:textColor="@color/white"
-                android:layout_marginBottom="8dp" />
-
-            <!-- Botón Previsualizar Todos -->
-            <Button
-                android:id="@+id/previewAllButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/preview_all"
-                android:background="@drawable/bg_card"
-                android:textColor="@color/text_secondary"
                 android:layout_marginBottom="8dp"
-                android:enabled="false" />
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp">
+                
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-            <!-- BOTÓN UNIFICADO DE EXPORTACIÓN -->
-            <Button
-                android:id="@+id/exportButton"
+                    <!-- Posición X -->
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/xValueText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/position_x"
+                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                        android:layout_marginBottom="4dp" />
+
+                    <SeekBar
+                        android:id="@+id/seekBarX"
+                        style="?attr/seekBarStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Posición Y -->
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/yValueText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/position_y"
+                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                        android:layout_marginBottom="4dp" />
+
+                    <SeekBar
+                        android:id="@+id/seekBarY"
+                        style="?attr/seekBarStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Escala Normal -->
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/scaleValueText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/scale"
+                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                        android:layout_marginBottom="4dp" />
+
+                    <SeekBar
+                        android:id="@+id/seekBarScale"
+                        style="?attr/seekBarStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Escala Exclusiva para Foreground Pre-procesado -->
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/foregroundScaleValueText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/foreground_scale"
+                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                        android:alpha="0.5"
+                        android:layout_marginBottom="4dp" />
+
+                    <SeekBar
+                        android:id="@+id/seekBarForegroundScale"
+                        style="?attr/seekBarStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.5"
+                        android:enabled="false"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Transparencia -->
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/alphaValueText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/transparency"
+                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                        android:layout_marginBottom="4dp" />
+
+                    <SeekBar
+                        android:id="@+id/seekBarAlpha"
+                        style="?attr/seekBarStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Intensidad de Color -->
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/colorIntensityValueText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/color_intensity"
+                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                        android:layout_marginBottom="4dp" />
+
+                    <SeekBar
+                        android:id="@+id/seekBarColorIntensity"
+                        style="?attr/seekBarStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="24dp" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Ajustes de Imagen -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/export_icon_pack"
-                android:background="@drawable/button_primary"
-                android:textColor="@color/white"
-                android:enabled="false" />
+                android:layout_marginBottom="8dp"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/image_adjustments"
+                        android:textAppearance="?attr/textAppearanceTitleMedium"
+                        android:gravity="center"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Tinte -->
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/hueValueText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/hue"
+                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                        android:layout_marginBottom="4dp" />
+
+                    <SeekBar
+                        android:id="@+id/seekBarHue"
+                        style="?attr/seekBarStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Saturación -->
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/saturationValueText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/saturation"
+                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                        android:layout_marginBottom="4dp" />
+
+                    <SeekBar
+                        android:id="@+id/seekBarSaturation"
+                        style="?attr/seekBarStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Brillo -->
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/brightnessValueText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/brightness"
+                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                        android:layout_marginBottom="4dp" />
+
+                    <SeekBar
+                        android:id="@+id/seekBarBrightness"
+                        style="?attr/seekBarStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Contraste -->
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/contrastValueText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/contrast"
+                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                        android:layout_marginBottom="4dp" />
+
+                    <SeekBar
+                        android:id="@+id/seekBarContrast"
+                        style="?attr/seekBarStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="24dp" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ✅ NUEVA SECCIÓN: FILTROS AVANZADOS -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- Toggle principal para filtros avanzados -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="16dp">
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/advancedFiltersToggle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/advanced_filters"
+                            android:textAppearance="?attr/textAppearanceTitleMedium" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/resetFiltersButton"
+                            style="?attr/materialButtonOutlinedStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/reset_filters"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+
+                    <!-- Contenido de filtros avanzados (inicialmente oculto) -->
+                    <LinearLayout
+                        android:id="@+id/advancedFiltersContent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <!-- RECORTE DE FORMA CON ICONMASK -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            app:cardBackgroundColor="?attr/colorSurfaceVariant"
+                            app:cardCornerRadius="8dp"
+                            app:strokeColor="?attr/colorOutline"
+                            app:strokeWidth="1dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="12dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical">
+
+                                    <com.google.android.material.switchmaterial.SwitchMaterial
+                                        android:id="@+id/iconmaskShapeToggle"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="@string/shape_mask_toggle"
+                                        android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:id="@+id/iconmaskShapeStatus"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/shape_mask_status_not_loaded"
+                                        android:textAppearance="?attr/textAppearanceBodySmall"
+                                        android:textColor="?attr/colorOnSurfaceVariant" />
+
+                                </LinearLayout>
+
+                                <com.google.android.material.textview.MaterialTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/shape_mask_description"
+                                    android:textAppearance="?attr/textAppearanceBodySmall"
+                                    android:textColor="?attr/colorOnSurfaceVariant"
+                                    android:layout_marginTop="4dp" />
+
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <!-- MÁSCARA PERSONALIZADA CON CONTROL DE ESCALA INTEGRADO -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            app:cardBackgroundColor="?attr/colorSurfaceVariant"
+                            app:cardCornerRadius="8dp"
+                            app:strokeColor="?attr/colorOutline"
+                            app:strokeWidth="1dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="12dp">
+
+                                <!-- Toggle principal de máscara -->
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical">
+
+                                    <com.google.android.material.switchmaterial.SwitchMaterial
+                                        android:id="@+id/maskToggle"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="@string/personalized_mask"
+                                        android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+                                    <com.google.android.material.button.MaterialButton
+                                        android:id="@+id/loadMaskButton"
+                                        style="?attr/materialButtonOutlinedStyle"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/load_mask"
+                                        android:enabled="false"
+                                        android:textSize="12sp" />
+
+                                </LinearLayout>
+
+                                <!-- ✅ NUEVO: CONTROL DE ESCALA DE MÁSCARA -->
+                                <LinearLayout
+                                    android:id="@+id/maskScaleControls"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:visibility="gone"
+                                    android:layout_marginTop="8dp">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal"
+                                        android:gravity="center_vertical">
+
+                                        <com.google.android.material.textview.MaterialTextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:text="@string/mask_scale"
+                                            android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+                                        <com.google.android.material.textview.MaterialTextView
+                                            android:id="@+id/maskScaleValue"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="@string/mask_scale_percent"
+                                            android:textAppearance="?attr/textAppearanceBodySmall" />
+
+                                    </LinearLayout>
+
+                                    <SeekBar
+                                        android:id="@+id/maskScaleSeekBar"
+                                        style="?attr/seekBarStyle"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:max="200"
+                                        android:progress="100" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <!-- ✅ NUEVO: ESCALA DE IMAGEN IC -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            app:cardBackgroundColor="?attr/colorSurfaceVariant"
+                            app:cardCornerRadius="8dp"
+                            app:strokeColor="?attr/colorOutline"
+                            app:strokeWidth="1dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="12dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical">
+
+                                    <com.google.android.material.switchmaterial.SwitchMaterial
+                                        android:id="@+id/imageScaleToggle"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="@string/image_scale_ic"
+                                        android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:id="@+id/imageScaleValue"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/image_scale_percent"
+                                        android:textAppearance="?attr/textAppearanceBodySmall" />
+
+                                </LinearLayout>
+
+                                <SeekBar
+                                    android:id="@+id/imageScaleSeekBar"
+                                    style="?attr/seekBarStyle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:max="200"
+                                    android:progress="100" />
+
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <!-- ✅ NUEVO: COLORIZACIÓN DE ÍCONOS -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            app:cardBackgroundColor="?attr/colorSurfaceVariant"
+                            app:cardCornerRadius="8dp"
+                            app:strokeColor="?attr/colorOutline"
+                            app:strokeWidth="1dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="12dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical">
+
+                                    <com.google.android.material.switchmaterial.SwitchMaterial
+                                        android:id="@+id/iconColorizationToggle"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="@string/icon_colorization"
+                                        android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:id="@+id/colorizationIntensityValue"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/intensity_percent"
+                                        android:textAppearance="?attr/textAppearanceBodySmall" />
+
+                                </LinearLayout>
+
+                                <SeekBar
+                                    android:id="@+id/colorizationIntensitySeekBar"
+                                    style="?attr/seekBarStyle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:max="100"
+                                    android:progress="100" />
+
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/colorizationColorButton"
+                                    style="?attr/materialButtonOutlinedStyle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/select_colorization_color"
+                                    android:textAppearance="?attr/textAppearanceBodyMedium"
+                                    android:layout_marginTop="8dp" />
+
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <!-- 1. REALCE DE BORDES -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            app:cardBackgroundColor="?attr/colorSurfaceVariant"
+                            app:cardCornerRadius="8dp"
+                            app:strokeColor="?attr/colorOutline"
+                            app:strokeWidth="1dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="12dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical">
+
+                                    <com.google.android.material.switchmaterial.SwitchMaterial
+                                        android:id="@+id/edgeEnhanceToggle"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="@string/edge_enhance"
+                                        android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:id="@+id/edgeEnhanceValue"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/intensity_percent"
+                                        android:textAppearance="?attr/textAppearanceBodySmall" />
+
+                                </LinearLayout>
+
+                                <SeekBar
+                                    android:id="@+id/edgeEnhanceSeekBar"
+                                    style="?attr/seekBarStyle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:max="100"
+                                    android:progress="100" />
+
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <!-- 9. BORDE -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            app:cardBackgroundColor="?attr/colorSurfaceVariant"
+                            app:cardCornerRadius="8dp"
+                            app:strokeColor="?attr/colorOutline"
+                            app:strokeWidth="1dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="12dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical">
+
+                                    <com.google.android.material.switchmaterial.SwitchMaterial
+                                        android:id="@+id/borderToggle"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="@string/border_effect"
+                                        android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+                                </LinearLayout>
+
+                                <!-- BORDE INTERIOR -->
+                                <com.google.android.material.textview.MaterialTextView
+                                    android:id="@+id/borderInnerValue"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Interior: 3px"
+                                    android:textAppearance="?attr/textAppearanceBodySmall"
+                                    android:layout_marginTop="8dp" />
+
+                                <SeekBar
+                                    android:id="@+id/borderInnerSeekBar"
+                                    style="?attr/seekBarStyle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:max="20"
+                                    android:progress="3" />
+
+                                <!-- BORDE EXTERIOR -->
+                                <com.google.android.material.textview.MaterialTextView
+                                    android:id="@+id/borderOuterValue"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Exterior: 6px"
+                                    android:textAppearance="?attr/textAppearanceBodySmall"
+                                    android:layout_marginTop="8dp" />
+
+                                <SeekBar
+                                    android:id="@+id/borderOuterSeekBar"
+                                    style="?attr/seekBarStyle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:max="20"
+                                    android:progress="6" />
+
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/borderColorButton"
+                                    style="?attr/materialButtonOutlinedStyle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/border_color_button"
+                                    android:textAppearance="?attr/textAppearanceBodyMedium"
+                                    android:layout_marginTop="8dp" />
+
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <!-- 2. ABERRACIÓN CROMÁTICA -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            app:cardBackgroundColor="?attr/colorSurfaceVariant"
+                            app:cardCornerRadius="8dp"
+                            app:strokeColor="?attr/colorOutline"
+                            app:strokeWidth="1dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="12dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical">
+
+                                    <com.google.android.material.switchmaterial.SwitchMaterial
+                                        android:id="@+id/chromaticToggle"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="@string/chromatic_aberration"
+                                        android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:id="@+id/chromaticIntensityValue"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/intensity_percent"
+                                        android:textAppearance="?attr/textAppearanceBodySmall" />
+
+                                </LinearLayout>
+
+                                <SeekBar
+                                    android:id="@+id/chromaticIntensitySeekBar"
+                                    style="?attr/seekBarStyle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:max="100"
+                                    android:progress="50" />
+
+                                <com.google.android.material.textview.MaterialTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/chromatic_offsets"
+                                    android:textAppearance="?attr/textAppearanceBodySmall"
+                                    android:layout_marginTop="8dp" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:weightSum="3">
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="@string/red_offset"
+                                        android:textAppearance="?attr/textAppearanceBodySmall"
+                                        android:gravity="center" />
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="@string/green_offset"
+                                        android:textAppearance="?attr/textAppearanceBodySmall"
+                                        android:gravity="center" />
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="@string/blue_offset"
+                                        android:textAppearance="?attr/textAppearanceBodySmall"
+                                        android:gravity="center" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:weightSum="3">
+
+                                    <SeekBar
+                                        android:id="@+id/chromaticRedSeekBar"
+                                        style="?attr/seekBarStyle"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:max="20"
+                                        android:progress="12" />
+
+                                    <SeekBar
+                                        android:id="@+id/chromaticGreenSeekBar"
+                                        style="?attr/seekBarStyle"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:max="20"
+                                        android:progress="10" />
+
+                                    <SeekBar
+                                        android:id="@+id/chromaticBlueSeekBar"
+                                        style="?attr/seekBarStyle"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:max="20"
+                                        android:progress="8" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <!-- 3. EFECTO ESFERA -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            app:cardBackgroundColor="?attr/colorSurfaceVariant"
+                            app:cardCornerRadius="8dp"
+                            app:strokeColor="?attr/colorOutline"
+                            app:strokeWidth="1dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="12dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical">
+
+                                    <com.google.android.material.switchmaterial.SwitchMaterial
+                                        android:id="@+id/sphereToggle"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="@string/sphere_effect"
+                                        android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:id="@+id/sphereValue"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/strength_percent"
+                                        android:textAppearance="?attr/textAppearanceBodySmall" />
+
+                                </LinearLayout>
+
+                                <SeekBar
+                                    android:id="@+id/sphereSeekBar"
+                                    style="?attr/seekBarStyle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:max="100"
+                                    android:progress="30" />
+
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <!-- 4. EFECTO RELIEVE -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            app:cardBackgroundColor="?attr/colorSurfaceVariant"
+                            app:cardCornerRadius="8dp"
+                            app:strokeColor="?attr/colorOutline"
+                            app:strokeWidth="1dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="12dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical">
+
+                                    <com.google.android.material.switchmaterial.SwitchMaterial
+                                        android:id="@+id/embossToggle"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="@string/emboss_effect"
+                                        android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:id="@+id/embossIntensityValue"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/intensity_percent"
+                                        android:textAppearance="?attr/textAppearanceBodySmall" />
+
+                                </LinearLayout>
+
+                                <SeekBar
+                                    android:id="@+id/embossIntensitySeekBar"
+                                    style="?attr/seekBarStyle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:max="100"
+                                    android:progress="50" />
+
+                                <com.google.android.material.textview.MaterialTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/emboss_azimuth"
+                                    android:textAppearance="?attr/textAppearanceBodySmall"
+                                    android:layout_marginTop="8dp" />
+
+                                <SeekBar
+                                    android:id="@+id/embossAzimuthSeekBar"
+                                    style="?attr/seekBarStyle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:max="360"
+                                    android:progress="45" />
+
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <!-- 5. EFECTO BRILLO -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            app:cardBackgroundColor="?attr/colorSurfaceVariant"
+                            app:cardCornerRadius="8dp"
+                            app:strokeColor="?attr/colorOutline"
+                            app:strokeWidth="1dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="12dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical">
+
+                                    <com.google.android.material.switchmaterial.SwitchMaterial
+                                        android:id="@+id/glowToggle"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="@string/glow_effect"
+                                        android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:id="@+id/glowIntensityValue"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/intensity_percent"
+                                        android:textAppearance="?attr/textAppearanceBodySmall" />
+
+                                </LinearLayout>
+
+                                <SeekBar
+                                    android:id="@+id/glowIntensitySeekBar"
+                                    style="?attr/seekBarStyle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:max="100"
+                                    android:progress="30" />
+
+                                <com.google.android.material.textview.MaterialTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/glow_radius"
+                                    android:textAppearance="?attr/textAppearanceBodySmall"
+                                    android:layout_marginTop="8dp" />
+
+                                <SeekBar
+                                    android:id="@+id/glowRadiusSeekBar"
+                                    style="?attr/seekBarStyle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:max="50"
+                                    android:progress="10" />
+
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <!-- 6. MÁSCARA SUAVE -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            app:cardBackgroundColor="?attr/colorSurfaceVariant"
+                            app:cardCornerRadius="8dp"
+                            app:strokeColor="?attr/colorOutline"
+                            app:strokeWidth="1dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="12dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical">
+
+                                    <com.google.android.material.switchmaterial.SwitchMaterial
+                                        android:id="@+id/softMaskToggle"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="@string/soft_mask"
+                                        android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:id="@+id/softMaskValue"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/intensity_percent"
+                                        android:textAppearance="?attr/textAppearanceBodySmall" />
+
+                                </LinearLayout>
+
+                                <SeekBar
+                                    android:id="@+id/softMaskSeekBar"
+                                    style="?attr/seekBarStyle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:max="100"
+                                    android:progress="50" />
+
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <!-- 7. ROTACIÓN -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            app:cardBackgroundColor="?attr/colorSurfaceVariant"
+                            app:cardCornerRadius="8dp"
+                            app:strokeColor="?attr/colorOutline"
+                            app:strokeWidth="1dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="12dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical">
+
+                                    <com.google.android.material.switchmaterial.SwitchMaterial
+                                        android:id="@+id/rotationToggle"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="@string/rotation"
+                                        android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:id="@+id/rotationValue"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/rotation_degrees"
+                                        android:textAppearance="?attr/textAppearanceBodySmall" />
+
+                                </LinearLayout>
+
+                                <SeekBar
+                                    android:id="@+id/rotationSeekBar"
+                                    style="?attr/seekBarStyle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:max="100"
+                                    android:progress="0" />
+
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <!-- 8. SOMBRA -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            app:cardBackgroundColor="?attr/colorSurfaceVariant"
+                            app:cardCornerRadius="8dp"
+                            app:strokeColor="?attr/colorOutline"
+                            app:strokeWidth="1dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="12dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical">
+
+                                    <com.google.android.material.switchmaterial.SwitchMaterial
+                                        android:id="@+id/shadowToggle"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="@string/shadow_effect"
+                                        android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:id="@+id/shadowIntensityValue"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/intensity_percent"
+                                        android:textAppearance="?attr/textAppearanceBodySmall" />
+
+                                </LinearLayout>
+
+                                <SeekBar
+                                    android:id="@+id/shadowIntensitySeekBar"
+                                    style="?attr/seekBarStyle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:max="100"
+                                    android:progress="70" />
+
+                                <com.google.android.material.textview.MaterialTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/shadow_radius"
+                                    android:textAppearance="?attr/textAppearanceBodySmall"
+                                    android:layout_marginTop="8dp" />
+
+                                <SeekBar
+                                    android:id="@+id/shadowRadiusSeekBar"
+                                    style="?attr/seekBarStyle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:max="50"
+                                    android:progress="15" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:weightSum="2">
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="@string/offset_x"
+                                        android:textAppearance="?attr/textAppearanceBodySmall"
+                                        android:gravity="center" />
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="@string/offset_y"
+                                        android:textAppearance="?attr/textAppearanceBodySmall"
+                                        android:gravity="center" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:weightSum="2">
+
+                                    <SeekBar
+                                        android:id="@+id/shadowOffsetXSeekBar"
+                                        style="?attr/seekBarStyle"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:max="20"
+                                        android:progress="15" />
+
+                                    <SeekBar
+                                        android:id="@+id/shadowOffsetYSeekBar"
+                                        style="?attr/seekBarStyle"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:max="20"
+                                        android:progress="15" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <!-- 10. PIXELADO -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            app:cardBackgroundColor="?attr/colorSurfaceVariant"
+                            app:cardCornerRadius="8dp"
+                            app:strokeColor="?attr/colorOutline"
+                            app:strokeWidth="1dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="12dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical">
+
+                                    <com.google.android.material.switchmaterial.SwitchMaterial
+                                        android:id="@+id/pixelateToggle"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="@string/pixelate_effect"
+                                        android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:id="@+id/pixelateValue"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/pixel_size"
+                                        android:textAppearance="?attr/textAppearanceBodySmall" />
+
+                                </LinearLayout>
+
+                                <SeekBar
+                                    android:id="@+id/pixelateSeekBar"
+                                    style="?attr/seekBarStyle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:max="20"
+                                    android:progress="8" />
+
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <!-- 11. EFECTO CARTOON -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            app:cardBackgroundColor="?attr/colorSurfaceVariant"
+                            app:cardCornerRadius="8dp"
+                            app:strokeColor="?attr/colorOutline"
+                            app:strokeWidth="1dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="12dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical">
+
+                                    <com.google.android.material.switchmaterial.SwitchMaterial
+                                        android:id="@+id/cartoonToggle"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="@string/cartoon_effect"
+                                        android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:id="@+id/cartoonValue"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/intensity_percent"
+                                        android:textAppearance="?attr/textAppearanceBodySmall" />
+
+                                </LinearLayout>
+
+                                <SeekBar
+                                    android:id="@+id/cartoonSeekBar"
+                                    style="?attr/seekBarStyle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:max="100"
+                                    android:progress="70" />
+
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <!-- 12. RUIDO -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            app:cardBackgroundColor="?attr/colorSurfaceVariant"
+                            app:cardCornerRadius="8dp"
+                            app:strokeColor="?attr/colorOutline"
+                            app:strokeWidth="1dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="12dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical">
+
+                                    <com.google.android.material.switchmaterial.SwitchMaterial
+                                        android:id="@+id/noiseToggle"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="@string/noise_effect"
+                                        android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:id="@+id/noiseValue"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/intensity_percent"
+                                        android:textAppearance="?attr/textAppearanceBodySmall" />
+
+                                </LinearLayout>
+
+                                <SeekBar
+                                    android:id="@+id/noiseSeekBar"
+                                    style="?attr/seekBarStyle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:max="100"
+                                    android:progress="10" />
+
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <!-- 13. EFECTO OJO DE PEZ -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            app:cardBackgroundColor="?attr/colorSurfaceVariant"
+                            app:cardCornerRadius="8dp"
+                            app:strokeColor="?attr/colorOutline"
+                            app:strokeWidth="1dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="12dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical">
+
+                                    <com.google.android.material.switchmaterial.SwitchMaterial
+                                        android:id="@+id/fisheyeToggle"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="@string/fisheye_effect"
+                                        android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:id="@+id/fisheyeValue"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/strength_percent"
+                                        android:textAppearance="?attr/textAppearanceBodySmall" />
+
+                                </LinearLayout>
+
+                                <SeekBar
+                                    android:id="@+id/fisheyeSeekBar"
+                                    style="?attr/seekBarStyle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:max="100"
+                                    android:progress="50" />
+
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Configuración de Capas de Icono -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/icon_layers_config"
+                        android:textAppearance="?attr/textAppearanceTitleMedium"
+                        android:gravity="center"
+                        android:layout_marginBottom="8dp" />
+
+                    <CheckBox
+                        android:id="@+id/useDefaultIconCheckbox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/use_default_icon"
+                        android:checked="true"
+                        android:layout_marginBottom="8dp" />
+
+                    <CheckBox
+                        android:id="@+id/useRoundIconCheckbox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/use_round_icon"
+                        android:checked="false"
+                        android:layout_marginBottom="8dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2"
+                        android:layout_marginBottom="8dp">
+
+                        <CheckBox
+                            android:id="@+id/foregroundLayerCheckbox"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/foreground_layer"
+                            android:checked="true" />
+
+                        <CheckBox
+                            android:id="@+id/backgroundLayerCheckbox"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/background_layer"
+                            android:checked="true" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/layerInfoText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/loading_layer_info"
+                        android:textAppearance="?attr/textAppearanceBodySmall"
+                        android:background="?attr/colorSurfaceVariant"
+                        android:padding="8dp"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Progreso -->
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/progressText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ready_to_process"
+                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                        android:gravity="center"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Botones de Acción -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/applyButton"
+                        style="?attr/materialButtonStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/apply_to_all_icons"
+                        android:textSize="14sp"
+                        android:layout_marginBottom="8dp" />
+                    
+                    <!-- Botón Previsualizar Todos - Nuevo Método para botones con cambio de estado -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/previewAllButton"
+                        android:background="@drawable/button_export_state_selector"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/preview_all"
+                        android:textColor="@color/button_export_text_selector"
+                        android:textSize="14sp"
+                        android:layout_marginBottom="8dp"
+                        android:enabled="false"/>
+                    
+                    <!-- BOTÓN UNIFICADO DE EXPORTACIÓN - Nuevo Método para botones con cambio de estado -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/exportButton"
+                        android:background="@drawable/button_export_state_selector"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/export_icon_pack"
+                        android:textColor="@color/button_export_text_selector"
+                        android:textSize="14sp"
+                        android:layout_marginBottom="8dp"
+                        android:enabled="false"/>
+                    
+                    <!-- Botón Previsualizar Todos - CON BORDE VISIBLE
+                    <com.romaster.appiconscrapper.ThemeAwareMaterialButton
+                        android:id="@+id/previewAllButton"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/preview_all"
+                        android:layout_marginBottom="8dp"
+                        android:enabled="false"/> -->
+
+                    <!-- BOTÓN UNIFICADO DE EXPORTACIÓN
+                    <com.romaster.appiconscrapper.ThemeAwareMaterialButton
+                        android:id="@+id/exportButton"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/export_icon_pack"
+                        android:layout_marginBottom="8dp"
+                        android:enabled="false"/> -->
+
+                    <!-- BOTONES DE EXPORTACIÓN/IMPORTACIÓN DE TEMATIZACIÓN -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="16dp">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/importThemingButton"
+                            style="?attr/materialButtonStyle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="4dp"
+                            android:text="@string/import_theming" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/exportThemingButton"
+                            style="?attr/materialButtonStyle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="4dp"
+                            android:text="@string/export_theming" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
-
     </ScrollView>
 
 </LinearLayout>

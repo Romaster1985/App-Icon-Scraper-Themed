@@ -1,69 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/appCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="12dp"
-    android:background="@drawable/bg_card"
-    android:layout_margin="4dp">
-
-    <ImageView
-        android:id="@+id/appIcon"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:padding="4dp" />
+    android:layout_marginHorizontal="4dp"
+    android:layout_marginVertical="2dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="?attr/colorSurface"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    app:cardUseCompatPadding="true"
+    app:strokeColor="?attr/colorOutline"
+    app:strokeWidth="1dp">
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:paddingStart="12dp">
+        android:orientation="horizontal"
+        android:padding="12dp">
 
-        <TextView
-            android:id="@+id/appName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:maxLines="1"
-            android:ellipsize="end" />
+        <!-- App Icon -->
+        <ImageView
+            android:id="@+id/appIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="@string/app_name"
+            android:padding="4dp"
+            android:scaleType="centerInside" />
 
-        <TextView
-            android:id="@+id/appPackage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:maxLines="1"
-            android:ellipsize="end" />
-
+        <!-- Text Content -->
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingStart="12dp">
 
-            <View
-                android:id="@+id/systemBadge"
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:background="@color/primary"
-                android:visibility="gone" />
+            <!-- App Name - USAR TEXT APPEARANCE DEL TEMA -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/appName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAppearance="?attr/textAppearanceBodyLarge"
+                android:textStyle="bold" />
 
-            <View
-                android:id="@+id/googleBadge"
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:background="@color/accent"
-                android:visibility="gone" />
+            <!-- App Package - USAR TEXT APPEARANCE DEL TEMA -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/appPackage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAppearance="?attr/textAppearanceBodySmall" />
+
+            <!-- Badges Container -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
+                <!-- System Badge - ESTILOS VIA ATRIBUTOS DE TEMA -->
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/systemBadge"
+                    style="@style/Widget.Material3.Chip.Custom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/system_badge"
+                    android:textColor="?attr/systemChipTextColor"
+                    android:visibility="gone"
+                    app:chipBackgroundColor="?attr/systemChipBackgroundColor" />
+                
+                <!-- Google Badge - ESTILOS VIA ATRIBUTOS DE TEMA -->
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/googleBadge"
+                    style="@style/Widget.Material3.Chip.Custom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/google_badge"
+                    android:textColor="?attr/googleChipTextColor"
+                    android:visibility="gone"
+                    app:chipBackgroundColor="?attr/googleChipBackgroundColor" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
+        <!-- CheckBox - CAMBIADO A MaterialCheckBox -->
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/checkBox"
+            style="?attr/checkboxStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:focusable="false"
+            android:clickable="false" />
+
     </LinearLayout>
 
-    <CheckBox
-        android:id="@+id/checkBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical" />
-
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>

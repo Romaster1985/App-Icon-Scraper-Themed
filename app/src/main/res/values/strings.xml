@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">App Icon Scraper &amp; Themer</string>
+    <string name="theme_customization_title">Personalizar Iconos</string>
+    <string name="icon_preview_title">Vista Previa de Iconos</string>
+    <string name="pre_process_title">Pre-procesamiento Foreground</string>
+    <string name="apk_analyzer_title">Analizador de APKs</string>
     <string name="about_title">Acerca de</string>
     <string name="menu_about">Acerca de</string>
     <string name="export_selected">Exportar Seleccionados</string>
@@ -9,7 +13,9 @@
     <string name="filter_all">Todas</string>
     <string name="filter_system">Sistema</string>
     <string name="filter_user">Usuario</string>
-    <string name="filter_gapps">Google Apps</string>
+    <string name="filter_gapps">GApps</string>
+    <string name="system_badge">Sistema</string>
+    <string name="google_badge">Google</string>
     <string name="apps_count">%d aplicaciones</string>
     <string name="export_success">Iconos exportados exitosamente</string>
     <string name="export_error">Error al exportar iconos</string>
@@ -70,6 +76,14 @@
     <string name="processing_app">Procesando: %s</string>
     <string name="processing_completed">¡Procesamiento completado! %d íconos listos.</string>
     <string name="color_hexadecimal">Hexadecimal…</string>
+    <!-- Strings para selector de color hexadecimal -->
+    <string name="select_border_color">Seleccionar color del borde</string>
+    <string name="hex_color_picker_title">Color Hexadecimal</string>
+    <string name="hex_color_hint">#RRGGBB o #AARRGGBB</string>
+    <string name="hex_color_applied">Color hexadecimal aplicado</string>
+    <string name="invalid_hex_color">Color hexadecimal inválido</string>
+    <string name="invalid_hex_format">Formato inválido. Use #RRGGBB o #AARRGGBB</string>
+    <string name="border_color_button">Color del borde</string>
     
     <!-- NUEVOS STRINGS PARA EXPORTACIÓN APK -->
     <string name="export_iconpack_apk">Exportar como APK</string>
@@ -97,7 +111,7 @@
     <string name="zip_saved_location">Guardado en: %s</string>
     <string name="zip_working_note">Este archivo ZIP puede ser importado directamente en Icon Packer.</string>
     <string name="preprocess_foreground_start">Iniciando pre-procesamiento de foreground…</string>
-    <string name="preprocess_foreground_progress">Pre-procesando iconos: %d/%d</string>
+    <string name="preprocess_foreground_progress">Pre-procesando iconos: %1$d/%2$d</string>
     <string name="apk_error">Error al crear el pack de íconos APK</string>
     
     <!-- Strings nuevos para la implementación de máscara -->
@@ -105,22 +119,145 @@
     <string name="mask">Máscara</string>
     <string name="select_background">Seleccionar Fondo</string>
     <string name="select_mask">Seleccionar Máscara</string>
-    <string name="clear_masks">Limpiar Máscaras (Usar Transparente)</string>
+    <string name="clear_masks">Limpiar Capas</string>
     <string name="background_transparent">Fondo Transparente</string>
     <string name="mask_transparent">Máscara Transparente</string>
     <string name="masks_cleared">Máscaras limpiadas - Estado transparente</string>
     
     <!-- Nuevos strings para la capa superior -->
     <string name="upper_layer">Capa Superior</string>
-    <string name="select_upper_layer">Seleccionar Capa Superior</string>
+    <string name="select_upper_layer">Seleccionar Capa Sup.</string>
     <string name="upper_layer_transparent">Capa Superior Transparente</string>
     
-    <!-- Nuevos strings para licencias -->
+    <!-- ✅ NUEVOS STRINGS PARA FILTROS AVANZADOS -->
+    <string name="advanced_filters">Filtros Avanzados</string>
+    <string name="reset_filters">Resetear Todo</string>
+    <string name="intensity_percent">%d%%</string>
+    <string name="strength_percent">%d%%</string>
+    <string name="edge_enhance">Realce de Bordes</string>
+    <string name="chromatic_aberration">Aberración Cromática</string>
+    <string name="chromatic_offsets">Desplazamientos de Color</string>
+    <string name="red_offset">Rojo</string>
+    <string name="green_offset">Verde</string>
+    <string name="blue_offset">Azul</string>
+    <string name="sphere_effect">Efecto Esfera</string>
+    <string name="emboss_effect">Efecto Relieve</string>
+    <string name="emboss_azimuth">Ángulo (0-360°)</string>
+    <string name="glow_effect">Efecto Brillo</string>
+    <string name="glow_radius">Radio del Brillo</string>
+    <string name="soft_mask">Máscara Suave</string>
+    <string name="rotation">Rotación</string>
+    <string name="rotation_degrees">%.0f°</string>
+    <string name="shadow_effect">Efecto Sombra</string>
+    <string name="shadow_radius">Radio de Sombra</string>
+    <string name="offset_x">Despl. X</string>
+    <string name="offset_y">Despl. Y</string>
+    <string name="border_effect">Borde</string>
+    <string name="border_width_px">%d px</string>
+    <string name="pixelate_effect">Efecto Pixelado</string>
+    <string name="pixel_size">Tamaño píxel</string>
+    <string name="cartoon_effect">Efecto Cartoon</string>
+    <string name="noise_effect">Efecto Ruido</string>
+    <string name="fisheye_effect">Efecto Ojo de Pez</string>
+    <string name="border_inner_px">%d px interior</string>
+    <string name="border_outer_px">%d px exterior</string>
+    <string name="load_mask">Cargar Máscara</string>
+    <string name="personalized_mask">Máscara Personalizada de Recorte</string>
+    <string name="mask_scale">Escala de Máscara</string>
+    <string name="mask_scale_percent">%d%%</string>
+    <string name="image_scale_ic">Escala de Imagen IC</string>
+    <string name="image_scale_percent">%d%%</string>
+    <string name="icon_colorization">Colorización de Íconos</string>
+    <string name="colorization_intensity">Intensidad de Colorización</string>
+    <string name="select_colorization_color">Seleccionar Color de Colorización</string>
+    <!-- Recorte de Forma con iconmask -->
+    <string name="shape_mask_toggle">Recorte de Forma (iconmask)</string>
+    <string name="shape_mask_status_loaded">Cargado</string>
+    <string name="shape_mask_status_not_loaded">No cargado</string>
+    <string name="shape_mask_status_active">Activado</string>
+    <string name="shape_mask_status_ready">Listo</string>
+    <string name="shape_mask_description">Define la forma final del ícono - Siempre centrado</string>
+    <string name="background_updated">Fondo actualizado</string>
+    <string name="upper_layer_updated">Capa superior actualizada</string>
+    <string name="mask_updated">Máscara actualizada</string>
+    <!-- Exportar Tematización -->
+    <string name="import_theming">Importar Tematización</string>
+    <string name="export_theming">Exportar Tematización</string>
+    <string name="export_theming_success">Tematización exportada exitosamente</string>
+    <string name="import_theming_success">Tematización importada exitosamente</string>
+    <string name="theming_file_corrupted">Archivo de tematización corrupto</string>
+    <string name="theming_export_error">Error al exportar tematización</string>
+    <string name="theming_import_error">Error al importar tematización</string>
     
+    <!-- ✅ NUEVOS STRINGS PARA FILTRO DE LAUNCHER -->
+    <string name="filter_launcher_apps">Solo apps visibles en el launcher</string>
+    <string name="launcher_filter_info">Muestra solo aplicaciones que tienen actividad MAIN/LAUNCHER y son visibles para el usuario. Excluye servicios del sistema, proveedores de contenido y apps ocultas.</string>
+    <string name="info">Información</string>
+    
+    <!-- ✅ NUEVOS STRINGS INFORMATIVOS DEL ESCANEO -->
+    <string name="scanning_apps">Escaneando aplicaciones</string>
+    <string name="step_step">Paso</string>
+    <string name="start_scan">Iniciando escaneo</string>
+    <string name="search_installed_apps">Buscando aplicaciones instaladas</string>
+    <string name="preparing_basic_data">Preparando datos básicos</string>
+    <string name="starting_advanced_analysis">Iniciando análisis avanzado</string>
+    <string name="updating_interface">Actualizando interfaz</string>
+    <string name="scan_completed">Escaneo completado</string>
+    <string name="results">Resultados</string>
+    <string name="total_apps">Apps totales</string>
+    <string name="visible_apps">Apps visibles</string>
+    <string name="hidden_apps">Apps ocultas</string>
+    <string name="scan_error">Error en el escaneo</string>
+    <string name="details">Detalles</string>
+    <string name="try_again">Reintente o verifique los permisos</string>
+    
+    <string name="actual_stats">Estadísticas actuales</string>
+    <string name="detected_hidden_apps">Apps ocultas detectadas</string>    
+    <string name="apps_visible_in_the_launcher">Apps visibles en el launcher</string>    
+    <string name="precalculated_for_speed">Todas las listas están pre-calculadas para máxima velocidad</string>    
+    <string name="first_five">Primeras 5</string>    
+    <string name="no_hidden_apps">No hay apps ocultas</string>    
+    <string name="no_visible_apps">No hay apps visibles</string>    
+    <string name="more_hidden_apps">apps ocultas más</string>    
+    <string name="more_visible_apps">apps visibles más</string>    
+    <string name="filter_of_launcher_apps">Filtro de Apps del Launcher</string>
+    <string name="understood">Entendido</string>
+    
+    <!-- Progreso del escaneo de aplicaciones -->
+    <string name="optimized_with_cache">Optimizado con cache de visibilidad</string>
+    <string name="progress_scanning_launcher_apps">Escaneando apps del launcher...</string>
+    <string name="progress_calculating_visible_apps">Calculando apps visibles en el launcher…</string>
+    <string name="progress_sorting_complete_list">Ordenando lista completa alfabéticamente…</string>
+    <string name="progress_preparing_all_filter">Preparando filtro TODAS las apps…</string>
+    <string name="progress_preparing_system_filter">Preparando filtro SISTEMA…</string>
+    <string name="progress_preparing_user_filter">Preparando filtro USUARIO…</string>
+    <string name="progress_preparing_gapps_filter">Preparando filtro GOOGLE APPS…</string>
+    <string name="progress_calculating_stats">Calculando estadísticas para información rápida…</string>
+    <string name="progress_lists_ready">¡Listas preparadas! Todo listo para usar.</string>
+    
+    <!-- Selector de temas -->
+    <string name="menu_theme">Tema de la App</string>
+    <string name="theme_classic">Clásico (Actual)</string>
+    <string name="theme_neon_dark">Neon Dark Futurista</string>
+    <string name="theme_material_blue">Material Blue</string>
+    <string name="theme_changed">Tema cambiado a: %s</string>
+    <string name="select_theme">Seleccionar Tema Visual</string>
+    <!-- Cyberpunk Edge Runners Theme -->
+    <string name="theme_cyberpunk_edge_runners">Cyberpunk Edge Runners</string>
+    
+    <!-- Strings para diálogo de progreso de tematización -->
+    <string name="exporting_theming">Exportando tematización</string>
+    <string name="importing_theming">Importando tematización</string>
+    <string name="creating_zip_file">Creando archivo ZIP</string>
+    <string name="reading_zip_file">Leyendo archivo ZIP</string>
+    <string name="please_wait">Por favor espera</string>
+    <string name="applying_theming">Aplicando tematización</string>
+    
+    <!-- Nuevos strings para licencias -->
     <string name="licenses_title">Licencias Open Source</string>
     <string name="menu_licenses">Licencias</string>
     <string name="open_source_licenses">Licencias Open Source</string>
 
     <!-- About section actualizada -->
-   <string name="about_content"><big><b>App Icon Scraper &amp; Themer V1.5</b></big>\n\n<b>Desarrollado por Romaster</b>\n\n<b>Contacto:</b> roman.ignacio.romero@gmail.com\n\n<b>GitHub:</b> https://github.com/Romaster1985\n\nUna aplicación completa para extraer, personalizar, exportar iconos de aplicaciones Android y crear packs de íconos totalmente personalizados.\n\n<b>Características principales:</b>\n• 📱 Interfaz de usuario simple y profesional\n• 🔍📋 Escanea y lista todas las aplicaciones instaladas\n• 🎯 Filtrado inteligente (Sistema, Usuario, Google Apps)\n• ✅ Selección múltiple de aplicaciones\n• 🎨 Sistema único de tematización de iconos con selección de iconos multicapa\n• 📐✂️ Reescalado y centrado independiente de capas frontales con detección y recorte inteligente de áreas transparentes\n• 📍 Ajuste de posición, escala, transparencia, tinte, saturación, brillo y contraste (escala independiente para capas frontales)\n• 🎭 Sistema de carga de máscaras para íconos adaptativos (iconback; iconmask; iconupon)\n• 🎛️ Control de intensidad de color (fundido a color preseteado)\n• 👁️ Vista previa en tiempo real + vista previa de todos los íconos\n• 📦 Generación de packs de iconos personalizados\n• 🗜️ Exportación a archivo ZIP listo para cargar en Icon Packer\n•📦 Esportación de pack de íconos en formato APK compatible con gran variedad de Launchers populares\n• 🤖📝 Crash Guard Logger incorporado para autodiagnóstico de errores ⛓️‍💥💥\n\n<b>Tecnologías:</b>\n• Kotlin\n• Android SDK\n• Material Design 3\n• RecyclerView\n• ViewModel\n• Gradle\n• Active Internal Cache\n• ZipAlign-Android 1.0 by Muntashir Al-Islam\m• Built In Android ApkSigner\n\nEsta aplicación fue desarrollada con la asistencia de 🐬DeepSeek.</string>
+   <string name="about_content"><big><b>App Icon Scraper &amp; Themer V1.6</b></big>\n\n<b>Desarrollado por Romaster</b>\n\n<b>Contacto:</b> roman.ignacio.romero@gmail.com\n\n<b>GitHub:</b> https://github.com/Romaster1985\n\nUna aplicación completa para extraer, personalizar, exportar iconos de aplicaciones Android y crear packs de íconos totalmente personalizados.\n\n<b>Características principales:</b>\n• 📱 Interfaz de usuario simple y profesional\n• 🔍📋 Escanea y lista todas las aplicaciones instaladas\n• 🎯 Filtrado inteligente (Sistema, Usuario, Google Apps)\n• ✅ Selección múltiple de aplicaciones\n• 🎨 Sistema único de tematización de iconos con selección de iconos multicapa\n• 📐✂️ Reescalado y centrado independiente de capas frontales con detección y recorte inteligente de áreas transparentes\n• 📍 Ajuste de posición, escala, transparencia, tinte, saturación, brillo y contraste (escala independiente para capas frontales)\n• 🎭 Sistema de carga de máscaras para íconos adaptativos (iconback; iconmask; iconupon)\n• 🎛️ Control de intensidad de color (fundido a color preseteado)\n• 🛸 NUEVOS AJUSTES AVANZADOS HIPERCARGADOS\n🆕​🎉​🐟​🔮​🎨​🫟🖌️​🎭🪛​🔩​⚙️​🛠️​📐​​​👾​🤯​\n• 👁️ Vista previa en tiempo real + vista previa de todos los íconos\n• 📦 Generación de packs de iconos personalizados\n• 🗜️ Exportación a archivo ZIP listo para cargar en Icon Packer\n•📦 Esportación de pack de íconos en formato APK compatible con gran variedad de Launchers populares\n• 🤖📝 Crash Guard Logger incorporado para autodiagnóstico de errores ⛓️‍💥💥\n\n<b>Tecnologías:</b>\n• Kotlin\n• Android SDK\n• Material Design 3\n• RecyclerView\n• ViewModel\n• Gradle\n• Active Internal Cache\n• ZipAlign-Android 1.0 by Muntashir Al-Islam\m• Built In Android ApkSigner\n\nEsta aplicación fue desarrollada con la asistencia de 🐬DeepSeek.</string>
 </resources>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="360dp"
+    android:height="640dp"
+    android:viewportWidth="360"
+    android:viewportHeight="640">
+
+    <!-- fondo oscuro -->
+    <path
+        android:fillColor="#0B0420"
+        android:pathData="M0,0 H360 V640 H0 Z" />
+
+    <!-- figura central magenta (forma simplificada) -->
+    <path
+        android:fillColor="#D139E6"
+        android:pathData="M90,80 L270,80 L300,140 L250,200 L220,200 L200,260 L230,320 L200,420 L160,420 L140,360 L120,320 L100,260 L80,200 L70,150 Z" />
+
+    <!-- detalles oscuros recortando (para dar sensación de cortes en la figura central) -->
+    <path
+        android:fillColor="#07051A"
+        android:pathData="M220,200 L260,160 L280,180 L240,220 Z" />
+
+    <path
+        android:fillColor="#07051A"
+        android:pathData="M150,320 L180,290 L190,310 L160,340 Z" />
+
+    <!-- acento cian izquierdo, barra vertical -->
+    <path
+        android:fillColor="#66F5F4"
+        android:pathData="M20,120 L60,120 L60,520 L20,520 Z" />
+
+    <!-- acento cian derecho, forma angulada -->
+    <path
+        android:fillColor="#66F5F4"
+        android:pathData="M300,40 L340,40 L340,380 L310,420 L300,420 Z" />
+
+    <!-- franjas diagonales (motivos tipo rejilla) - repetidas -->
+    <group android:translateX="40" android:translateY="160">
+        <path android:fillColor="#07051A" android:pathData="M0,0 L40,0 L40,8 L0,8 Z" />
+        <path android:fillColor="#07051A" android:pathData="M0,18 L40,18 L40,26 L0,26 Z" />
+        <path android:fillColor="#07051A" android:pathData="M0,36 L40,36 L40,44 L0,44 Z" />
+    </group>
+
+    <group android:translateX="240" android:translateY="460">
+        <path android:fillColor="#07051A" android:pathData="M0,0 L30,0 L30,8 L0,8 Z" />
+        <path android:fillColor="#07051A" android:pathData="M0,12 L30,12 L30,20 L0,20 Z" />
+    </group>
+
+    <!-- líneas finas tipo circuito (stroke-only) -->
+    <path
+        android:strokeColor="#2A1235"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M40,40 L70,70 L90,70 L120,40" />
+
+    <path
+        android:strokeColor="#2A1235"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M320,120 L300,140 L300,220 L320,240" />
+
+    <path
+        android:strokeColor="#66F5F4"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M80,380 L140,440 L140,480" />
+
+    <path
+        android:strokeColor="#D139E6"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M200,520 L200,480 L230,440" />
+
+    <!-- pequeños puntos de conexión (nodos) -->
+    <path
+        android:fillColor="#66F5F4"
+        android:pathData="M68,68 m-4,0 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0" />
+
+    <path
+        android:fillColor="#D139E6"
+        android:pathData="M310,230 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0" />
+
+</vector>

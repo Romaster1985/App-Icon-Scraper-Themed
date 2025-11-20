@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- ===== COLORES EXISTENTES (NO BORRAR) ===== -->
     <color name="primary">#2196F3</color>
     <color name="primary_dark">#1976D2</color>
     <color name="accent">#FF4081</color>
@@ -8,4 +9,100 @@
     <color name="card_stroke">#E0E0E0</color>
     <color name="text_primary">#212121</color>
     <color name="text_secondary">#757575</color>
+    <color name="black">#000000</color>
+    <color name="success">#00FF00</color>  <!-- ← ESTE ES EL QUE USA TU CÓDIGO -->
+    
+    <!-- ===== COLORES PARA TEMA NEON DARK ===== -->
+    <color name="neon_cyan">#FF00F5FF</color>
+    <color name="neon_purple">#FF9D50FF</color>
+    <color name="neon_pink">#FFFF0080</color>
+    <color name="neon_orange">#FFFF8A00</color>
+    <color name="neon_green">#FF00FFAA</color>
+    <color name="neon_glow">#4000FFFF</color>  <!-- Efecto de brillo cyan -->
+    
+    <!-- Fondos futuristas -->
+    <color name="neon_dark_background">#FF0A0A1A</color>
+    <color name="neon_dark_surface">#FF151530</color>
+    <color name="neon_dark_card">#FF202045</color>
+    <color name="neon_dark_card_light">#FF2D2D5A</color>
+    
+    <!-- Textos neon -->
+    <color name="neon_text_primary">#FFFFFFFF</color>
+    <color name="neon_text_secondary">#FFCCCCFF</color>
+    <color name="neon_text_accent">#FF00F5FF</color>
+    
+    <!-- ===== COLORES PARA TEMA MATERIAL BLUE ===== -->
+    <color name="material_blue_primary">#FF2196F3</color>
+    <color name="material_blue_primary_dark">#FF1976D2</color>
+    <color name="material_blue_accent">#FFFF9800</color>
+    <color name="material_light_background">#FFF5F5F5</color>
+    <color name="material_light_surface">#FFFFFFFF</color>
+    
+    <!-- ===== COLORES CYBERPUNK EDGE RUNNERS ===== -->
+    <color name="cyberpunk_black">#FF0A0A12</color>
+    <color name="cyberpunk_dark_blue">#FF151530</color>
+    <color name="cyberpunk_dark_purple">#FF1A0A2A</color>
+    
+    <!-- Neones -->
+    <color name="cyberpunk_neon_cyan">#FF00F5FF</color>
+    <color name="cyberpunk_neon_pink">#FFFF0080</color>
+    <color name="cyberpunk_neon_purple">#FF9D50FF</color>
+    <color name="cyberpunk_neon_yellow">#FFFFD700</color>
+    <color name="cyberpunk_neon_green">#FF00FFAA</color>
+    <color name="cyberpunk_neon_orange">#FFFF8A00</color>
+    
+    <!-- Efectos glitch -->
+    <color name="cyberpunk_glitch_red">#FFFF0044</color>
+    <color name="cyberpunk_glitch_blue">#FF0044FF</color>
+    <color name="cyberpunk_glitch_green">#FF00FF44</color>
+    
+    <!-- Textos -->
+    <color name="cyberpunk_text_primary">#FFFFFFFF</color>
+    <color name="cyberpunk_text_secondary">#FFCCCCFF</color>
+    <color name="cyberpunk_text_accent">#FF00F5FF</color>
+    <color name="cyberpunk_text_warning">#FFFFD700</color>
+    <color name="cyberpunk_text_danger">#FFFF0044</color>
+    <color name="cyberpunk_text_success">#FF00FFAA</color>
+    
+    <!-- Superficies con transparencias -->
+    <color name="cyberpunk_surface">#80151530</color>
+    <color name="cyberpunk_surface_variant">#40202A40</color>
+    <color name="cyberpunk_surface_glass">#201A0A2A</color>
+    
+    <!-- Bordes -->
+    <color name="cyberpunk_border_cyan">#FF00F5FF</color>
+    <color name="cyberpunk_border_pink">#FFFF0080</color>
+    <color name="cyberpunk_border_purple">#FF9D50FF</color>
+    
+    <!-- Colores adicionales para switches -->
+    <color name="switch_track_disabled">#E0E0E0</color>
+    <color name="switch_track_enabled_light">#BBDEFB</color>
+    <color name="switch_track_enabled_dark">#424242</color>
+    
+    <!-- Para Neon -->
+    <color name="neon_switch_track_off">#334D4DFF</color>
+    <color name="neon_switch_track_on">#4D00F5FF</color>
+    
+    <!-- Para Cyberpunk -->
+    <color name="cyberpunk_switch_track_off">#40202A40</color>
+    <color name="cyberpunk_switch_track_on">#6600F5FF</color>
+    
+    <!-- ===== COLORES DE SUPERFICIE GLASS (VIDRIO) ===== -->
+
+    <!-- Para Tema Clásico -->
+    <color name="surface_glass_classic">#99FFFFFF</color>
+    <color name="surface_variant_glass_classic">#99F5F5F5</color>
+    
+    <!-- Para Tema Neon Dark -->
+    <color name="surface_glass_neon_dark">#CC202045</color>
+    <color name="surface_variant_glass_neon_dark">#CC151530</color>
+    
+    <!-- Para Tema Material Blue -->
+    <color name="surface_glass_material_blue">#80FFFFFF</color>
+    <color name="surface_variant_glass_material_blue">#80F5F5F5</color>
+    
+    <!-- Para Tema Cyberpunk -->
+    <color name="surface_glass_cyberpunk">#CC151530</color>
+    <color name="surface_variant_glass_cyberpunk">#CC202A40</color>
+
 </resources>

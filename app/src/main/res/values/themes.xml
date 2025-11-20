@@ -1,9 +1,377 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Theme.AppIconScraper" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Primary brand color. -->
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    
+    <!-- ===== TEMA CLÁSICO (BASE) - MATERIAL 3 LIGHT ===== -->
+    <style name="Theme.AppIconScraper" parent="Theme.Material3.Light">
+        <!-- Primary colors -->
         <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primary_dark</item>
-        <item name="colorAccent">@color/accent</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/primary</item>
+        <item name="colorOnPrimaryContainer">@color/white</item>
+        
+        <!-- Secondary colors -->
+        <item name="colorSecondary">@color/accent</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSecondaryContainer">@color/accent</item>
+        <item name="colorOnSecondaryContainer">@color/white</item>
+        
+        <!-- Tertiary colors -->
+        <item name="colorTertiary">@color/primary_dark</item>
+        <item name="colorOnTertiary">@color/white</item>
+        
+        <!-- Surface colors -->
+        <item name="colorSurface">@color/surface_glass_classic</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="colorSurfaceVariant">@color/surface_variant_glass_classic</item>
+        <item name="colorOnSurfaceVariant">@color/text_secondary</item>
+        
+        <!-- Background colors
+        <item name="android:colorBackground">@color/white</item> -->
+        <item name="colorOnBackground">@color/text_primary</item>
+        
+        <!-- Error colors -->
+        <item name="colorError">@android:color/holo_red_dark</item>
+        <item name="colorOnError">@color/white</item>
+        
+        <!-- Outline colors -->
+        <item name="colorOutline">@color/card_stroke</item>
+        <item name="colorOutlineVariant">@color/text_secondary</item>
+        
+        <!-- ✅ CHIPS TEMÁTICOS -->
+        <item name="systemChipBackgroundColor">@color/accent</item>
+        <item name="systemChipTextColor">@color/white</item>
+        <item name="googleChipBackgroundColor">@color/primary</item>
+        <item name="googleChipTextColor">@color/white</item>
+        
+        <!-- ✅ COMPONENTES TEMÁTICOS -->
+        <!-- Botones -->
+        <item name="materialButtonStyle">@style/Button.Classic.Filled</item>
+        <item name="materialButtonOutlinedStyle">@style/Button.Classic.Outlined</item>
+        
+        <!-- CheckBox -->
+        <item name="checkboxStyle">@style/CheckBox.Classic</item>
+        
+        <!-- Switch -->
+        <item name="switchStyle">@style/Switch.Classic</item>
+        
+        <!-- RadioButton -->
+        <item name="radioButtonStyle">@style/RadioButton.Classic</item>
+        
+        <!-- Chips -->
+        <item name="chipStyle">@style/Chip.Classic.System</item>
+        
+        <!-- ActionBar -->
+        <item name="actionBarStyle">@style/ActionBar.Classic</item>
+        
+        <!-- Tipografía con Exo 2 -->
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.Material3.TitleLarge.Exo2</item>
+        <item name="textAppearanceTitleMedium">@style/TextAppearance.Material3.TitleMedium.Exo2</item>
+        <item name="textAppearanceTitleSmall">@style/TextAppearance.Material3.TitleSmall.Exo2</item>
+        <item name="textAppearanceBodyLarge">@style/TextAppearance.Material3.BodyLarge.Exo2</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.Material3.BodyMedium.Exo2</item>
+        <item name="textAppearanceBodySmall">@style/TextAppearance.Material3.BodySmall.Exo2</item>
+        <item name="textAppearanceLabelLarge">@style/TextAppearance.Material3.LabelLarge.Exo2</item>
+        <item name="textAppearanceLabelMedium">@style/TextAppearance.Material3.LabelMedium.Exo2</item>
+        <item name="textAppearanceLabelSmall">@style/TextAppearance.Material3.LabelSmall.Exo2</item>
+        
+        <!-- Window background -->
+        <item name="android:windowBackground">@drawable/bg_classic</item>
+        <!-- Para que se vea el PNG a través del glass -->
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        
+        <!-- Status bar -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/primary_dark</item>
+        <item name="android:navigationBarColor">@color/white</item>
+        
+        <!-- Animaciones -->
+        <item name="android:windowAnimationStyle">@style/WindowAnimation.Default</item>
+        
+        <!-- Cards -->
+        <item name="cardViewStyle">@style/Card.Classic</item>
+        
+        <!-- SeekBar -->
+        <item name="seekBarStyle">@style/SeekBar.Classic</item>
     </style>
+
+    <!-- ===== TEMA NEON DARK ===== -->
+    <style name="Theme.AppIconScraper.NeonDark" parent="Theme.Material3.Dark">
+        <!-- Colores Cyberpunk -->
+        <item name="colorPrimary">@color/neon_cyan</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorPrimaryContainer">@color/neon_dark_surface</item>
+        <item name="colorOnPrimaryContainer">@color/neon_cyan</item>
+        
+        <item name="colorSecondary">@color/neon_pink</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondaryContainer">@color/neon_dark_card</item>
+        <item name="colorOnSecondaryContainer">@color/neon_pink</item>
+        
+        <!-- Tertiary colors -->
+        <item name="colorTertiary">@color/neon_purple</item>
+        <item name="colorOnTertiary">@color/black</item>
+        
+        <!-- Surface colors -->
+        <item name="colorSurface">@color/surface_glass_neon_dark</item>
+        <item name="colorOnSurface">@color/neon_text_primary</item>
+        <item name="colorSurfaceVariant">@color/surface_variant_glass_neon_dark</item>
+        <item name="colorOnSurfaceVariant">@color/neon_text_secondary</item>
+        
+        <!-- Background colors
+        <item name="android:colorBackground">@color/neon_dark_background</item> -->
+        <item name="colorOnBackground">@color/neon_text_primary</item>
+        
+        <!-- Error colors -->
+        <item name="colorError">@color/neon_pink</item>
+        <item name="colorOnError">@color/black</item>
+        
+        <!-- Outline colors -->
+        <item name="colorOutline">@color/neon_cyan</item>
+        <item name="colorOutlineVariant">@color/neon_text_secondary</item>
+        
+        <!-- ✅ CHIPS TEMÁTICOS PARA NEON DARK -->
+        <item name="systemChipBackgroundColor">@color/neon_pink</item>
+        <item name="systemChipTextColor">@color/black</item>
+        <item name="googleChipBackgroundColor">@color/neon_cyan</item>
+        <item name="googleChipTextColor">@color/black</item>
+        
+        <!-- ✅ COMPONENTES TEMÁTICOS PARA NEON DARK -->
+        <!-- Botones -->
+        <item name="materialButtonStyle">@style/Button.NeonDark.Filled</item>
+        <item name="materialButtonOutlinedStyle">@style/Button.NeonDark.Outlined</item>
+        
+        <!-- CheckBox -->
+        <item name="checkboxStyle">@style/CheckBox.NeonDark</item>
+        
+        <!-- Switch -->
+        <item name="switchStyle">@style/Switch.NeonDark</item>
+        
+        <!-- RadioButton -->
+        <item name="radioButtonStyle">@style/RadioButton.NeonDark</item>
+        
+        <!-- Chips -->
+        <item name="chipStyle">@style/Chip.NeonDark.System</item>
+        
+        <!-- ActionBar -->
+        <item name="actionBarStyle">@style/ActionBar.NeonDark</item>
+        
+        <!-- Tipografía con efectos neon -->
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.NeonDark.TitleLarge</item>
+        <item name="textAppearanceTitleMedium">@style/TextAppearance.NeonDark.TitleMedium</item>
+        <item name="textAppearanceTitleSmall">@style/TextAppearance.NeonDark.TitleSmall</item>
+        <item name="textAppearanceBodyLarge">@style/TextAppearance.NeonDark.BodyLarge</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.NeonDark.BodyMedium</item>
+        <item name="textAppearanceBodySmall">@style/TextAppearance.NeonDark.BodySmall</item>
+        <item name="textAppearanceLabelLarge">@style/TextAppearance.NeonDark.LabelLarge</item>
+        <item name="textAppearanceLabelMedium">@style/TextAppearance.NeonDark.LabelMedium</item>
+        <item name="textAppearanceLabelSmall">@style/TextAppearance.NeonDark.LabelSmall</item>
+        
+        <!-- Fondo ventana -->
+        <item name="android:windowBackground">@drawable/bg_neon_dark</item>
+        <!-- Para que se vea el PNG a través del glass -->
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        
+        <!-- Status bar Neon Dark -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/neon_dark_surface</item>
+        <item name="android:navigationBarColor">@color/neon_dark_background</item>
+        
+        <!-- Animaciones -->
+        <item name="android:windowAnimationStyle">@style/WindowAnimation.Default</item>
+        
+        <!-- Cards -->
+        <item name="cardViewStyle">@style/Card.NeonDark</item>
+        
+        <!-- SeekBar -->
+        <item name="seekBarStyle">@style/SeekBar.NeonDark</item>
+        
+        <!-- Componentes específicos -->
+        <item name="seekBarStyle">@style/SeekBar.NeonDark</item>
+    </style>
+
+    <!-- ===== TEMA MATERIAL BLUE ===== -->
+    <style name="Theme.AppIconScraper.MaterialBlue" parent="Theme.Material3.Light">
+        <!-- Colores Material Blue -->
+        <item name="colorPrimary">@color/material_blue_primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/material_blue_primary</item>
+        <item name="colorOnPrimaryContainer">@color/white</item>
+        
+        <item name="colorSecondary">@color/material_blue_accent</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondaryContainer">@color/material_blue_accent</item>
+        <item name="colorOnSecondaryContainer">@color/black</item>
+        
+        <!-- Surface colors -->
+        <item name="colorSurface">@color/surface_glass_material_blue</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="colorSurfaceVariant">@color/surface_variant_glass_material_blue</item>
+        <item name="colorOnSurfaceVariant">@color/text_secondary</item>
+        
+        <!-- Background colors
+        <item name="android:colorBackground">@color/material_light_background</item> -->
+        <item name="colorOnBackground">@color/text_primary</item>
+        
+        <!-- Outline colors -->
+        <item name="colorOutline">@color/text_secondary</item>
+        <item name="colorOutlineVariant">@color/card_stroke</item>
+        
+        <!-- ✅ CHIPS TEMÁTICOS PARA MATERIAL BLUE -->
+        <item name="systemChipBackgroundColor">@color/accent</item>
+        <item name="systemChipTextColor">@color/white</item>
+        <item name="googleChipBackgroundColor">@color/material_blue_primary</item>
+        <item name="googleChipTextColor">@color/white</item>
+        
+        <!-- ✅ COMPONENTES TEMÁTICOS PARA MATERIAL BLUE -->
+        <!-- Botones -->
+        <item name="materialButtonStyle">@style/Button.MaterialBlue.Filled</item>
+        <item name="materialButtonOutlinedStyle">@style/Button.MaterialBlue.Outlined</item>
+        
+        <!-- CheckBox -->
+        <item name="checkboxStyle">@style/CheckBox.MaterialBlue</item>
+        
+        <!-- Switch -->
+        <item name="switchStyle">@style/Switch.MaterialBlue</item>
+        
+        <!-- RadioButton -->
+        <item name="radioButtonStyle">@style/RadioButton.MaterialBlue</item>
+        
+        <!-- Chips -->
+        <item name="chipStyle">@style/Chip.MaterialBlue.System</item>
+        
+        <!-- ActionBar -->
+        <item name="actionBarStyle">@style/ActionBar.MaterialBlue</item>
+        
+        <!-- Tipografía con Exo 2 -->
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.Material3.TitleLarge.Exo2</item>
+        <item name="textAppearanceTitleMedium">@style/TextAppearance.Material3.TitleMedium.Exo2</item>
+        <item name="textAppearanceTitleSmall">@style/TextAppearance.Material3.TitleSmall.Exo2</item>
+        <item name="textAppearanceBodyLarge">@style/TextAppearance.Material3.BodyLarge.Exo2</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.Material3.BodyMedium.Exo2</item>
+        <item name="textAppearanceBodySmall">@style/TextAppearance.Material3.BodySmall.Exo2</item>
+        <item name="textAppearanceLabelLarge">@style/TextAppearance.Material3.LabelLarge.Exo2</item>
+        <item name="textAppearanceLabelMedium">@style/TextAppearance.Material3.LabelMedium.Exo2</item>
+        <item name="textAppearanceLabelSmall">@style/TextAppearance.Material3.LabelSmall.Exo2</item>
+        
+        <!-- Fondo ventana -->
+        <item name="android:windowBackground">@drawable/bg_material_blue</item>
+        <!-- Para que se vea el PNG a través del glass -->
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        
+        <!-- Status bar -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/material_blue_primary_dark</item>
+        <item name="android:navigationBarColor">@color/material_light_background</item>
+        
+        <!-- Animaciones -->
+        <item name="android:windowAnimationStyle">@style/WindowAnimation.Default</item>
+        
+        <!-- Cards -->
+        <item name="cardViewStyle">@style/Card.MaterialBlue</item>
+        
+        <!-- SeekBar -->
+        <item name="seekBarStyle">@style/SeekBar.MaterialBlue</item>
+    </style>
+    
+    <!-- ===== TEMA CYBERPUNK EDGE RUNNERS ===== -->
+    <style name="Theme.AppIconScraper.CyberpunkEdgeRunners" parent="Theme.Material3.Dark">
+        <!-- ✅ ATRIBUTO PARA DETECTAR TEMA CYBERPUNK -->
+        <item name="isCyberpunkTheme">true</item>
+            
+        <!-- Colores principales -->
+        <item name="colorPrimary">@color/cyberpunk_neon_cyan</item>
+        <item name="colorOnPrimary">@color/cyberpunk_black</item>
+        <item name="colorPrimaryContainer">@color/cyberpunk_surface</item>
+        <item name="colorOnPrimaryContainer">@color/cyberpunk_neon_cyan</item>
+        
+        <item name="colorSecondary">@color/cyberpunk_neon_pink</item>
+        <item name="colorOnSecondary">@color/cyberpunk_black</item>
+        <item name="colorSecondaryContainer">@color/cyberpunk_surface_variant</item>
+        <item name="colorOnSecondaryContainer">@color/cyberpunk_neon_pink</item>
+        
+        <item name="colorTertiary">@color/cyberpunk_neon_purple</item>
+        <item name="colorOnTertiary">@color/cyberpunk_black</item>
+        <item name="colorTertiaryContainer">@color/cyberpunk_surface_glass</item>
+        <item name="colorOnTertiaryContainer">@color/cyberpunk_neon_purple</item>
+        
+        <!-- Superficies -->
+        <item name="colorSurface">@color/surface_glass_cyberpunk</item>
+        <item name="colorOnSurface">@color/cyberpunk_text_primary</item>
+        <item name="colorSurfaceVariant">@color/surface_variant_glass_cyberpunk</item>
+        <item name="colorOnSurfaceVariant">@color/cyberpunk_text_secondary</item>
+        
+        <!-- Background
+        <item name="android:colorBackground">@color/cyberpunk_black</item> -->
+        <item name="colorOnBackground">@color/cyberpunk_text_primary</item>
+        
+        <!-- Error -->
+        <item name="colorError">@color/cyberpunk_neon_pink</item>
+        <item name="colorOnError">@color/cyberpunk_black</item>
+        
+        <!-- Outline -->
+        <item name="colorOutline">@color/cyberpunk_border_cyan</item>
+        <item name="colorOutlineVariant">@color/cyberpunk_border_pink</item>
+        
+        <!-- ✅ CHIPS TEMÁTICOS PARA CYBERPUNK -->
+        <item name="systemChipBackgroundColor">@color/cyberpunk_neon_pink</item>
+        <item name="systemChipTextColor">@color/cyberpunk_black</item>
+        <item name="googleChipBackgroundColor">@color/cyberpunk_neon_yellow</item>
+        <item name="googleChipTextColor">@color/cyberpunk_black</item>
+        
+        <!-- ✅ COMPONENTES TEMÁTICOS PARA CYBERPUNK -->
+        <!-- Botones -->
+        <item name="materialButtonStyle">@style/Button.Cyberpunk.Filled</item>
+        <item name="materialButtonOutlinedStyle">@style/Button.Cyberpunk.Outlined</item>
+        
+        <!-- CheckBox -->
+        <item name="checkboxStyle">@style/CheckBox.Cyberpunk</item>
+        
+        <!-- Switch -->
+        <item name="switchStyle">@style/Switch.Cyberpunk</item>
+        
+        <!-- RadioButton -->
+        <item name="radioButtonStyle">@style/RadioButton.Cyberpunk</item>
+        
+        <!-- Chips -->
+        <item name="chipStyle">@style/Chip.Cyberpunk.System</item>
+        
+        <!-- ActionBar -->
+        <item name="actionBarStyle">@style/ActionBar.Cyberpunk</item>
+        
+        <!-- Tipografía Cyberpunk -->
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.Cyberpunk.TitleLarge.Glitch</item>
+        <item name="textAppearanceTitleMedium">@style/TextAppearance.Cyberpunk.TitleMedium</item>
+        <item name="textAppearanceTitleSmall">@style/TextAppearance.Cyberpunk.TitleSmall</item>
+        <item name="textAppearanceBodyLarge">@style/TextAppearance.Cyberpunk.BodyLarge</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.Cyberpunk.BodyMedium</item>
+        <item name="textAppearanceBodySmall">@style/TextAppearance.Cyberpunk.BodySmall</item>
+        <item name="textAppearanceLabelLarge">@style/TextAppearance.Cyberpunk.LabelLarge</item>
+        <item name="textAppearanceLabelMedium">@style/TextAppearance.Cyberpunk.LabelMedium</item>
+        <item name="textAppearanceLabelSmall">@style/TextAppearance.Cyberpunk.LabelSmall</item>
+        
+        <!-- Fondo -->
+        <item name="android:windowBackground">@drawable/bg_cyberpunk_edgerunners</item>
+        <!-- Para que se vea el PNG a través del glass -->
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        
+        <!-- Status bar -->
+        <item name="android:statusBarColor">@color/cyberpunk_black</item>
+        <item name="android:navigationBarColor">@color/cyberpunk_black</item>
+        
+        <!-- Animaciones Cyberpunk -->
+        <item name="android:windowAnimationStyle">@style/WindowAnimation.Default</item>
+        
+        <!-- Cards -->
+        <item name="cardViewStyle">@style/Card.Cyberpunk</item>
+        
+        <!-- SeekBar -->
+        <item name="seekBarStyle">@style/SeekBar.Cyberpunk</item>
+        
+        <!-- Elevación -->
+        <item name="android:elevation">4dp</item>
+        <item name="elevationOverlayEnabled">true</item>
+    </style>
+
 </resources>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Atributos para chips temáticos -->
+    <attr name="systemChipBackgroundColor" format="color" />
+    <attr name="systemChipTextColor" format="color" />
+    <attr name="googleChipBackgroundColor" format="color" />
+    <attr name="googleChipTextColor" format="color" />
+    
+    <!-- Atributo para detectar tema Cyberpunk -->
+    <attr name="isCyberpunkTheme" format="boolean" />
+    
+    <!-- Atributos para componentes temáticos personalizados -->
+    <attr name="cardStyle" format="reference" />
+    <attr name="buttonStyleFilled" format="reference" />
+    <attr name="buttonStyleOutlined" format="reference" />
+    <attr name="checkboxStyle" format="reference" />
+    <attr name="switchStyle" format="reference" />
+    <attr name="radioButtonStyle" format="reference" />
+    <attr name="seekBarStyle" format="reference" />
+    <attr name="chipSystemStyle" format="reference" />
+    <attr name="chipGoogleStyle" format="reference" />
+    
+    <!-- Atributos para efectos especiales -->
+    <attr name="neonGlowColor" format="color" />
+    <attr name="cyberpunkGlitchColor" format="color" />
+    <attr name="hasGlitchEffect" format="boolean" />
+    <attr name="hasNeonEffect" format="boolean" />
+    
+    <!-- Atributos para tipografía temática -->
+    <attr name="fontFamilyPrimary" format="reference" />
+    <attr name="fontFamilySecondary" format="reference" />
+    <attr name="fontFamilyCyberpunk" format="reference" />
+    
+    <!-- Atributos para bordes temáticos -->
+    <attr name="borderColorPrimary" format="color" />
+    <attr name="borderColorSecondary" format="color" />
+    <attr name="borderWidthNormal" format="dimension" />
+    <attr name="borderWidthThick" format="dimension" />
+    
+    <!-- Atributos para sombras y elevaciones temáticas -->
+    <attr name="elevationSmall" format="dimension" />
+    <attr name="elevationMedium" format="dimension" />
+    <attr name="elevationLarge" format="dimension" />
+    <attr name="shadowColor" format="color" />
+    <attr name="shadowRadius" format="dimension" />
+    
+    <!-- Atributos para esquinas redondeadas temáticas -->
+    <attr name="cornerRadiusSmall" format="dimension" />
+    <attr name="cornerRadiusMedium" format="dimension" />
+    <attr name="cornerRadiusLarge" format="dimension" />
+    <attr name="cornerRadiusCyberpunk" format="dimension" />
+    
+    <!-- Atributos para animaciones temáticas -->
+    <attr name="windowEnterAnimation" format="reference" />
+    <attr name="windowExitAnimation" format="reference" />
+    <attr name="buttonPressAnimation" format="reference" />
+    
+    <!-- Atributos para estados de componentes -->
+    <attr name="buttonEnabledStyle" format="reference" />
+    <attr name="buttonDisabledStyle" format="reference" />
+    <attr name="cardSelectedStyle" format="reference" />
+    <attr name="cardUnselectedStyle" format="reference" />
+    
+    <!-- Atributos para iconos temáticos -->
+    <attr name="iconTintColor" format="color" />
+    <attr name="iconTintColorDisabled" format="color" />
+    <attr name="iconSizeSmall" format="dimension" />
+    <attr name="iconSizeMedium" format="dimension" />
+    <attr name="iconSizeLarge" format="dimension" />
+    
+    <!-- Atributos para textos temáticos -->
+    <attr name="textColorPrimary" format="color" />
+    <attr name="textColorSecondary" format="color" />
+    <attr name="textColorAccent" format="color" />
+    <attr name="textColorDisabled" format="color" />
+    
+    <!-- Atributos para fondos temáticos -->
+    <attr name="backgroundPrimary" format="color|reference" />
+    <attr name="backgroundSecondary" format="color|reference" />
+    <attr name="backgroundSurface" format="color|reference" />
+    <attr name="backgroundOverlay" format="color|reference" />
+    
+    <!-- Atributos para transparencias temáticas -->
+    <attr name="alphaEnabled" format="fraction" />
+    <attr name="alphaDisabled" format="fraction" />
+    <attr name="alphaSelected" format="fraction" />
+    <attr name="alphaUnselected" format="fraction" />
+    
+</resources>

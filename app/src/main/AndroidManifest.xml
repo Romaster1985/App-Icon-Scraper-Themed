@@ -44,33 +44,27 @@
         <activity
             android:name=".ThemeCustomizationActivity"
             android:launchMode="singleTop"
-            android:label="Personalizar Iconos"
+            android:label="@string/theme_customization_title"
             android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.AppIconScraper" />
 
         <activity
             android:name=".IconPreviewActivity"
-            android:label="Vista Previa de Iconos"
+            android:label="@string/icon_preview_title"
             android:parentActivityName=".ThemeCustomizationActivity"
             android:theme="@style/Theme.AppIconScraper" />
             
         <activity
             android:name=".ForegroundProcessingActivity"
-            android:label="Pre-procesamiento Foreground"
+            android:label="@string/pre_process_title"
             android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.AppIconScraper" />
             
         <activity
             android:name=".APKAnalysisActivity"
-            android:label="Analizador de APKs"
+            android:label="@string/apk_analyzer_title"
             android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.AppIconScraper" />
-            
-        <activity
-            android:name=".DebugLogsActivity"
-            android:label="Debug en Tiempo Real"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
-            android:exported="false" />
             
         <activity
             android:name=".LicensesActivity"

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Shape corner radii -->
+    <dimen name="shape_corner_small">8dp</dimen>
+    <dimen name="shape_corner_medium">12dp</dimen>
+    <dimen name="shape_corner_large">16dp</dimen>
+    <dimen name="shape_corner_extra_large">28dp</dimen>
+    
+    <!-- Cyberpunk specific -->
+    <dimen name="cyberpunk_corner_small">2dp</dimen>
+    <dimen name="cyberpunk_corner_medium">4dp</dimen>
+    <dimen name="cyberpunk_corner_large">0dp</dimen>
+    <dimen name="cyberpunk_button_radius">2dp</dimen>
+    <dimen name="cyberpunk_button_stroke_width">2dp</dimen>
+    
+    <!-- Neon specific -->
+    <dimen name="neon_glow_radius">10dp</dimen>
+    <dimen name="neon_stroke_width">2dp</dimen>
+    
+    <!-- Spacing -->
+    <dimen name="spacing_tiny">4dp</dimen>
+    <dimen name="spacing_small">8dp</dimen>
+    <dimen name="spacing_medium">16dp</dimen>
+    <dimen name="spacing_large">24dp</dimen>
+    <dimen name="spacing_extra_large">32dp</dimen>
+    
+    <!-- Elevation -->
+    <dimen name="elevation_none">0dp</dimen>
+    <dimen name="elevation_small">2dp</dimen>
+    <dimen name="elevation_medium">4dp</dimen>
+    <dimen name="elevation_large">8dp</dimen>
+    <dimen name="elevation_extra_large">16dp</dimen>
+    
+    <!-- Component sizes -->
+    <dimen name="button_height">48dp</dimen>
+    <dimen name="button_height_small">36dp</dimen>
+    <dimen name="button_height_large">56dp</dimen>
+    
+    <dimen name="icon_size_small">24dp</dimen>
+    <dimen name="icon_size_medium">48dp</dimen>
+    <dimen name="icon_size_large">96dp</dimen>
+    <dimen name="icon_size_xlarge">128dp</dimen>
+    
+    <dimen name="chip_height">24dp</dimen>
+    <dimen name="chip_height_small">20dp</dimen>
+    
+    <!-- Stroke widths -->
+    <dimen name="stroke_width_thin">0.5dp</dimen>
+    <dimen name="stroke_width_normal">1dp</dimen>
+    <dimen name="stroke_width_thick">2dp</dimen>
+    <dimen name="stroke_width_extra_thick">4dp</dimen>
+    
+    <!-- Text sizes -->
+    <dimen name="text_size_micro">8sp</dimen>
+    <dimen name="text_size_tiny">10sp</dimen>
+    <dimen name="text_size_small">12sp</dimen>
+    <dimen name="text_size_medium">14sp</dimen>
+    <dimen name="text_size_large">16sp</dimen>
+    <dimen name="text_size_xlarge">20sp</dimen>
+    <dimen name="text_size_xxlarge">24sp</dimen>
+    
+    <!-- Padding -->
+    <dimen name="padding_tiny">2dp</dimen>
+    <dimen name="padding_small">4dp</dimen>
+    <dimen name="padding_medium">8dp</dimen>
+    <dimen name="padding_large">12dp</dimen>
+    <dimen name="padding_xlarge">16dp</dimen>
+    <dimen name="padding_xxlarge">24dp</dimen>
+    
+    <!-- Margins -->
+    <dimen name="margin_tiny">2dp</dimen>
+    <dimen name="margin_small">4dp</dimen>
+    <dimen name="margin_medium">8dp</dimen>
+    <dimen name="margin_large">12dp</dimen>
+    <dimen name="margin_xlarge">16dp</dimen>
+    <dimen name="margin_xxlarge">24dp</dimen>
+    
+    <!-- Card specific -->
+    <dimen name="card_elevation_small">2dp</dimen>
+    <dimen name="card_elevation_medium">4dp</dimen>
+    <dimen name="card_elevation_large">8dp</dimen>
+    
+    <!-- App specific -->
+    <dimen name="preview_icon_size">120dp</dimen>
+    <dimen name="mask_preview_size">80dp</dimen>
+    <dimen name="app_icon_size_list">48dp</dimen>
+    
+</resources>

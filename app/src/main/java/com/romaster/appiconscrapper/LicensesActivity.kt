@@ -32,6 +32,7 @@ class LicensesActivity : AppCompatActivity() {
         setContentView(webView)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title = getString(R.string.licenses_title)
+        supportActionBar?.title = getString(R.string.licenses_title)
     }
     
     override fun onSupportNavigateUp(): Boolean {

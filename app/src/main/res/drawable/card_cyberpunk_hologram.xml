@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <!-- Base oscura semi-transparente -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="14dp"/>
+            <solid android:color="#80151530"/>
+        </shape>
+    </item>
+    
+    <!-- Borde neón con dash -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="14dp"/>
+            <stroke
+                android:width="1.5dp"
+                android:color="#FF00F5FF"
+                android:dashWidth="4dp"
+                android:dashGap="4dp"/>
+        </shape>
+    </item>
+    
+    <!-- Grid interno holográfico -->
+    <item android:bottom="8dp" android:top="8dp" android:left="8dp" android:right="8dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="6dp"/>
+            <stroke
+                android:width="0.5dp"
+                android:color="#20FFFFFF"
+                android:dashWidth="2dp"
+                android:dashGap="2dp"/>
+            <solid android:color="#10151530"/>
+        </shape>
+    </item>
+    
+    <!-- Reflejo de esquina superior -->
+    <item android:gravity="top|start">
+        <rotate android:fromDegrees="45">
+            <shape android:shape="rectangle">
+                <size android:width="20dp" android:height="20dp"/>
+                <gradient
+                    android:startColor="#80FFFFFF"
+                    android:endColor="#00FFFFFF"
+                    android:angle="135"/>
+            </shape>
+        </rotate>
+    </item>
+    
+    <!-- Puntos de conexión brillantes -->
+    <item>
+        <vector android:width="300dp" android:height="300dp"
+                android:viewportWidth="300" android:viewportHeight="300">
+            <path
+                android:fillColor="#FF00F5FF"
+                android:pathData="M20,20h2v2h-2z M280,20h2v2h-2z
+                                 M20,150h2v2h-2z M150,150h2v2h-2z M280,150h2v2h-2z
+                                 M20,280h2v2h-2z M280,280h2v2h-2z"/>
+        </vector>
+    </item>
+    
+</layer-list>

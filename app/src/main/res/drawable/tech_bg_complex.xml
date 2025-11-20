@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="360dp"
+    android:height="640dp"
+    android:viewportWidth="360"
+    android:viewportHeight="640">
+
+    <!-- FONDO -->
+    <path
+        android:fillColor="#0A0820"
+        android:pathData="M0,0 H360 V640 H0 Z" />
+
+    <!-- BLOQUES MAGENTA PRINCIPALES (formas grandes) -->
+    <path
+        android:fillColor="#D336E6"
+        android:pathData="
+            M110,40 L250,40 L290,120
+            L260,180 L220,180 L200,240
+            L240,300 L210,390 L150,390
+            L130,330 L100,300 L80,240 L70,180 L90,120 Z" />
+
+    <!-- Extensiones magenta extra para dar irregularidad -->
+    <path
+        android:fillColor="#D336E6"
+        android:pathData="M130,410 L180,410 L200,460 L150,460 Z" />
+
+    <path
+        android:fillColor="#D336E6"
+        android:pathData="M220,250 L260,250 L280,300 L240,300 Z" />
+
+    <!-- CORTES OSCUROS SOBRE EL MAGENTA (imitan canales internos) -->
+    <path
+        android:fillColor="#08041A"
+        android:pathData="M200,170 L240,130 L255,150 L215,190 Z" />
+
+    <path
+        android:fillColor="#08041A"
+        android:pathData="M150,250 L180,220 L195,245 L165,275 Z" />
+
+    <path
+        android:fillColor="#08041A"
+        android:pathData="M170,330 L210,300 L225,320 L185,350 Z" />
+
+    <!-- BANDAS DIAGONALES MAGENTA -->
+    <group android:translateX="140" android:translateY="120">
+        <path android:fillColor="#C02AD1" android:pathData="M0,0 L38,0 L38,10 L0,10 Z" />
+        <path android:fillColor="#C02AD1" android:pathData="M0,22 L38,22 L38,32 L0,32 Z" />
+        <path android:fillColor="#C02AD1" android:pathData="M0,44 L38,44 L38,54 L0,54 Z" />
+    </group>
+
+    <group android:translateX="170" android:translateY="300">
+        <path android:fillColor="#C02AD1" android:pathData="M0,0 L32,0 L32,8 L0,8 Z" />
+        <path android:fillColor="#C02AD1" android:pathData="M0,16 L32,16 L32,24 L0,24 Z" />
+    </group>
+
+    <!-- BLOQUES CIAN GRANDES -->
+    <path
+        android:fillColor="#63F1FF"
+        android:pathData="M20,80 L60,80 L60,560 L20,560 Z" />
+
+    <path
+        android:fillColor="#63F1FF"
+        android:pathData="M300,30 L340,30 L340,360 L300,420 Z" />
+
+    <!-- CIAN CORTES TIPO “REJILLA” -->
+    <group android:translateX="40" android:translateY="200">
+        <path android:fillColor="#0A0820" android:pathData="M0,0 L50,0 L50,8 L0,8 Z" />
+        <path android:fillColor="#0A0820" android:pathData="M0,18 L50,18 L50,26 L0,26 Z" />
+        <path android:fillColor="#0A0820" android:pathData="M0,36 L50,36 L50,44 L0,44 Z" />
+        <path android:fillColor="#0A0820" android:pathData="M0,54 L50,54 L50,62 L0,62 Z" />
+    </group>
+
+    <group android:translateX="260" android:translateY="460">
+        <path android:fillColor="#0A0820" android:pathData="M0,0 L40,0 L40,8 L0,8 Z" />
+        <path android:fillColor="#0A0820" android:pathData="M0,14 L40,14 L40,22 L0,22 Z" />
+        <path android:fillColor="#0A0820" android:pathData="M0,28 L40,28 L40,36 L0,36 Z" />
+    </group>
+
+    <!-- TRAZOS TIPO CIRCUITO: LÍNEAS PRINCIPALES -->
+    <path
+        android:strokeColor="#63F1FF"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M80,40 L110,80 L110,150 L130,170" />
+
+    <path
+        android:strokeColor="#D336E6"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M260,100 L240,130 L240,190 L270,220" />
+
+    <path
+        android:strokeColor="#63F1FF"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M60,300 L120,360 L120,420 L140,440" />
+
+    <path
+        android:strokeColor="#D336E6"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M220,500 L220,440 L260,400" />
+
+    <!-- TRAZOS SECUNDARIOS DELGADOS -->
+    <path
+        android:strokeColor="#2C1A3B"
+        android:strokeWidth="1.4"
+        android:strokeLineCap="round"
+        android:pathData="M40,120 L70,160 L70,210" />
+
+    <path
+        android:strokeColor="#2C1A3B"
+        android:strokeWidth="1.4"
+        android:pathData="M290,260 L310,290 L310,360" />
+
+    <path
+        android:strokeColor="#2C1A3B"
+        android:strokeWidth="1.4"
+        android:pathData="M150,520 L150,480 L180,450" />
+
+    <!-- NODOS (puntos redondos) -->
+    <path
+        android:fillColor="#63F1FF"
+        android:pathData="M110,150 m-4,0 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0" />
+
+    <path
+        android:fillColor="#D336E6"
+        android:pathData="M240,190 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0" />
+
+    <path
+        android:fillColor="#63F1FF"
+        android:pathData="M120,420 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0" />
+
+    <path
+        android:fillColor="#D336E6"
+        android:pathData="M260,400 m-4,0 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0" />
+
+</vector>
