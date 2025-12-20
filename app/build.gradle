@@ -11,8 +11,8 @@ android {
         applicationId 'com.romaster.appiconscrapper'
         minSdk 21
         targetSdk 34
-        versionCode 7
-        versionName '1.6'
+        versionCode 8
+        versionName '1.7'
 
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
@@ -53,11 +53,16 @@ dependencies {
     // ✅ DEPENDENCIA CORRECTA para librería ZipAlign de Android
     implementation 'com.github.MuntashirAkon:zipalign-android:1.0'
     
+    // ✅ NUEVAS DEPENDENCIAS PARA VIDEOS DE FONDO (Media3)
+    // Versión estable compatible con Android 5.0+ (minSdk 21)
+    implementation 'androidx.media3:media3-exoplayer:1.2.1'
+    implementation 'androidx.media3:media3-ui:1.2.1'
+    implementation 'androidx.media3:media3-common:1.2.1'
+    
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     implementation 'org.json:json:20231013'
     
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
-    
 }

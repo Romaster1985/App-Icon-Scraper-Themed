@@ -57,6 +57,10 @@ class ThemeCustomizationActivity : BaseActivity() {
     private lateinit var iconuponPreview: ImageView
     private lateinit var iconPreview: ImageView
     
+    // ✅ BOTONES CON COLOR DE COLORPICKER
+    private lateinit var colorizationButton: MaterialButton
+    private lateinit var borderColorButton: MaterialButton
+    
     // ✅ BOTONES - TODOS SON MaterialButton AHORA
     private lateinit var selectIconbackButton: MaterialButton
     private lateinit var selectIconmaskButton: MaterialButton
@@ -108,7 +112,7 @@ class ThemeCustomizationActivity : BaseActivity() {
     private var offsetY: Int = 0
     private var scalePercentage: Int = 100
     private var alphaPercentage: Int = 100
-    private var colorIntensity: Int = 100
+    private var colorIntensity: Int = 0
     
     // Parámetros de ajuste de imagen
     private var hue: Float = 0f
@@ -160,13 +164,10 @@ class ThemeCustomizationActivity : BaseActivity() {
     
     // ✅ FUNCIÓN PARA ACTUALIZAR BOTÓN CON COLOR Y TEXTO APROPIADO (COMPATIBLE CON SISTEMA DE TEMAS)
     private fun updateButtonWithColor(button: MaterialButton, color: Int) {
-        Log.d(TAG, "Actualizando botón ${button.id} con color: #${color.toString(16)}")
+        Log.d(TAG, "Actualizando botón ${button.text} con color: #${color.toString(16)}")
         
         // Guardar estado temporal para evitar interferencia del sistema de temas
         button.setTag(R.id.button_custom_color, color)
-        
-        // Establecer color de fondo
-        button.setBackgroundColor(color)
         
         // Determinar el color del texto basado en el brillo del fondo
         val textColor = if (isColorDark(color)) {
@@ -175,7 +176,8 @@ class ThemeCustomizationActivity : BaseActivity() {
             Color.BLACK
         }
         
-        // Aplicar color de texto
+        // ✅ IMPORTANTE: Forzar la actualización del color de fondo y texto
+        button.setBackgroundColor(color)
         button.setTextColor(textColor)
         
         // Para MaterialButton, mantener funcionalidad de borde
@@ -188,6 +190,10 @@ class ThemeCustomizationActivity : BaseActivity() {
         
         // Marcar que este botón tiene color personalizado
         button.setTag(R.id.has_custom_color, true)
+        
+        // ✅ Forzar redibujado del botón
+        button.invalidate()
+        button.requestLayout()
         
         Log.d(TAG, "Color de texto establecido: ${if (isColorDark(color)) "BLANCO" else "NEGRO"}")
     }
@@ -214,7 +220,7 @@ class ThemeCustomizationActivity : BaseActivity() {
 
         // INICIALIZAR VISTAS PRIMERO
         initViews()
-
+        
         // AHORA restaurar estado desde ViewModel (después de initViews)
         restoreStateFromViewModel()
         
@@ -234,7 +240,7 @@ class ThemeCustomizationActivity : BaseActivity() {
         
         // ✅ INICIALIZAR MÁSCARAS CON ESTADO TRANSPARENTE
         initializeTransparentMasks()
-
+        
         // Restaurar máscaras si existen
         if (selectedIconback != null) {
             iconbackPreview.setImageBitmap(selectedIconback)
@@ -284,6 +290,38 @@ class ThemeCustomizationActivity : BaseActivity() {
         
         // ✅ ACTUALIZAR ESTADOS INICIALES DE BOTONES
         refreshButtonStates()
+        
+// *****************************************************************************************************************
+        
+        // Método 1 para aplicar video a cards: Individual con sufijos específicos
+        // METODOS PARA VIDEOS CON INTRO+LOOP
+        applyThemeVideoToCard(findViewById(R.id.customizationCardExport), "_customization_export", 500)
+        applyThemeVideoToCard(findViewById(R.id.customizationCardControlsAdjust), "_customization_adjust", 550)
+
+        applyThemeVideoWithSeamlessIntro(
+            cardView = findViewById(R.id.customizationCardControlsBasic),
+            introSuffix = "_customization_basic_intro",   // Video de apertura  
+            loopSuffix = "_customization_basic_loop",     // Video en bucle
+            delayMs = 600,
+            videoAlpha = 0.8f
+        )
+        applyThemeVideoWithSeamlessIntro(
+            cardView = findViewById(R.id.customizationCardLayers),
+            introSuffix = "_customization_layers_intro",   // Video de apertura  
+            loopSuffix = "_customization_layers_loop",     // Video en bucle
+            delayMs = 650,
+            videoAlpha = 0.8f
+        )
+        applyThemeVideoWithSeamlessIntro(
+            cardView = findViewById(R.id.customizationCardPreview),
+            introSuffix = "_customization_preview_intro",  // Video de apertura
+            loopSuffix = "_customization_preview_loop",    // Video en bucle
+            delayMs = 700,
+            videoAlpha = 0.8f
+        )
+                        
+// *****************************************************************************************************************
+        
     }
     
     // ✅ NUEVO: Aplicar sistema de temas a todos los componentes
@@ -438,6 +476,9 @@ class ThemeCustomizationActivity : BaseActivity() {
         scalePercentage = viewModel.scalePercentage
         alphaPercentage = viewModel.alphaPercentage
         colorIntensity = viewModel.colorIntensity
+        // ✅ CORREGIDO: Actualizar texto de intensidad de color con el valor del ViewModel
+        colorIntensityValueText.text = getString(R.string.color_intensity, colorIntensity)
+    
         hue = viewModel.hue
         saturation = viewModel.saturation
         brightness = viewModel.brightness
@@ -461,11 +502,17 @@ class ThemeCustomizationActivity : BaseActivity() {
         updateButtonWithColor(colorPickerButton, selectedColor)
         
         // Actualizar colores de botones de colorización y borde
-        val colorizationButton = findViewById<MaterialButton>(R.id.colorizationColorButton)
-        val borderColorButton = findViewById<MaterialButton>(R.id.borderColorButton)
-        
         colorizationButton?.setBackgroundColor(viewModel.iconColorizationColor)
         borderColorButton?.setBackgroundColor(viewModel.borderColor)
+        
+        // ✅ ACTUALIZAR COLOR DEL BOTÓN DE COLOR PICKER
+        updateButtonWithColor(colorPickerButton, selectedColor)
+        
+        // ✅ ACTUALIZAR COLORES DE BOTONES DE COLORIZACIÓN Y BORDE CON COLORES CONTRASTANTES
+        updateButtonWithColor(colorizationButton, viewModel.iconColorizationColor)
+        
+        updateButtonWithColor(borderColorButton, viewModel.borderColor)
+            
     }
     
     private fun saveStateToViewModel() {
@@ -523,7 +570,9 @@ class ThemeCustomizationActivity : BaseActivity() {
         alphaValueText = findViewById(R.id.alphaValueText)
         colorIntensityValueText = findViewById(R.id.colorIntensityValueText)
         progressText = findViewById(R.id.progressText)
-
+        // ✅ CORREGIDO: Inicializar texto de intensidad de color con el valor por defecto
+        colorIntensityValueText.text = getString(R.string.color_intensity, colorIntensity)
+        
         // Controles de ajuste de imagen
         seekBarHue = findViewById(R.id.seekBarHue)
         seekBarSaturation = findViewById(R.id.seekBarSaturation)
@@ -576,6 +625,17 @@ class ThemeCustomizationActivity : BaseActivity() {
         // ✅ ELIMINADO: Todo el código de gestión de estilos hardcodeados
         // Los estilos ahora vienen completamente de XML
         
+        // ✅ INICIALIZAR BOTÓN DE COLOR PICKER CON COLOR POR DEFECTO
+        updateButtonWithColor(colorPickerButton, selectedColor)
+        
+        // ✅ INICIALIZAR BOTONES DE COLORIZACIÓN Y BORDE CON COLORES CONTRASTANTES
+        colorizationButton = findViewById(R.id.colorizationColorButton)
+        borderColorButton = findViewById(R.id.borderColorButton)
+        
+        // ✅ INICIALIZAR COLORES
+        updateButtonWithColor(colorizationButton, viewModel.iconColorizationColor)
+        updateButtonWithColor(borderColorButton, viewModel.borderColor)
+        
         Log.d(TAG, "✅ Vistas inicializadas - Sistema de temas centralizado activo")
     }
     
@@ -593,6 +653,17 @@ class ThemeCustomizationActivity : BaseActivity() {
         // ✅ CORREGIDO: Inicializar foreground scale con valor por defecto
         seekBarForegroundScale.progress = foregroundScalePercentage
         foregroundScaleValueText.text = getString(R.string.foreground_scale, foregroundScalePercentage)
+        
+        // ✅ CORREGIDO: Actualizar todos los textos con los valores actuales
+        xValueText.text = getString(R.string.position_x, offsetX)
+        yValueText.text = getString(R.string.position_y, offsetY)
+        scaleValueText.text = getString(R.string.scale, scalePercentage)
+        alphaValueText.text = getString(R.string.transparency, alphaPercentage)
+        colorIntensityValueText.text = getString(R.string.color_intensity, colorIntensity)  // ✅ Añadir esta línea
+        hueValueText.text = getString(R.string.hue, hue)
+        saturationValueText.text = getString(R.string.saturation, (saturation * 100).toInt())
+        brightnessValueText.text = getString(R.string.brightness, brightness)
+        contrastValueText.text = getString(R.string.contrast, (contrast * 100).toInt())
         
         useDefaultIconCheckbox.isChecked = useDefaultIcon
         useRoundIconCheckbox.isChecked = useRoundIcon
@@ -1990,11 +2061,14 @@ class ThemeCustomizationActivity : BaseActivity() {
     }
     
     private fun setupBorderColorPicker() {
-        val borderColorButton = findViewById<MaterialButton>(R.id.borderColorButton)
+        // ✅ ELIMINAR la declaración local - usar la variable de clase directamente
+        // val borderColorButton = findViewById<MaterialButton>(R.id.borderColorButton)
         
-        borderColorButton?.setBackgroundColor(viewModel.borderColor)
+        // ✅ Usar la variable de clase directamente (ya está inicializada en initViews())
+        updateButtonWithColor(borderColorButton, viewModel.borderColor)
         
-        borderColorButton?.setOnClickListener {
+        // ✅ Configurar el click listener usando la variable de clase
+        borderColorButton.setOnClickListener {
             showBorderColorPickerDialog()
         }
     }
@@ -2043,20 +2117,14 @@ class ThemeCustomizationActivity : BaseActivity() {
                         initialColor = viewModel.borderColor,
                         onColorSelected = { color: Int ->
                             viewModel.borderColor = color
-                            val borderColorButton = findViewById<MaterialButton>(R.id.borderColorButton)
-                            if (borderColorButton != null) {
-                                updateButtonWithColor(borderColorButton, color)
-                                updatePreview()
-                            }
+                            updateButtonWithColor(borderColorButton, color)
+                            updatePreview()
                         }
                     )
                 } else {
-                    val borderColorButton = findViewById<MaterialButton>(R.id.borderColorButton)
-                    if (borderColorButton != null) {
-                        viewModel.borderColor = colors[which]
-                        updateButtonWithColor(borderColorButton, colors[which])
-                        updatePreview()
-                    }
+                    viewModel.borderColor = colors[which]
+                    updateButtonWithColor(borderColorButton, colors[which])
+                    updatePreview()
                 }
                 
                 dialog.dismiss()
@@ -2495,7 +2563,10 @@ class ThemeCustomizationActivity : BaseActivity() {
         intensitySeekBar.progress = viewModel.iconColorizationIntensity
         intensityValue.text = getString(R.string.intensity_percent, intensitySeekBar.progress)
         
-        colorButton?.setBackgroundColor(viewModel.iconColorizationColor)
+        // ✅ CORREGIDO: Usar updateButtonWithColor en lugar de setBackgroundColor
+        colorButton?.let {
+            updateButtonWithColor(it, viewModel.iconColorizationColor)
+        }
         
         toggle.setOnCheckedChangeListener { _, isChecked ->
             viewModel.iconColorizationEnabled = isChecked
@@ -2542,20 +2613,14 @@ class ThemeCustomizationActivity : BaseActivity() {
                         initialColor = viewModel.iconColorizationColor,
                         onColorSelected = { color: Int ->
                             viewModel.iconColorizationColor = color
-                            val colorizationButton = findViewById<MaterialButton>(R.id.colorizationColorButton)
-                            if (colorizationButton != null) {
-                                updateButtonWithColor(colorizationButton, color)
-                                updatePreview()
-                            }
+                            updateButtonWithColor(colorizationButton, color)
+                            updatePreview()
                         }
                     )
                 } else {
                     viewModel.iconColorizationColor = colors[which]
-                    val colorizationButton = findViewById<MaterialButton>(R.id.colorizationColorButton)
-                    if (colorizationButton != null) {
-                        updateButtonWithColor(colorizationButton, colors[which])
-                        updatePreview()
-                    }
+                    updateButtonWithColor(colorizationButton, colors[which])
+                    updatePreview()
                 }
                 dialog.dismiss()
             }
@@ -2660,11 +2725,9 @@ class ThemeCustomizationActivity : BaseActivity() {
         findViewById<TextView>(R.id.colorizationIntensityValue).text = getString(R.string.intensity_percent, 100)
         
         // Resetear botones de color
-        val colorizationButton = findViewById<MaterialButton>(R.id.colorizationColorButton)
-        val borderColorButton = findViewById<MaterialButton>(R.id.borderColorButton)
-        
-        colorizationButton?.setBackgroundColor(Color.CYAN)
-        borderColorButton?.setBackgroundColor(Color.WHITE)
+        // ✅ CORREGIDO: Usar updateButtonWithColor en lugar de setBackgroundColor
+        updateButtonWithColor(colorizationButton, Color.CYAN)
+        updateButtonWithColor(borderColorButton, Color.WHITE)
         
         updateAdvancedFiltersVisibility(false)
         updatePreview()
@@ -2942,22 +3005,8 @@ class ThemeCustomizationActivity : BaseActivity() {
         // ✅ Actualizar color del botón
         updateButtonWithColor(colorPickerButton, selectedColor)
         
-        val colorizationButton = findViewById<MaterialButton>(R.id.colorizationColorButton)
-        val borderColorButton = findViewById<MaterialButton>(R.id.borderColorButton)
-        
-        colorizationButton?.let { updateButtonWithColor(it, viewModel.iconColorizationColor) }
-        borderColorButton?.let { updateButtonWithColor(it, viewModel.borderColor) }
-        
-        /*val colorizationButton = findViewById<MaterialButton>(R.id.colorizationColorButton)
-        if (colorizationButton != null) {
-            colorizationButton.setBackgroundColor(viewModel.iconColorizationColor)
-        }
-        
-        val borderColorButton = findViewById<MaterialButton>(R.id.borderColorButton)
-        if (borderColorButton != null) {
-            borderColorButton.setBackgroundColor(viewModel.borderColor)
-        }
-        */
+        updateButtonWithColor(borderColorButton, viewModel.borderColor)
+        updateButtonWithColor(colorizationButton, viewModel.iconColorizationColor)
         
         // ✅ Refrescar estados de botones
         refreshButtonStates()

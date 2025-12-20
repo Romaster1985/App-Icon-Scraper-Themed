@@ -1,0 +1,8 @@
+Just follow this steps:
+1- Open App
+2- Scan your apps
+3- Select your apps for edit Icons
+4- Scroll down and tap the "Import Theming" button
+5- Select one of this zip files
+6- Tap apply to all button and preview your Icons
+7- Export to APK, apply on your Launcher and enjoy ;)

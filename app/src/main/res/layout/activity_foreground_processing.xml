@@ -18,39 +18,63 @@
         android:layout_marginBottom="32dp"
         android:textColor="?attr/colorOnSurface" />
 
-    <!-- Texto de estado (lo que antes era statusText) -->
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/statusText"
+    <!-- ✅ CARD PRINCIPAL CON VIDEO DE FONDO -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/preprocessCard"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/starting_processing"
-        android:textAppearance="?attr/textAppearanceBodyLarge"
-        android:gravity="center"
-        android:layout_marginBottom="24dp"
-        android:textColor="?attr/colorOnSurfaceVariant" />
+        android:layout_height="300dp"
+        android:layout_marginBottom="20dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="2dp"
+        app:strokeColor="?attr/colorOutline"
+        app:strokeWidth="1dp"
+        app:cardBackgroundColor="@android:color/transparent">
+        
+        <!-- ✅ CONTENEDOR INTERNO OPTIMIZADO PARA VIDEO -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="28dp"
+            android:background="@color/overlay_video_background">
+    
+            <!-- Texto de estado - MEJOR CONTRASTE SOBRE VIDEO -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/statusText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/starting_processing"
+                android:textAppearance="?attr/textAppearanceTitleMedium"
+                android:gravity="center"
+                android:layout_marginBottom="28dp"
+                android:textColor="@android:color/white" />
+        
+            <!-- Barra de progreso - COLOR PRIMARIO BRILLANTE -->
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/progressBar"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                app:indicatorColor="?attr/colorPrimary"
+                app:trackColor="#66FFFFFF"
+                android:layout_marginBottom="16dp"
+                android:indeterminate="false" />
+        
+            <!-- Texto del progreso - COLOR PRIMARIO BRILLANTE -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/progressText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0/0"
+                android:textAppearance="?attr/textAppearanceTitleMedium"
+                android:gravity="center"
+                android:textColor="?attr/colorPrimary" />
+                
+        </LinearLayout>
+        
+    </com.google.android.material.card.MaterialCardView>
 
-    <!-- Barra de progreso -->
-    <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/progressBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:indicatorColor="?attr/colorPrimary"
-        app:trackColor="?attr/colorSurfaceContainerHighest"
-        android:layout_marginBottom="16dp"
-        android:indeterminate="false" />
-
-    <!-- Texto del progreso (ej: "5/50") -->
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/progressText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="0/0"
-        android:textAppearance="?attr/textAppearanceBodyMedium"
-        android:gravity="center"
-        android:layout_marginBottom="32dp"
-        android:textColor="?attr/colorPrimary" />
-
-    <!-- Botón de continuar (deshabilitado inicialmente) -->
+    <!-- Botón de continuar -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/continueButton"
         style="?attr/materialButtonStyle"

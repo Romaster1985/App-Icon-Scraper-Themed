@@ -2,4 +2,8 @@
 <resources>
     <item name="button_custom_color" type="id" />
     <item name="has_custom_color" type="id" />
+    
+    <!-- ✅ NUEVOS IDs PARA VIDEOS DE FONDO -->
+    <item name="video_background_player" type="id" />
+    <item name="has_video_background" type="id" />
 </resources>

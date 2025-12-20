@@ -41,12 +41,13 @@ class ForegroundProcessingActivity : BaseActivity() {
         setContentView(R.layout.activity_foreground_processing)
         
         supportActionBar?.title = getString(R.string.pre_process_title)
-
+        
         // Obtener apps seleccionadas desde MainActivity
         selectedApps = intent.getParcelableArrayListExtra("selected_apps") ?: emptyList()
         totalApps = selectedApps.size
 
         initViews()
+        
         setupListeners()
         
         if (selectedApps.isNotEmpty()) {
@@ -55,6 +56,10 @@ class ForegroundProcessingActivity : BaseActivity() {
             statusText.text = getString(R.string.no_apps_selected)
             continueButton.isEnabled = true
         }
+        
+        // ✅ AGREGAR VIDEO DE FONDO
+        applyThemeVideoToCardMain(findViewById(R.id.preprocessCard), "_preprocess", 300)
+        
     }
 
     private fun initViews() {

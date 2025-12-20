@@ -104,5 +104,14 @@
     <!-- Para Tema Cyberpunk -->
     <color name="surface_glass_cyberpunk">#CC151530</color>
     <color name="surface_variant_glass_cyberpunk">#CC202A40</color>
+    
+    <!-- Para Cards Cyberpunk/Neon (fondo oscuro) -->
+    <color name="overlay_video_background">#33000000</color>
+    
+    <!-- Para Cards Material Blue (podría ser azul oscuro) -->
+    <color name="overlay_video_background_material">#330A1A3A</color>
+    
+    <!-- Para Cards Classic (gris oscuro) -->
+    <color name="overlay_video_background_classic">#331A1A1A</color>
 
 </resources>
