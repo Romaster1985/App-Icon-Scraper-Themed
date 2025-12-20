@@ -57,7 +57,7 @@ class MainActivity : BaseActivity() {
 
     private lateinit var viewModel: MainActivityViewModel
     private lateinit var adapter: AppAdapter
-
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -84,6 +84,10 @@ class MainActivity : BaseActivity() {
         if (ThemeManager.isCyberpunkTheme(this)) {
             applyCyberpunkEffects()
         }
+        
+        // APLICAR VIDEO AL FONDO DE LA CARD
+        applyThemeVideoToCardMain(findViewById(R.id.mainCardView), "_video", 300)
+        
     }
 
     private fun initViews() {

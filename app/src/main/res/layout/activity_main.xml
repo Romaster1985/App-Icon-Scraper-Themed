@@ -125,7 +125,7 @@
                         android:layout_weight="1"
                         android:text="@string/filter_launcher_apps"
                         android:textSize="12sp"
-                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:textColor="?attr/colorOnSurface"
                         android:enabled="false" />
 
                     <com.google.android.material.imageview.ShapeableImageView
@@ -177,7 +177,7 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/selectAllButton"
-                        style="?attr/materialButtonOutlinedStyle"
+                        style="?attr/materialButtonStyle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -189,7 +189,7 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/deselectAllButton"
-                        style="?attr/materialButtonOutlinedStyle"
+                        style="?attr/materialButtonStyle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"

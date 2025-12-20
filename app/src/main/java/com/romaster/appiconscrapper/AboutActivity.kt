@@ -32,6 +32,10 @@ class AboutActivity : BaseActivity() {
         supportActionBar?.title = getString(R.string.about_title)
         
         setupViews()
+        
+        // Método 1 para aplicar video a cards: Individual con sufijos específicos
+        applyThemeVideoToCardMain(findViewById(R.id.aboutLogoCard), "_about", 300)
+        
     }
     
     private fun setupViews() {
